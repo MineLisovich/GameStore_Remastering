@@ -1,4 +1,6 @@
 ﻿using GameStore.BLL.DTO.Dictionaries;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.BLL.DTO.Games
 {
@@ -13,27 +15,44 @@ namespace GameStore.BLL.DTO.Games
         /// <summary>
         /// Наименование игры
         /// </summary>
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
         public required string Name { get; set; }
 
         /// <summary>
         /// Описание игры
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; }
+
+
+        /// <summary>
+        /// Техническое поле. Временно хранит выбранные Id жанров из выподающего списка
+        /// </summary>
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
+        public int[] GameGanresIds { get; set; }
 
         /// <summary>
         /// Список жанров
         /// </summary>
         public List<GenreDTO> GameGanres { get; set; } = new();
 
+
         /// <summary>
         /// Id Разработчика игры
         /// </summary>
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
         public int DeveloperId { get; set; }
 
         /// <summary>
         /// Разработчик игры
         /// </summary>
         public GameDeveloperDTO Developer { get; set; } = null;
+
+
+        /// <summary>
+        /// Техническое поле. Временно хранит выбранные Id игровых платформ из выподающего списка
+        /// </summary>
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
+        public int[] GamePlatformsIds { get; set; }
 
         /// <summary>
         /// Список игровых платформ
@@ -43,11 +62,14 @@ namespace GameStore.BLL.DTO.Games
         /// <summary>
         /// Дата выхода игры
         /// </summary>
+
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
         public DateTime ReleaseDate { get; set; }
 
         /// <summary>
         /// Цена
         /// </summary>
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
         public decimal Price { get; set; }
 
         /// <summary>
@@ -71,7 +93,12 @@ namespace GameStore.BLL.DTO.Games
         public string PosterName { get; set; } = null;
 
         /// <summary>
-        /// Ссалка на ютуб трейлер игры
+        /// Техническое поле. Временно хранит выбранную картинку постера
+        /// </summary>
+        public IFormFile UploadPoster { get; set; }
+
+        /// <summary>
+        /// Ссылка на ютуб трейлер игры
         /// </summary>
         public string YtLinkGameTrailer { get; set; } = null;
 
@@ -81,14 +108,32 @@ namespace GameStore.BLL.DTO.Games
         public List<GameScreenshotDTO> Screenshots { get; set; } = new();
 
         /// <summary>
+        /// Техническое поле. Временно хранит выбранные картинки скриншотов игры
+        /// </summary>
+        public IFormFile[] UploadScreenshots { get; set; }
+
+        /// <summary>
         /// Ключи от игры
         /// </summary>
         public List<GameKeyDTO> GameKeys { get; set; } = new();
+
+
+        /// <summary>
+        /// Техническое поле. Временно хранит выбранный файл с ключаси от игры
+        /// </summary>
+        public IFormFile UploadGameKeys { get; set; }
 
         /// <summary>
         /// Ярлыки игры
         /// </summary>
         public List<GameLabelDTO> GameLabels { get; set; } = new();
+
+
+        /// <summary>
+        /// Техническое поле. Временно хранит выбранные Id ярлыков игры из выподающего списка
+        /// </summary>
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
+        public int[] GameLabelsIds { get; set; }
 
         //Системные требование игры
         /// <summary>
@@ -126,5 +171,10 @@ namespace GameStore.BLL.DTO.Games
         /// Игра удалена (фэйковое удаление игры)
         /// </summary>
         public bool IsDeleted { get; set; } = false;
+
+        /// <summary>
+        /// Техническое поле. Подтверждение что данные все данные введены 
+        /// </summary>
+        public bool IsConfirmActions { get; set; } = false;
     }
 }

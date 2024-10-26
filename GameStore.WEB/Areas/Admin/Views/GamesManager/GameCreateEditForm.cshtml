@@ -1,0 +1,185 @@
+﻿
+@{
+    ViewData["Title"] = "Создание игры / Редактирование игры";
+}
+
+@section js
+{
+    <script src="~/js/companets.js"></script>
+    <script>
+        $(document).ready(function () {
+            InitializationMultiSelect2("js-mulsel");
+            InitializationSelect2("js-single");
+         
+        });
+    </script>
+}
+
+
+<div class="row mt-5">
+    <div class="col-7 borderS">
+        <h3>Создание игры / Редактирование игры</h3>
+        <form id="cereateEditGameForm" asp-controller="" asp-action="" method="post" enctype="multipart/form-data">
+
+            <div class="modal-body">
+
+                <h4 class="text-center">Основная информация</h4>
+
+                @* НАИМЕНОВАНИЕ *@
+                <div class="form-group">
+                    <label id="Name">Наименование игры: *</label>
+                    <input id="Name" type="text" class="form-control" />
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+                @* ОПИСАНИЕ *@
+                <div class="form-group">
+                    <label id="Description"> Описание игры:</label>
+                    <textarea id="Description" type="text" class="form-control" ></textarea>
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+
+                @* ЖАНР *@
+                <div class="form-group">
+                    <label> Выберите жанр(ы) игры: *</label>
+                    <select class="form-select js-mulsel" multiple="multiple">
+                        <option value="AL">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+
+                @* РАЗРАБОТЧИК *@
+                <div class="form-group">
+                    <label> Выберите разработчика игры: *</label>
+                    <select class="form-select js-single">
+                        <option selected disabled ></option>
+                        <option value="AL">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+
+                @* ПЛАТФОРМА *@
+                <div class="form-group">
+                    <label> Выберите игровую платформу(ы): *</label>
+                    <select class="form-select js-mulsel" multiple="multiple">
+                        <option value="AL">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+
+                @* ЯРЛЫКИ ИГРЫ *@
+                <div class="form-group">
+                    <label> Выберите ярлыки (особенности) игры: *</label>
+                    <select class="form-select js-mulsel" multiple="multiple">
+                        <option value="AL">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+
+                @* ДАТА ВЫХОДА ИГРЫ *@
+                <div class="form-group">
+                    <label> Дата выхода: *</label>
+                    <input type="date" class="form-control" />
+
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+               
+                @* ЦЕНА *@
+                <div class="form-group">
+                    <label>Цена: *</label>
+                    <div class=" input-group">
+                        <span class="input-group-text">BYN</span>
+                        <span class="input-group-text">0.00</span>
+                        <input type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
+                    </div>
+                  
+                    @*<span asp-validation-for="" class="validError"></span>*@
+                </div>
+
+                <h4 class="text-center mt-3">Загружаемая информация (постер, скриншоты, ключи)</h4>
+
+                @* ПОСТЕР *@
+                <div class="form-group">
+                    <label>Постер:</label>
+                    <input name="uploadPoster" type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат картинки .jpg, рекомендуемое разрешение постера: 200x200" />
+                </div>
+
+                @* ССЫЛКА НА ЮТУБ ТРЕЙЛЕР ИГРЫ *@
+                <div class="form-group">
+                    <label>Ссылка на ютуб трейлер:</label>
+                    <input type="text" class="form-control"/>
+                </div>
+                
+                @* СКРИНШОТЫ ИГРЫ *@
+                <div class="form-group">
+                    <label>Скриншоты игры:</label>
+                    <input name="uploadScreanshots" type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат скриншотов .jpg, рекомендуемое разрешение скриншотов: 1920x1080" multiple/>
+                </div>
+
+                @* КЛЮЧИ ОТ ИГРЫ *@
+                <div class="form-group">
+                    <label>Ключи от игры:</label>
+                    <input name="UploadGameKeys" type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
+                </div>
+
+                <h4 class="text-center mt-3">Системные требования (форма записи: Рекомендуемые / Минимальные)</h4>
+
+                @* ОПЕРАЦИОННАЯ СИСТЕМА *@
+                <div class="form-group">
+                    <label>Операционная система:</label>
+                    <input type="text" class="form-control" />
+                </div>
+
+                @* ПРОЦЕССОР *@
+                <div class="form-group">
+                    <label>Процессор:</label>
+                    <input type="text" class="form-control" />
+                </div>
+
+                @* ОПЕРАТИВНАЯ ПАМЯТЬ *@
+                <div class="form-group">
+                    <label>Оперативная память:</label>
+                    <input type="text" class="form-control" />
+                </div>
+
+                @* ЗАНИМАЙМОЕ МЕСТО НА ДИСКЕ*@
+                <div class="form-group">
+                    <label>Занимаймое место на диске:</label>
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group form-check form-switch">
+                <input type="checkbox" id="conf" class="form-check-input" />
+                <label class="form-check-label" id="conf">Подтверждение введёных данных**</label>
+            </div>
+            
+            <div class="alert alert-warning" role="alert">
+                <p>* - Поля обязательны к зополнению.</p>
+                <p>
+                    ** - Если тублер активирован (цвет синий) вы подтверждаете что заполнили абсолютно все данные об игре.
+                     После нажатия на кнопку "Сохранить" игра автоматически разместиться на сайте и станет готовой к покупке.
+                     Если тублер деактивирован (цвет серый) и вы нажимаете кнопку сохранить. Это означает что введённые вами данные сохронятся как черновик.
+                     Игра не будет размещена на сайте и её будет не возможно купить. Вы можете в любой момент вернуться и дозаполнить информацию об Игре.
+                     После того как вы дозаполнили всю информацию, активируйте тумблер и нажмите на кнопку "Сохранить".
+                </p>
+            </div>
+
+            <div class="modal-footer">
+
+               
+                <button type="button" id="btnBackFromCreateEditMode" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col borderS mx-1">
+       <h3>Превью выбранных изоображений</h3>
+       <h5>Постер игры</h5>
+       <h5>Скриншоты игры</h5>
+    </div>
+</div>
