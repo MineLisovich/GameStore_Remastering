@@ -2,6 +2,18 @@
     ViewData["Title"] = "Игры";
 }
 
+@section js
+{
+    <script>
+        $("#testFEG").on("click", function () {
+
+            $("#modalFastEditGame").modal("show");
+        
+        });
+    </script>
+}
+
+
 <h1>Игры</h1>
 <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Вернутся к выбору разделов</a>
 
@@ -35,7 +47,7 @@
 
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Быстрое редактирование. Позволяет быстро отредактировать игру (к примеру добавить новые ключи, сделать игру акционной, изменить видимость игры на сайте и тд).">Быстрое редактирование</button>
+                    <button type="button" id="testFEG" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Быстрое редактирование. Позволяет быстро отредактировать игру (к примеру добавить новые ключи, сделать игру акционной, изменить видимость игры на сайте и тд).">Быстрое редактирование</button>
                     <a asp-controller="GamesManager" asp-action="GameCreateEditForm" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Полное редактирование игры. Позволяет редактировать все данные игры.">Редактировать</a>
                 </div>
             </div>
@@ -44,3 +56,7 @@
     </div>
 
 </div>
+
+
+@* ВРЕМЕННО *@
+@await Html.PartialAsync("_Partial.FastEditGameForm")

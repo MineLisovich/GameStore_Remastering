@@ -1,0 +1,52 @@
+﻿
+
+<div class="modal fade modal-js" id="modalFastEditGame" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    Быстрое редактирование - 
+                </h5>
+            </div>
+            <form id="fastEditGameDataForm" asp-area="Admin" asp-controller="" asp-action="" method="post" enctype="multipart/form-data">
+
+                <div class="modal-body">
+
+                    @* ВИДИМОСТЬ НА САЙТЕ *@
+                    <div class="form-group form-check form-switch">
+                        <input type="checkbox" id="vis" class="form-check-input" />
+                        <label class="form-check-label" id="vis">Видимость на сайте</label>
+                    </div>
+
+                     @* АКЦИЯ *@
+                    <div class="form-group form-check form-switch">
+                        <input type="checkbox" id="sh" class="form-check-input" />
+                        <label class="form-check-label" id="sh">Акция</label>
+                    </div>
+
+                    @* АКЦИЯ - ЦЕНА *@
+                    <div class="form-group">
+                        <label>Акционная цена:</label>
+                        <div class=" input-group">
+                            <span class="input-group-text">BYN</span>
+                            <span class="input-group-text">0.00</span>
+                            <input type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
+                        </div>
+                    </div>
+
+                    @* КЛЮЧИ ОТ ИГРЫ *@
+                    <div class="form-group">
+                        <label>Ключи от игры:</label>
+                        <input name="UploadGameKeys" type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
+                    </div>
+
+                 </div>
+               
+                <div class="modal-footer">
+                    <button type="button" id="btnBackFromCreateEditMode" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
