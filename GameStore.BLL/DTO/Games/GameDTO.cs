@@ -16,7 +16,7 @@ namespace GameStore.BLL.DTO.Games
         /// Наименование игры
         /// </summary>
         [Required(ErrorMessage = "Поле обязательно для заполнения!")]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Описание игры
@@ -145,6 +145,11 @@ namespace GameStore.BLL.DTO.Games
         /// Форма записи: Рекомендуемые / Минимальные. Процессор
         /// </summary>
         public string Cpu { get; set; } = null;
+
+        /// <summary>
+        /// Форма записи: Рекомендуемые / Минимальные. Видиокарта
+        /// </summary>
+        public string Gpu { get; set; } = null;
 
         /// <summary>
         /// Форма записи: Рекомендуемые / Минимальные. Оперативная память

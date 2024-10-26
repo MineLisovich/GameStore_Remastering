@@ -1,0 +1,54 @@
+﻿@model ShowGamesModel
+
+@functions
+{
+    string ConvertBoolToString(bool Isbool) { return (Isbool) ? "Да" : "Нет"; }
+
+}
+@if(Model.Games.Count() > 0)
+{
+    @foreach(var game in Model.Games)
+    {
+        <div class="gameCard borderS">
+            <div class="gameCardInfo d-flex">
+                <div class="s_gameposter">
+                    @if(game.Poster.Length == 0)
+                    {
+                        <img src="~/img/gamesposters/gameposter.jpg" />
+                    }
+                    else
+                    {
+                        @Html.Raw("<img  src=\"data:image/jpeg;base64,"
+                                 + Convert.ToBase64String(game.Poster) + "\" />")
+                    }
+                  
+                </div>
+                <div class="s_gameinfo">
+                    <h5>@game.Name</h5>
+                    <p><b>Видимость на сайте: </b>@ConvertBoolToString(game.IsVisible)</p>
+                    <p><b>Количество ключей: </b>@game.GameKeys.Count()</p>
+                    <p><b>Цена: </b>@game.Price BYN</p>
+                    <p><b>Акция: </b>  @((game.IsShare is false) ? ConvertBoolToString(false) : $"{ConvertBoolToString(true)} (Акционная цена: {game.SharePrice} BYN)")</p>
+                </div>
+            </div>
+
+            <div class="gameCartBtn">
+                <div class="btn-group">
+                    <button type="button" data-section="fullDelete" data-GameId="@game.Id" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Полное удаление. Удаляет полностью игру и все данные связанные с ней (Не рекомендуется к использованию).">Полное удаление</button>
+                    <button type="button" data-section="delete" data-GameId="@game.Id" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Мягкое удаление. Не даёт возможность редактировать данные (а так же к покупке) этой игры, но при этом все днанные сохраняются в базе данных (Рекомендовано к использованию).">Удалить</button>
+
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="testFEG" data-section="fastEdit" data-GameId="@game.Id" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Быстрое редактирование. Позволяет быстро отредактировать игру (к примеру добавить новые ключи, сделать игру акционной, изменить видимость игры на сайте и тд).">Быстрое редактирование</button>
+                    <a asp-controller="GamesManager" asp-action="GameCreateEditForm" asp-route-gameId ="@game.Id" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Полное редактирование игры. Позволяет редактировать все данные игры.">Редактировать</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <h3 class="text-center">Не найдено</h3>
+}
+
+

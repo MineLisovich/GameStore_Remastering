@@ -104,6 +104,12 @@ namespace GameStore.DAL.Entities.Games
         /// </summary>
         public string? Cpu { get; set; }
 
+
+        /// <summary>
+        /// Форма записи: Рекомендуемые / Минимальные. Видиокарта
+        /// </summary>
+        public string? Gpu { get; set; }
+
         /// <summary>
         /// Форма записи: Рекомендуемые / Минимальные. Оперативная память
         /// </summary>

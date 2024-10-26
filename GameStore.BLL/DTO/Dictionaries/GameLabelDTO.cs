@@ -15,7 +15,7 @@ namespace GameStore.BLL.DTO.Dictionaries
         /// Наименование ярлыка
         /// </summary>
         [Required(ErrorMessage = "Поле обязательно для заполнения!")]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Игры

@@ -1,6 +1,9 @@
-﻿
+﻿@model DataGameModel
+
 @{
-    ViewData["Title"] = "Создание игры / Редактирование игры";
+    bool isCreateMethod = (Model.Game.Id == 0) ? true : false;
+    string actionName = (isCreateMethod is true) ? "CreateGame": "EditGame";
+    ViewData["Title"] = (isCreateMethod is true) ? "Создание игры" : "Редактирование игры";
 }
 
 @section js
@@ -18,85 +21,87 @@
 
 <div class="row mt-5">
     <div class="col-7 borderS">
-        <h3>Создание игры / Редактирование игры</h3>
-        <form id="cereateEditGameForm" asp-controller="" asp-action="" method="post" enctype="multipart/form-data">
+        @if(isCreateMethod is true)
+        {
+            <h3>Создание игры</h3>
+        }
+        else
+        {
+            <h3>Редактирование игры - @Model.Game.Name</h3>
+        }
+
+        <form id="cereateEditGameForm" asp-area="Admin" asp-controller="GamesManager" asp-action="@actionName" method="post" enctype="multipart/form-data">
 
             <div class="modal-body">
+                <input asp-for="Game.Id" readonly hidden/>
 
                 <h4 class="text-center">Основная информация</h4>
 
                 @* НАИМЕНОВАНИЕ *@
                 <div class="form-group">
-                    <label id="Name">Наименование игры: *</label>
-                    <input id="Name" type="text" class="form-control" />
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <label asp-for=Game.Name>Наименование игры: *</label>
+                    <input asp-for=Game.Name type="text" class="form-control" />
+                    <span asp-validation-for="Game.Name" class="validError"></span>
                 </div>
                 @* ОПИСАНИЕ *@
                 <div class="form-group">
-                    <label id="Description"> Описание игры:</label>
-                    <textarea id="Description" type="text" class="form-control" ></textarea>
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <label asp-for=Game.Description> Описание игры:</label>
+                    <textarea asp-for=Game.Description type="text" class="form-control"></textarea>
                 </div>
 
                 @* ЖАНР *@
                 <div class="form-group">
-                    <label> Выберите жанр(ы) игры: *</label>
-                    <select class="form-select js-mulsel" multiple="multiple">
-                        <option value="AL">Alabama</option>
-                        <option value="WY">Wyoming</option>
+                    <label asp-for=Game.GameGanresIds> Выберите жанр(ы) игры: *</label>
+                    <select asp-for=Game.GameGanresIds asp-items=Model.SelectListItemsGameGenres class="form-select js-mulsel" multiple="multiple">
+                   
                     </select>
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <span asp-validation-for="Game.GameGanresIds" class="validError"></span>
                 </div>
 
                 @* РАЗРАБОТЧИК *@
                 <div class="form-group">
-                    <label> Выберите разработчика игры: *</label>
-                    <select class="form-select js-single">
+                    <label asp-for=Game.DeveloperId> Выберите разработчика игры: *</label>
+                    <select asp-for=Game.DeveloperId asp-items=Model.SelectListItemsGameDevelopers class="form-select js-single">
                         <option selected disabled ></option>
-                        <option value="AL">Alabama</option>
-                        <option value="WY">Wyoming</option>
+                      
                     </select>
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <span asp-validation-for="Game.DeveloperId" class="validError"></span>
                 </div>
 
                 @* ПЛАТФОРМА *@
                 <div class="form-group">
-                    <label> Выберите игровую платформу(ы): *</label>
-                    <select class="form-select js-mulsel" multiple="multiple">
-                        <option value="AL">Alabama</option>
-                        <option value="WY">Wyoming</option>
+                    <label asp-for=Game.GamePlatformsIds> Выберите игровую платформу(ы): *</label>
+                    <select asp-for=Game.GamePlatformsIds asp-items=Model.SelectListItemsGamePlatforms class="form-select js-mulsel" multiple="multiple">
+                      
                     </select>
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <span asp-validation-for="Game.GamePlatformsIds" class="validError"></span>
                 </div>
 
                 @* ЯРЛЫКИ ИГРЫ *@
                 <div class="form-group">
-                    <label> Выберите ярлыки (особенности) игры: *</label>
-                    <select class="form-select js-mulsel" multiple="multiple">
-                        <option value="AL">Alabama</option>
-                        <option value="WY">Wyoming</option>
+                    <label asp-for=Game.GameLabelsIds> Выберите ярлыки (особенности) игры: *</label>
+                    <select asp-for=Game.GameLabelsIds asp-items=Model.SelectListItemsGameLabels class="form-select js-mulsel" multiple="multiple">
+                    
                     </select>
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <span asp-validation-for="Game.GameLabelsIds" class="validError"></span>
                 </div>
 
                 @* ДАТА ВЫХОДА ИГРЫ *@
                 <div class="form-group">
-                    <label> Дата выхода: *</label>
-                    <input type="date" class="form-control" />
-
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <label asp-for=Game.ReleaseDate> Дата выхода: *</label>
+                    <input asp-for=Game.ReleaseDate type="date" class="form-control" value="@((isCreateMethod) ? "":$"@{Model.Game.ReleaseDate}")" />
+                    <span asp-validation-for="Game.ReleaseDate" class="validError"></span>
                 </div>
                
                 @* ЦЕНА *@
                 <div class="form-group">
-                    <label>Цена: *</label>
+                    <label asp-for=Game.Price>Цена: *</label>
                     <div class=" input-group">
                         <span class="input-group-text">BYN</span>
                         <span class="input-group-text">0.00</span>
-                        <input type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
+                        <input asp-for=Game.Price type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
                     </div>
-                  
-                    @*<span asp-validation-for="" class="validError"></span>*@
+                    <span asp-validation-for="Game.Price" class="validError"></span>
                 </div>
 
                 <h4 class="text-center mt-3">Загружаемая информация (постер, скриншоты, ключи)</h4>
@@ -104,57 +109,63 @@
                 @* ПОСТЕР *@
                 <div class="form-group">
                     <label>Постер:</label>
-                    <input name="uploadPoster" type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат картинки .jpg, рекомендуемое разрешение постера: 200x200" />
+                    <input asp-for=Game.UploadPoster type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат картинки .jpg, рекомендуемое разрешение постера: 200x200" />
                 </div>
 
                 @* ССЫЛКА НА ЮТУБ ТРЕЙЛЕР ИГРЫ *@
                 <div class="form-group">
                     <label>Ссылка на ютуб трейлер:</label>
-                    <input type="text" class="form-control"/>
+                    <input asp-for=Game.YtLinkGameTrailer type="text" class="form-control"/>
                 </div>
                 
                 @* СКРИНШОТЫ ИГРЫ *@
                 <div class="form-group">
                     <label>Скриншоты игры:</label>
-                    <input name="uploadScreanshots" type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат скриншотов .jpg, рекомендуемое разрешение скриншотов: 1920x1080" multiple/>
+                    <input asp-for=Game.UploadScreenshots type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат скриншотов .jpg, рекомендуемое разрешение скриншотов: 1920x1080" multiple/>
                 </div>
 
                 @* КЛЮЧИ ОТ ИГРЫ *@
                 <div class="form-group">
                     <label>Ключи от игры:</label>
-                    <input name="UploadGameKeys" type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
+                    <input asp-for=Game.UploadGameKeys type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
                 </div>
 
                 <h4 class="text-center mt-3">Системные требования (форма записи: Рекомендуемые / Минимальные)</h4>
 
                 @* ОПЕРАЦИОННАЯ СИСТЕМА *@
                 <div class="form-group">
-                    <label>Операционная система:</label>
-                    <input type="text" class="form-control" />
+                    <label asp-for=Game.Os>Операционная система:</label>
+                    <input asp-for=Game.Os type="text" class="form-control" />
                 </div>
 
                 @* ПРОЦЕССОР *@
                 <div class="form-group">
-                    <label>Процессор:</label>
-                    <input type="text" class="form-control" />
+                    <label asp-for=Game.Cpu>Процессор:</label>
+                    <input asp-for=Game.Cpu type="text" class="form-control" />
+                </div>
+
+                @* ВИДИОКАРТА *@
+                <div class="form-group">
+                    <label asp-for=Game.Gpu>Видеокарта:</label>
+                    <input asp-for=Game.Gpu type="text" class="form-control" />
                 </div>
 
                 @* ОПЕРАТИВНАЯ ПАМЯТЬ *@
                 <div class="form-group">
-                    <label>Оперативная память:</label>
-                    <input type="text" class="form-control" />
+                    <label asp-for=Game.Ram>Оперативная память:</label>
+                    <input asp-for=Game.Ram type="text" class="form-control" />
                 </div>
 
                 @* ЗАНИМАЙМОЕ МЕСТО НА ДИСКЕ*@
                 <div class="form-group">
-                    <label>Занимаймое место на диске:</label>
-                    <input type="text" class="form-control" />
+                    <label asp-for=Game.Weight>Занимаймое место на диске:</label>
+                    <input asp-for=Game.Weight type="text" class="form-control" />
                 </div>
             </div>
 
             <div class="form-group form-check form-switch">
-                <input type="checkbox" id="conf" class="form-check-input" />
-                <label class="form-check-label" id="conf">Подтверждение введёных данных**</label>
+                <input type="checkbox" asp-for=Game.IsConfirmActions class="form-check-input" />
+                <label class="form-check-label" asp-for=Game.IsConfirmActions>Подтверждение введёных данных**</label>
             </div>
             
             <div class="alert alert-warning" role="alert">

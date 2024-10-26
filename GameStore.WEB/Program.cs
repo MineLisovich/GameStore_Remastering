@@ -18,6 +18,7 @@ using GameStore.BLL.Infrastrcture.AutomapperProfiles.GamesProfiles;
 using GameStore.BLL.Services.DictionariesServices;
 using GameStore.DAL.Entities.Dictionaries;
 using GameStore.BLL.DTO.Dictionaries;
+using GameStore.BLL.Services.GamesServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +117,7 @@ builder.Services.AddScoped<DictionaryService<Genre, GenreDTO>>();
 builder.Services.AddScoped<DictionaryService<GameDeveloper, GameDeveloperDTO>>();
 builder.Services.AddScoped<DictionaryService<GamePlatform, GamePlatformDTO>>();
 builder.Services.AddScoped<DictionaryService<GameLabel, GameLabelDTO>>();
+builder.Services.AddScoped<IGameService, GameService>();
 
 
 //Middleware

@@ -483,6 +483,9 @@ namespace GameStore.DAL.Migrations
                     b.Property<int>("DeveloperId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Gpu")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -533,62 +536,62 @@ namespace GameStore.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(251),
+                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(23),
                             DeveloperId = 1,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Grand The Auto 5",
                             Price = 34.33m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(254)
+                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(26)
                         },
                         new
                         {
                             Id = 2L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(257),
+                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(31),
                             DeveloperId = 9,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "The First Player",
                             Price = 120.50m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(257)
+                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(31)
                         },
                         new
                         {
                             Id = 3L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(258),
+                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(32),
                             DeveloperId = 3,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "The Wither 3",
                             Price = 79.00m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(259)
+                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(33)
                         },
                         new
                         {
                             Id = 4L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(260),
+                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(34),
                             DeveloperId = 5,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Just Dance",
                             Price = 66.33m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(260)
+                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(35)
                         },
                         new
                         {
                             Id = 5L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(288),
+                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(36),
                             DeveloperId = 2,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Far cry 5",
                             Price = 67.88m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(288)
+                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(36)
                         });
                 });
 
