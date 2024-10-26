@@ -528,6 +528,68 @@ namespace GameStore.DAL.Migrations
                     b.HasIndex("DeveloperId");
 
                     b.ToTable("Games_Games", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(251),
+                            DeveloperId = 1,
+                            IsDeleted = false,
+                            IsShare = false,
+                            IsVisible = false,
+                            Name = "Grand The Auto 5",
+                            Price = 34.33m,
+                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(254)
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(257),
+                            DeveloperId = 9,
+                            IsDeleted = false,
+                            IsShare = false,
+                            IsVisible = false,
+                            Name = "The First Player",
+                            Price = 120.50m,
+                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(257)
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(258),
+                            DeveloperId = 3,
+                            IsDeleted = false,
+                            IsShare = false,
+                            IsVisible = false,
+                            Name = "The Wither 3",
+                            Price = 79.00m,
+                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(259)
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(260),
+                            DeveloperId = 5,
+                            IsDeleted = false,
+                            IsShare = false,
+                            IsVisible = false,
+                            Name = "Just Dance",
+                            Price = 66.33m,
+                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(260)
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            DateAddedSite = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(288),
+                            DeveloperId = 2,
+                            IsDeleted = false,
+                            IsShare = false,
+                            IsVisible = false,
+                            Name = "Far cry 5",
+                            Price = 67.88m,
+                            ReleaseDate = new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(288)
+                        });
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Games.GameKey", b =>

@@ -472,6 +472,18 @@ namespace GameStore.DAL.Migrations
                     { 15, "Образовательная игра" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Games_Games",
+                columns: new[] { "Id", "Cpu", "DateAddedSite", "Description", "DeveloperId", "IsDeleted", "IsShare", "IsVisible", "Name", "Os", "Poster", "PosterName", "Price", "Ram", "ReleaseDate", "SharePrice", "Weight", "YtLinkGameTrailer" },
+                values: new object[,]
+                {
+                    { 1L, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(251), null, 1, false, false, false, "Grand The Auto 5", null, null, null, 34.33m, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(254), null, null, null },
+                    { 2L, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(257), null, 9, false, false, false, "The First Player", null, null, null, 120.50m, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(257), null, null, null },
+                    { 3L, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(258), null, 3, false, false, false, "The Wither 3", null, null, null, 79.00m, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(259), null, null, null },
+                    { 4L, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(260), null, 5, false, false, false, "Just Dance", null, null, null, 66.33m, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(260), null, null, null },
+                    { 5L, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(288), null, 2, false, false, false, "Far cry 5", null, null, null, 67.88m, null, new DateTime(2024, 10, 26, 18, 8, 28, 504, DateTimeKind.Utc).AddTicks(288), null, null, null }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
