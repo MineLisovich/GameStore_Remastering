@@ -129,7 +129,7 @@
                 @* ДАТА ВЫХОДА ИГРЫ *@
                 <div class="form-group">
                     <label asp-for=Game.ReleaseDate> Дата выхода: *</label>
-                    <input asp-for=Game.ReleaseDate type="date" class="form-control" value="@((isCreateMethod) ? "":$"@{Model.Game.ReleaseDate}")" />
+                    <input asp-for=Game.ReleaseDate type="date" class="form-control"  />
                     <span asp-validation-for="Game.ReleaseDate" class="validError"></span>
                 </div>
                
@@ -249,8 +249,12 @@
                 {
                     @foreach(var sc in Model.Game.Screenshots)
                     {
-                        @Html.Raw("<img  src=\"data:image/png;base64,"
-                                 + Convert.ToBase64String(sc.Screenshot) + "\" />")
+                        <div class="screenShotPreiew  mt-4" >
+
+                            @Html.Raw("<img  src=\"data:image/png;base64,"
+                                     + Convert.ToBase64String(sc.Screenshot) + "\" />")
+                        </div>
+                      
                     }
                 }
             </div>

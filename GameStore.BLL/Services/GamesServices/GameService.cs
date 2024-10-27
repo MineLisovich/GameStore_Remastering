@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.DTO.Games;
+using GameStore.BLL.Infrastrcture;
 using GameStore.DAL.Domain;
 using GameStore.DAL.Entities.Dictionaries;
 using GameStore.DAL.Entities.Games;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.BLL.Services.GamesServices
@@ -47,9 +49,51 @@ namespace GameStore.BLL.Services.GamesServices
         }
 
 
+        public async Task<ResultServiceModel> CreateGameAsync(GameDTO game)
+        {
+            ResultServiceModel result = new();
+
+            //Проверка на дубликат игры
+            bool isClone = await _dbContext.Games.AnyAsync(x => x.Name == game.Name);
+            if (isClone is true) { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.clone; return result; }
+
+            Game newGame = new() { Name = game.Name };
+            newGame.Description = game.Description;
+            newGame.GameGanres = await GetSelectedGanre(game.GameGanresIds);
+            newGame.DeveloperId = game.DeveloperId;
+            newGame.GamePlatforms = await GetSelectedPlatforms(game.GamePlatformsIds);
+            newGame.GameLabels = await GetSelectedLabels(game.GameLabelsIds);
+            newGame.ReleaseDate = game.ReleaseDate;
+            newGame.Price = game.Price;
+            newGame.IsShare = false;
+            newGame.SharePrice = null;
+            newGame.YtLinkGameTrailer = null;
+            newGame.Os = game.Os;
+            newGame.Gpu = game.Gpu;
+            newGame.Cpu = game.Cpu;
+            newGame.Ram = game.Ram;
+            newGame.Weight = game.Weight;
+            newGame.IsDeleted = false;
+            newGame.IsVisible = (game.IsConfirmActions is true) ? true : false;
+            //Медиа файлы
+            newGame.PosterName = (game.UploadPoster is not null) ? game.UploadPoster.FileName : null;
+            newGame.Poster = (game.UploadPoster is not null) ? UploadPoster(game.UploadPoster) : null;
+            newGame.Screenshots = (game.UploadScreenshots is not null) ? UploadGameScreenshot(game.UploadScreenshots) : null;
+            newGame.GameKeys = (game.UploadGameKeys is not null) ? UploadGameKeys(game.UploadGameKeys, game.GamePlatformsIds) : null;
+
+            try
+            {
+                _dbContext.Games.Update(newGame);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.dontSave; return result; }
+
+            result.IsSucceeded = true;
+            return result;
+        }
 
 
-        //SELECT LIST
+        #region SELECT LIST
         public async Task<List<GameDeveloperDTO>> GetDevelopersForSelectList()
         {
             List<GameDeveloper> developers = await _dbContext.GameDevelopers.ToListAsync();
@@ -70,5 +114,126 @@ namespace GameStore.BLL.Services.GamesServices
             List<GameLabel> gameLabels = await _dbContext.GameLabels.ToListAsync();
             return _mapper.Map<List<GameLabelDTO>>(gameLabels);
         }
+        #endregion
+
+        #region PRIVATE METHODS
+        private byte[] UploadPoster(IFormFile uploadPoster)
+        {
+            if (uploadPoster == null) return null;
+
+            byte[] posterData = null;
+            using (var stream = uploadPoster.OpenReadStream())
+            using (var binaryReader = new BinaryReader(stream))
+            {
+                posterData = binaryReader.ReadBytes((int)uploadPoster.Length);
+            }
+            return posterData;
+
+        }
+
+        private List<GameScreenshot> UploadGameScreenshot(IFormFile[] uploadScreens)
+        {
+            if (uploadScreens == null) return new();
+
+            List<GameScreenshot> screens = new();
+
+            foreach (var screen in uploadScreens)
+            {
+                byte[] scData = null;
+                using (var stream = screen.OpenReadStream())
+                using (var binaryReader = new BinaryReader(stream))
+                {
+                    scData = binaryReader.ReadBytes((int)screen.Length);
+                }
+
+                GameScreenshot gameSc = new()
+                {
+                    Screenshot = scData,
+                    ScreenshotName = screen.FileName,
+                };
+                screens.Add(gameSc);
+            }
+
+            return screens;
+        }
+
+        private List<GameKey> UploadGameKeys(IFormFile uploadKeys, int[] platformsIds)
+        {
+            List<GameKey> keys = new();
+            if (uploadKeys != null && uploadKeys.Length > 0)
+            {
+                using (var reader = new StreamReader(uploadKeys.OpenReadStream()))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        // Разделяем строку по символу '/'
+                        var parts = line.Split('/');
+                        if (parts.Length == 2 && int.TryParse(parts[0], out int platformId))
+                        {
+                            if (platformsIds.Contains(platformId))
+                            {
+                                keys.Add(new GameKey { PlatformId = platformId, Key = parts[1] });
+                            }
+
+                        }
+                    }
+                }
+            }
+            return keys;
+        }
+
+        private async Task<List<Genre>> GetSelectedGanre(int[] ganreIds)
+        {
+            List<Genre> genres = new();
+
+            if (ganreIds is not null)
+            {
+                foreach (int ganreId in ganreIds)
+                {
+                    Genre get = await _dbContext.Genres.Where(x => x.Id == ganreId).FirstOrDefaultAsync();
+                    if (get != null)
+                    {
+                        genres.Add(get);
+                    }
+                }
+            }
+            return genres;
+        }
+
+        private async Task<List<GamePlatform>> GetSelectedPlatforms(int[] platformsIds)
+        {
+            List<GamePlatform> platforms = new();
+            if (platformsIds is not null)
+            {
+                foreach (int platformId in platformsIds)
+                {
+                    GamePlatform get = await _dbContext.GamePlatforms.Where(x => x.Id == platformId).FirstOrDefaultAsync();
+                    if (get != null)
+                    {
+                        platforms.Add(get);
+                    }
+                }
+            }
+            return platforms;
+        }
+
+        private async Task<List<GameLabel>> GetSelectedLabels(int[] gamesLabelsIds)
+        {
+            List<GameLabel> gameLabels = new();
+            if (gamesLabelsIds is not null)
+            {
+                foreach (int gmLId in gamesLabelsIds)
+                {
+                    GameLabel get = await _dbContext.GameLabels.Where(x => x.Id == gmLId).FirstOrDefaultAsync();
+                    if (get != null)
+                    {
+                        gameLabels.Add(get);
+                    }
+                }
+            }
+            return gameLabels;
+        }
+        #endregion
     }
 }

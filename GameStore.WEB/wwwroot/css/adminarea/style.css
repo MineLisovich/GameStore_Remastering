@@ -69,3 +69,9 @@
     .gameCard:hover {
         box-shadow: 0 0 10px royalblue; /* shadow appears on hover */
     }
+
+
+.screenShotPreiew img{
+    width: 400px;
+    
+}

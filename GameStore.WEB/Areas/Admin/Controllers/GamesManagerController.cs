@@ -47,6 +47,15 @@ namespace GameStore.WEB.Areas.Admin.Controllers
         #endregion
 
         #region PUBLIC METHODS - POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task <IActionResult> CreateGame (DataGameModel model)
+        {
+            ResultServiceModel result = await _gameService.CreateGameAsync(model.Game);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Create.Id);
+            return RedirectToAction(nameof(GetGamesList));
+        }
         #endregion
 
         #region PRIVATE METHODS
@@ -92,10 +101,23 @@ namespace GameStore.WEB.Areas.Admin.Controllers
             UserActionResult lastAction = (TempData.ContainsKey("LastAction")) ? JsonConvert.DeserializeObject<UserActionResult>((string)TempData["LastAction"]) : new();
             return lastAction;
         }
-        private ITempDataDictionary SetTempDataForInfoAboutLastAction(ResultServiceModel result, int actionTypeId, int sectionOrderId)
+        private ITempDataDictionary SetTempDataForInfoAboutLastAction(ResultServiceModel result, int actionTypeId)
         {
             StandartUserActionTypes actionTypes = new();
             string mainMessage = "";
+
+            if(actionTypeId == actionTypes.Create.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Игра успешно создана" : "Не удалось создать игру";
+            }
+            else if(actionTypeId == actionTypes.Edit.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Данные об игре изменены" : "Не удалось изменить данные об игре";
+            }
+            else if(actionTypeId == actionTypes.Delete.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Игра успешно удалена" : "Не уадалось удалить игру";
+            }
 
             UserActionResult lastAction = new();
             lastAction.Id = actionTypeId;
