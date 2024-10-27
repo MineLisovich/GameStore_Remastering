@@ -13,8 +13,48 @@
         $(document).ready(function () {
             InitializationMultiSelect2("js-mulsel");
             InitializationSelect2("js-single");
-         
         });
+
+        //Poster
+        const posterInput = $('#Game_UploadPoster');
+        const posterPreview = $('#posterPreview-js');
+        posterInput.on('change', (e) => {
+            const file = posterInput[0].files[0];
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const imageDataUrl = event.target.result;
+                const img = $('<img >').attr('src', imageDataUrl);
+                img.css({'border': '1px solid black' });
+                posterPreview.empty().append(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        //ScreenShots
+        const scInput = $("#Game_UploadScreenshots");
+        const scPreview = $('#screenPreview-js');
+        scInput.on('change', (e) => {
+            const scFiles = scInput[0].files;
+            scPreview.empty();
+
+            for (let i = 0; i < scFiles.length; i++) {
+                const scFile = scFiles[i];
+                const scReader = new FileReader();
+
+                scReader.onload = (event) => {
+                    const scimageDataUrl = event.target.result;
+                    const scimg = $('<img>').attr('src', scimageDataUrl);
+                    scimg.css({ 'border': '1px solid black', 'margin': '5px', 'max-width': '400px', 'max-height': '400px' });
+                    scPreview.append(scimg);
+                };
+
+                scReader.readAsDataURL(scFile); // Читаем файл как Data URL
+            }
+            
+        });
+
     </script>
 }
 
@@ -109,7 +149,7 @@
                 @* ПОСТЕР *@
                 <div class="form-group">
                     <label>Постер:</label>
-                    <input asp-for=Game.UploadPoster type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат картинки .jpg, рекомендуемое разрешение постера: 200x200" />
+                    <input asp-for=Game.UploadPoster type="file" class="form-control" accept=".png" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат картинки .png, рекомендуемое разрешение постера: 200x200" />
                 </div>
 
                 @* ССЫЛКА НА ЮТУБ ТРЕЙЛЕР ИГРЫ *@
@@ -121,7 +161,7 @@
                 @* СКРИНШОТЫ ИГРЫ *@
                 <div class="form-group">
                     <label>Скриншоты игры:</label>
-                    <input asp-for=Game.UploadScreenshots type="file" class="form-control" accept=".jpg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат скриншотов .jpg, рекомендуемое разрешение скриншотов: 1920x1080" multiple/>
+                    <input asp-for=Game.UploadScreenshots type="file" class="form-control" accept=".png" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат скриншотов .png, рекомендуемое разрешение скриншотов: 1920x1080" multiple/>
                 </div>
 
                 @* КЛЮЧИ ОТ ИГРЫ *@
@@ -190,7 +230,32 @@
 
     <div class="col borderS mx-1">
        <h3>Превью выбранных изоображений</h3>
-       <h5>Постер игры</h5>
-       <h5>Скриншоты игры</h5>
+      
+       <div class="mt-2">
+            <h5>Постер игры</h5>
+            <div id="posterPreview-js">
+                @if (Model.Game.Poster is not null && Model.Game.Poster.Length !=0)
+                {
+                    @Html.Raw("<img  src=\"data:image/png;base64,"
+                             + Convert.ToBase64String(Model.Game.Poster) + "\" />")
+                }
+            </div>
+       </div>
+
+        <div class="mt-2">
+            <h5>Скриншоты игры</h5>
+            <div id="screenPreview-js">
+                @if(Model.Game.Screenshots is not null)
+                {
+                    @foreach(var sc in Model.Game.Screenshots)
+                    {
+                        @Html.Raw("<img  src=\"data:image/png;base64,"
+                                 + Convert.ToBase64String(sc.Screenshot) + "\" />")
+                    }
+                }
+            </div>
+        </div>
+        
+     
     </div>
 </div>

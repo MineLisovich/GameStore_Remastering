@@ -14,11 +14,11 @@
                 <div class="s_gameposter">
                     @if(game.Poster.Length == 0)
                     {
-                        <img src="~/img/gamesposters/gameposter.jpg" />
+                        <img src="~/img/gamesposters/2077.png" />
                     }
                     else
                     {
-                        @Html.Raw("<img  src=\"data:image/jpeg;base64,"
+                        @Html.Raw("<img  src=\"data:image/png;base64,"
                                  + Convert.ToBase64String(game.Poster) + "\" />")
                     }
                   
