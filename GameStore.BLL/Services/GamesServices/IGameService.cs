@@ -9,6 +9,7 @@ namespace GameStore.BLL.Services.GamesServices
         Task<List<GameDTO>> GetGamesAsync(string nameGame);
         Task<GameDTO> GetGameByIdAsync(long id);
         Task<ResultServiceModel> CreateGameAsync(GameDTO game);
+        Task<ResultServiceModel> UpdateGameAsync(GameDTO game);
         
         
         //SELECT LIST

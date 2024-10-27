@@ -56,6 +56,16 @@ namespace GameStore.WEB.Areas.Admin.Controllers
             TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Create.Id);
             return RedirectToAction(nameof(GetGamesList));
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditGame (DataGameModel model)
+        {
+            ResultServiceModel result = await _gameService.UpdateGameAsync(model.Game);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Edit.Id);
+            return RedirectToAction(nameof(GetGamesList));
+        }
         #endregion
 
         #region PRIVATE METHODS

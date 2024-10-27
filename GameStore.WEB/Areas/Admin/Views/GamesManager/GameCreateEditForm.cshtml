@@ -61,6 +61,7 @@
 
 <div class="row mt-5">
     <div class="col-7 borderS">
+        <a asp-controller="GamesManager" asp-action="GetGamesList" class="btn btn-outline-primary">Назад</a>
         @if(isCreateMethod is true)
         {
             <h3>Создание игры</h3>
@@ -203,25 +204,28 @@
                 </div>
             </div>
 
-            <div class="form-group form-check form-switch">
-                <input type="checkbox" asp-for=Game.IsConfirmActions class="form-check-input" />
-                <label class="form-check-label" asp-for=Game.IsConfirmActions>Подтверждение введёных данных**</label>
-            </div>
+            @if(isCreateMethod is true)
+            {
+                <div class="form-group form-check form-switch">
+                    <input type="checkbox" asp-for=Game.IsConfirmActions class="form-check-input" />
+                    <label class="form-check-label" asp-for=Game.IsConfirmActions>Подтверждение введёных данных**</label>
+                </div>
+
+                <div class="alert alert-warning" role="alert">
+                    <p>* - Поля обязательны к зополнению.</p>
+                    <p>
+                        ** - Если тублер активирован (цвет синий) вы подтверждаете что заполнили абсолютно все данные об игре.
+                        После нажатия на кнопку "Сохранить" игра автоматически разместиться на сайте и станет готовой к покупке.
+                        Если тублер деактивирован (цвет серый) и вы нажимаете кнопку сохранить. Это означает что введённые вами данные сохронятся как черновик.
+                        Игра не будет размещена на сайте и её будет не возможно купить. Вы можете в любой момент вернуться и дозаполнить информацию об Игре.
+                        После того как вы дозаполнили всю информацию, активируйте тумблер и нажмите на кнопку "Сохранить".
+                    </p>
+                </div>
+            }
+           
             
-            <div class="alert alert-warning" role="alert">
-                <p>* - Поля обязательны к зополнению.</p>
-                <p>
-                    ** - Если тублер активирован (цвет синий) вы подтверждаете что заполнили абсолютно все данные об игре.
-                     После нажатия на кнопку "Сохранить" игра автоматически разместиться на сайте и станет готовой к покупке.
-                     Если тублер деактивирован (цвет серый) и вы нажимаете кнопку сохранить. Это означает что введённые вами данные сохронятся как черновик.
-                     Игра не будет размещена на сайте и её будет не возможно купить. Вы можете в любой момент вернуться и дозаполнить информацию об Игре.
-                     После того как вы дозаполнили всю информацию, активируйте тумблер и нажмите на кнопку "Сохранить".
-                </p>
-            </div>
-
+          
             <div class="modal-footer">
-
-               
                 <a asp-controller="GamesManager" asp-action="GetGamesList" class="btn btn-secondary" >Назад</a>
                 <button type="submit" class="btn btn-outline-primary">Сохранить</button>
             </div>

@@ -92,6 +92,63 @@ namespace GameStore.BLL.Services.GamesServices
             return result;
         }
 
+        public async Task<ResultServiceModel> UpdateGameAsync(GameDTO game)
+        {
+            ResultServiceModel result = new();
+
+            Game currentGame = await _dbContext.Games.Where(x => x.Id == game.Id)
+                                              .Include(gr => gr.GameGanres)
+                                              .Include(d => d.Developer)
+                                              .Include(p => p.GamePlatforms)
+                                              .Include(l => l.GameLabels)
+                                              .Include(s => s.Screenshots)
+                                              .Include(k => k.GameKeys)
+                                              .FirstOrDefaultAsync();
+
+            if (currentGame is null) { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.recordNoExist; return result; }
+            currentGame.Name = game.Name;
+            currentGame.Description = game.Description;
+            currentGame.GameGanres = await GetSelectedGanre(game.GameGanresIds);
+            currentGame.DeveloperId = game.DeveloperId;
+            currentGame.GamePlatforms = await GetSelectedPlatforms(game.GamePlatformsIds);
+            currentGame.GameLabels = await GetSelectedLabels(game.GameLabelsIds);
+            currentGame.ReleaseDate = game.ReleaseDate;
+            currentGame.Price = game.Price;
+            currentGame.YtLinkGameTrailer = null;
+            currentGame.Os = game.Os;
+            currentGame.Gpu = game.Gpu;
+            currentGame.Cpu = game.Cpu;
+            currentGame.Ram = game.Ram;
+            currentGame.Weight = game.Weight; 
+           
+            //Медиа файлы
+            if(game.UploadPoster is not null)
+            {
+                currentGame.PosterName = game.UploadPoster.FileName;
+                currentGame.Poster = UploadPoster(game.UploadPoster);
+            }
+         
+            if(game.UploadScreenshots is not null)
+            {
+                currentGame.Screenshots = UploadGameScreenshot(game.UploadScreenshots);
+            }
+        
+            if (game.UploadGameKeys is not null)
+            {
+                List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys, game.GamePlatformsIds);
+                currentGame.GameKeys.AddRange(newKeys);
+            }
+
+            try
+            {
+                _dbContext.Games.Update(currentGame);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.dontSave; return result; }
+
+            result.IsSucceeded = true;
+            return result;
+        }
 
         #region SELECT LIST
         public async Task<List<GameDeveloperDTO>> GetDevelopersForSelectList()
