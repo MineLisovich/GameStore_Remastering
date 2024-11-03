@@ -1,0 +1,269 @@
+﻿@model DataGameModel
+
+@{
+    bool isCreateMethod = (Model.Game.Id == 0) ? true : false;
+    string actionName = (isCreateMethod is true) ? "CreateGame": "EditGame";
+    ViewData["Title"] = (isCreateMethod is true) ? "Создание игры" : "Редактирование игры";
+}
+
+@section js
+{
+    <script src="~/js/companets.js"></script>
+    <script>
+        $(document).ready(function () {
+            InitializationMultiSelect2("js-mulsel");
+            InitializationSelect2("js-single");
+        });
+
+        //Poster
+        const posterInput = $('#Game_UploadPoster');
+        const posterPreview = $('#posterPreview-js');
+        posterInput.on('change', (e) => {
+            const file = posterInput[0].files[0];
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const imageDataUrl = event.target.result;
+                const img = $('<img >').attr('src', imageDataUrl);
+                img.css({'border': '1px solid black' });
+                posterPreview.empty().append(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        //ScreenShots
+        const scInput = $("#Game_UploadScreenshots");
+        const scPreview = $('#screenPreview-js');
+        scInput.on('change', (e) => {
+            const scFiles = scInput[0].files;
+            scPreview.empty();
+
+            for (let i = 0; i < scFiles.length; i++) {
+                const scFile = scFiles[i];
+                const scReader = new FileReader();
+
+                scReader.onload = (event) => {
+                    const scimageDataUrl = event.target.result;
+                    const scimg = $('<img>').attr('src', scimageDataUrl);
+                    scimg.css({ 'border': '1px solid black', 'margin': '5px', 'max-width': '400px', 'max-height': '400px' });
+                    scPreview.append(scimg);
+                };
+
+                scReader.readAsDataURL(scFile); // Читаем файл как Data URL
+            }
+            
+        });
+
+    </script>
+}
+
+
+<div class="row mt-5">
+    <div class="col-7 borderS">
+        <a asp-controller="GamesManager" asp-action="GetGamesList" class="btn btn-outline-primary">Назад</a>
+        @if(isCreateMethod is true)
+        {
+            <h3>Создание игры</h3>
+        }
+        else
+        {
+            <h3>Редактирование игры - @Model.Game.Name</h3>
+        }
+
+        <form id="cereateEditGameForm" asp-area="Admin" asp-controller="GamesManager" asp-action="@actionName" method="post" enctype="multipart/form-data">
+
+            <div class="modal-body">
+                <input asp-for="Game.Id" readonly hidden/>
+
+                <h4 class="text-center">Основная информация</h4>
+
+                @* НАИМЕНОВАНИЕ *@
+                <div class="form-group">
+                    <label asp-for=Game.Name>Наименование игры: *</label>
+                    <input asp-for=Game.Name type="text" class="form-control" />
+                    <span asp-validation-for="Game.Name" class="validError"></span>
+                </div>
+                @* ОПИСАНИЕ *@
+                <div class="form-group">
+                    <label asp-for=Game.Description> Описание игры:</label>
+                    <textarea asp-for=Game.Description type="text" class="form-control"></textarea>
+                </div>
+
+                @* ЖАНР *@
+                <div class="form-group">
+                    <label asp-for=Game.GameGanresIds> Выберите жанр(ы) игры: *</label>
+                    <select asp-for=Game.GameGanresIds asp-items=Model.SelectListItemsGameGenres class="form-select js-mulsel" multiple="multiple">
+                   
+                    </select>
+                    <span asp-validation-for="Game.GameGanresIds" class="validError"></span>
+                </div>
+
+                @* РАЗРАБОТЧИК *@
+                <div class="form-group">
+                    <label asp-for=Game.DeveloperId> Выберите разработчика игры: *</label>
+                    <select asp-for=Game.DeveloperId asp-items=Model.SelectListItemsGameDevelopers class="form-select js-single">
+                        <option selected disabled ></option>
+                      
+                    </select>
+                    <span asp-validation-for="Game.DeveloperId" class="validError"></span>
+                </div>
+
+                @* ПЛАТФОРМА *@
+                <div class="form-group">
+                    <label asp-for=Game.GamePlatformsIds> Выберите игровую платформу(ы): *</label>
+                    <select asp-for=Game.GamePlatformsIds asp-items=Model.SelectListItemsGamePlatforms class="form-select js-mulsel" multiple="multiple">
+                      
+                    </select>
+                    <span asp-validation-for="Game.GamePlatformsIds" class="validError"></span>
+                </div>
+
+                @* ЯРЛЫКИ ИГРЫ *@
+                <div class="form-group">
+                    <label asp-for=Game.GameLabelsIds> Выберите ярлыки (особенности) игры: *</label>
+                    <select asp-for=Game.GameLabelsIds asp-items=Model.SelectListItemsGameLabels class="form-select js-mulsel" multiple="multiple">
+                    
+                    </select>
+                    <span asp-validation-for="Game.GameLabelsIds" class="validError"></span>
+                </div>
+
+                @* ДАТА ВЫХОДА ИГРЫ *@
+                <div class="form-group">
+                    <label asp-for=Game.ReleaseDate> Дата выхода: *</label>
+                    <input asp-for=Game.ReleaseDate type="date" class="form-control"  />
+                    <span asp-validation-for="Game.ReleaseDate" class="validError"></span>
+                </div>
+               
+                @* ЦЕНА *@
+                <div class="form-group">
+                    <label asp-for=Game.Price>Цена: *</label>
+                    <div class=" input-group">
+                        <span class="input-group-text">BYN</span>
+                        <span class="input-group-text">0.00</span>
+                        <input asp-for=Game.Price type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
+                    </div>
+                    <span asp-validation-for="Game.Price" class="validError"></span>
+                </div>
+
+                <h4 class="text-center mt-3">Загружаемая информация (постер, скриншоты, ключи)</h4>
+
+                @* ПОСТЕР *@
+                <div class="form-group">
+                    <label>Постер:</label>
+                    <input asp-for=Game.UploadPoster type="file" class="form-control" accept=".png" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат картинки .png, рекомендуемое разрешение постера: 200x200" />
+                </div>
+
+                @* ССЫЛКА НА ЮТУБ ТРЕЙЛЕР ИГРЫ *@
+                <div class="form-group">
+                    <label>Ссылка на ютуб трейлер:</label>
+                    <input asp-for=Game.YtLinkGameTrailer type="text" class="form-control"/>
+                </div>
+                
+                @* СКРИНШОТЫ ИГРЫ *@
+                <div class="form-group">
+                    <label>Скриншоты игры:</label>
+                    <input asp-for=Game.UploadScreenshots type="file" class="form-control" accept=".png" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат скриншотов .png, рекомендуемое разрешение скриншотов: 1920x1080" multiple/>
+                </div>
+
+                @* КЛЮЧИ ОТ ИГРЫ *@
+                <div class="form-group">
+                    <label>Ключи от игры:</label>
+                    <input asp-for=Game.UploadGameKeys type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
+                </div>
+
+                <h4 class="text-center mt-3">Системные требования (форма записи: Рекомендуемые / Минимальные)</h4>
+
+                @* ОПЕРАЦИОННАЯ СИСТЕМА *@
+                <div class="form-group">
+                    <label asp-for=Game.Os>Операционная система:</label>
+                    <input asp-for=Game.Os type="text" class="form-control" />
+                </div>
+
+                @* ПРОЦЕССОР *@
+                <div class="form-group">
+                    <label asp-for=Game.Cpu>Процессор:</label>
+                    <input asp-for=Game.Cpu type="text" class="form-control" />
+                </div>
+
+                @* ВИДИОКАРТА *@
+                <div class="form-group">
+                    <label asp-for=Game.Gpu>Видеокарта:</label>
+                    <input asp-for=Game.Gpu type="text" class="form-control" />
+                </div>
+
+                @* ОПЕРАТИВНАЯ ПАМЯТЬ *@
+                <div class="form-group">
+                    <label asp-for=Game.Ram>Оперативная память:</label>
+                    <input asp-for=Game.Ram type="text" class="form-control" />
+                </div>
+
+                @* ЗАНИМАЙМОЕ МЕСТО НА ДИСКЕ*@
+                <div class="form-group">
+                    <label asp-for=Game.Weight>Занимаймое место на диске:</label>
+                    <input asp-for=Game.Weight type="text" class="form-control" />
+                </div>
+            </div>
+
+            @if(isCreateMethod is true)
+            {
+                <div class="form-group form-check form-switch">
+                    <input type="checkbox" asp-for=Game.IsConfirmActions class="form-check-input" />
+                    <label class="form-check-label" asp-for=Game.IsConfirmActions>Подтверждение введёных данных**</label>
+                </div>
+
+                <div class="alert alert-warning" role="alert">
+                    <p>* - Поля обязательны к зополнению.</p>
+                    <p>
+                        ** - Если тублер активирован (цвет синий) вы подтверждаете что заполнили абсолютно все данные об игре.
+                        После нажатия на кнопку "Сохранить" игра автоматически разместиться на сайте и станет готовой к покупке.
+                        Если тублер деактивирован (цвет серый) и вы нажимаете кнопку сохранить. Это означает что введённые вами данные сохронятся как черновик.
+                        Игра не будет размещена на сайте и её будет не возможно купить. Вы можете в любой момент вернуться и дозаполнить информацию об Игре.
+                        После того как вы дозаполнили всю информацию, активируйте тумблер и нажмите на кнопку "Сохранить".
+                    </p>
+                </div>
+            }
+           
+            
+          
+            <div class="modal-footer">
+                <a asp-controller="GamesManager" asp-action="GetGamesList" class="btn btn-secondary" >Назад</a>
+                <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col borderS mx-1">
+       <h3>Превью выбранных изоображений</h3>
+      
+       <div class="mt-2">
+            <h5>Постер игры</h5>
+            <div id="posterPreview-js">
+                @if (Model.Game.Poster is not null && Model.Game.Poster.Length !=0)
+                {
+                    @Html.Raw("<img  src=\"data:image/png;base64,"
+                             + Convert.ToBase64String(Model.Game.Poster) + "\" />")
+                }
+            </div>
+       </div>
+
+        <div class="mt-2">
+            <h5>Скриншоты игры</h5>
+            <div id="screenPreview-js">
+                @if(Model.Game.Screenshots is not null)
+                {
+                    @foreach(var sc in Model.Game.Screenshots)
+                    {
+                        <div class="screenShotPreiew  mt-4" >
+
+                            @Html.Raw("<img  src=\"data:image/png;base64,"
+                                     + Convert.ToBase64String(sc.Screenshot) + "\" />")
+                        </div>
+                      
+                    }
+                }
+            </div>
+        </div>
+        
+     
+    </div>
+</div>

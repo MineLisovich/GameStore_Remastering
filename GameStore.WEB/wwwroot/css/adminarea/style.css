@@ -46,3 +46,32 @@
     width: 100px;
     height:70px;
 }
+
+
+
+.addGame {
+    width: 250px;
+}
+
+.gamesArea {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gameCard {
+    width: 620px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+    .gameCard:hover {
+        box-shadow: 0 0 10px royalblue; /* shadow appears on hover */
+    }
+
+
+.screenShotPreiew img{
+    width: 400px;
+    
+}

@@ -61,6 +61,9 @@ namespace GameStore.DAL.Domain
             builder.Entity<GamePlatform>().HasData(new Predefined.Dictionaries.PdGamePlatforms().ListGamePlatforms);
             builder.Entity<GameDeveloper>().HasData(new Predefined.Dictionaries.PdGameDevelopers().ListGameDevelopers);
             builder.Entity<GameLabel>().HasData(new Predefined.Dictionaries.PdGameLabels().Listlabels);
+
+            //-- Games
+            builder.Entity<Game>().HasData(new Predefined.Games.PdGames().testGames);
             #endregion
         }
 

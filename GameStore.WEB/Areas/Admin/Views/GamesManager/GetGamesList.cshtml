@@ -1,0 +1,92 @@
+﻿@model ShowGamesModel
+@{
+    ViewData["Title"] = "Игры";
+}
+
+@section js
+{
+    <script src="~/js/adminarea/games/gamesmain.js"></script>
+
+    <script>
+       // ШАГ 1. НАСТРОЙКА ОБЩЕГО ПОВЕДЕНИЯ МОДАЛОК
+        $(document).ready(function () {
+            //Загрузка данных об играх
+            AjaxActionGetGamesData("");
+
+           //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК
+           AddHandlerClickForButtonsOfActionModals('modalFastEditGame', 'gamesManager');
+          
+           //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+           AddHandlerShownModalForCreateEditModal("modalFastEditGame", "fastEditGameDataForm");
+           
+           //
+           ShowModalLastAction();
+
+            GameManagerBTNControll();
+        });
+        // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "GamesManager")';
+                    break;
+                case "delete":
+                    url = '@Url.Action("SoftDeleteGame", "GamesManager")';
+                    break;
+                case "hardDelete":
+                    url = '@Url.Action("HardDeleteGame", "GamesManager")';
+                    break;
+            }
+            return url;
+        }
+
+        // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+        function SettingBehaviorOfModalWindow(boxId, section) {
+            SettingsSharePriceInput();
+            SettingsGameKeyInput();
+       
+        }
+
+        function GetUrlForLoadGameData(){
+            var url = '@Url.Action("LoadGamesData","GamesManager")';
+            return url;
+        }
+
+
+    </script>
+}
+
+
+<h1>Игры</h1>
+<a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Вернутся к выбору разделов</a>
+
+<div class="row mt-5">
+    <input id="searchGame" type="text" class="form-control" placeholder="Поиск игры по наименованию (Регистр букв важен)" autocomplete="off" />
+</div>
+
+<div class="row mt-5">
+    <a asp-controller="GamesManager" asp-action="GameCreateEditForm" class="btn btn-success addGame">Добавить игру</a>
+
+    <div id="js-gemes" class="mt-5 gamesArea">
+
+      
+    </div>
+
+</div>
+
+<div id="modalWrapper">
+</div>
+
+<div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+    @await Html.PartialAsync("_Partial.Action.Warning")
+    @await Html.PartialAsync("_Partial.Action.Success")
+    @await Html.PartialAsync("_Partial.Action.Error")
+</div>
+
+<div id="lastActionDataWrapper">
+    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
+</div>
+
+

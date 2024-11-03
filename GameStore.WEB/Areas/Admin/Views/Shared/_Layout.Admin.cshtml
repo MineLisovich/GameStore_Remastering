@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/adminarea/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GameStore.WEB.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/datatables/datatables.min.css" />
-
+    <link rel="stylesheet" href="~/css/select2.min.css" asp-append-version="true" />
 </head>
 <body>
     @*Header*@
@@ -31,11 +31,12 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/showresults.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
     <script src="~/js/datatables/datatables.min.js"></script>
-
+    <script src="~/js/select2.min.js" asp-append-version="true"></script>
     @await RenderSectionAsync("js", required: false)
 </body>
 </html>

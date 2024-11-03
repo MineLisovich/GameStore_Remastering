@@ -9,12 +9,12 @@
         }
         else
         {
-            @Html.Raw("<img class='rounded-circle' src=\"data:image/jpg;base64,"
+            @Html.Raw("<img class='rounded-circle' src=\"data:image/png;base64,"
                      + Convert.ToBase64String(Model.AppUser.AvatarImage) + "\" />")
         }
     </div>
     <label>Сменить аватар:</label>
-    <input asp-for=uploadAvarar  type="file" class="form-control" accept=".jpg" />
+    <input asp-for=uploadAvarar  type="file" class="form-control" accept=".png" />
     <input asp-for=AppUser.AvatarName type="text" class="form-control" readonly hidden/>
     <span class="validError"></span>
 </div>
