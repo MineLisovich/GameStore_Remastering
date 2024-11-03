@@ -151,24 +151,13 @@ function GetData(actionType, id, section) {
             }
             break;
         case "userManager":
-            switch (actionType) {
-                case "edit":
-                    data = { userId: id };
-                    break;
-                case "delete":
-                    data = { userId: id };
-                    break;
-            }
+            data = { userId: id };
             break;
         case "dictionaries":
-            switch (actionType) {
-                case "edit":
-                    data = { id: id, sectionName: section };
-                    break;
-                case "delete":
-                    data = { id: id, sectionName: section };
-                    break;
-            }
+            data = { id: id, sectionName: section };
+            break;
+        case "gamesManager":
+            data = { gameId: id };
             break;
   
     }
@@ -214,6 +203,9 @@ function AjaxActionGetCreateEditModal(actionType, id, section) {
                     $(modalId).modal('show');
                     break;
                 case "delete":
+                    location.reload();
+                    break;
+                case "hardDelete":
                     location.reload();
                     break;
 

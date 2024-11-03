@@ -44,6 +44,29 @@ namespace GameStore.WEB.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPartialWorkOnData(long gameId)
+        {
+            DataGameModel model = await CreateDataGameModel(gameId, true);
+            return PartialView("_Partial.FastEditGameForm", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SoftDeleteGame(long gameId)
+        {
+            ResultServiceModel result = await _gameService.DeleteGameAsync(gameId, true);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Delete.Id);
+            return RedirectToAction(nameof(GetGamesList));
+        }
+        [HttpGet]
+        public async Task<IActionResult> HardDeleteGame(long gameId)
+        {
+            ResultServiceModel result = await _gameService.DeleteGameAsync(gameId, false);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Delete.Id);
+            return RedirectToAction(nameof(GetGamesList));
+        }
         #endregion
 
         #region PUBLIC METHODS - POST
@@ -66,10 +89,20 @@ namespace GameStore.WEB.Areas.Admin.Controllers
             TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Edit.Id);
             return RedirectToAction(nameof(GetGamesList));
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task <IActionResult> FastEditGame (DataGameModel model)
+        {
+            ResultServiceModel result = await _gameService.FastUpdateGameAsync(model.Game);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Edit.Id);
+            return RedirectToAction(nameof(GetGamesList));
+        }
         #endregion
 
         #region PRIVATE METHODS
-        private async Task<DataGameModel> CreateDataGameModel(long gameId)
+        private async Task<DataGameModel> CreateDataGameModel(long gameId, bool isFastEditMode = false)
         {
             DataGameModel model = new();
 
@@ -83,13 +116,21 @@ namespace GameStore.WEB.Areas.Admin.Controllers
             else
             {
                 model.Game = await _gameService.GetGameByIdAsync(gameId);
-                model.Game.GameGanresIds = (model.Game.GameGanres.Count() > 0) ? model.Game.GameGanres.Select(x=>x.Id).ToArray() : [];
-                model.Game.GamePlatformsIds = (model.Game.GamePlatforms.Count() > 0) ? model.Game.GamePlatforms.Select(x=>x.Id).ToArray() : [];
-                model.Game.GameLabelsIds = (model.Game.GameLabels.Count() > 0) ? model.Game.GameLabels.Select(x=>x.Id).ToArray() : [];
+              
+                if(isFastEditMode is false)
+                {
+                    model.Game.GameGanresIds = (model.Game.GameGanres.Count() > 0) ? model.Game.GameGanres.Select(x => x.Id).ToArray() : [];
+                    model.Game.GamePlatformsIds = (model.Game.GamePlatforms.Count() > 0) ? model.Game.GamePlatforms.Select(x => x.Id).ToArray() : [];
+                    model.Game.GameLabelsIds = (model.Game.GameLabels.Count() > 0) ? model.Game.GameLabels.Select(x => x.Id).ToArray() : [];
+                }
             }
 
-            //SelectList
-            await CreateSelectList(model);
+            if(isFastEditMode is false)
+            {
+                //SelectList
+                await CreateSelectList(model);
+            }
+          
 
             return model;
         }

@@ -27,11 +27,11 @@ namespace GameStore.BLL.Services.GamesServices
             List<Game> games = new();
             if (nameGame == "")
             {
-                games = await sqlQuery.ToListAsync();
+                games = await sqlQuery.Where(x=>x.IsDeleted == false).ToListAsync();
             }
             else
             {
-                games = await sqlQuery.Where(x => x.Name.Contains(nameGame)).ToListAsync();
+                games = await sqlQuery.Where(x => x.Name.Contains(nameGame) && x.IsDeleted == false).ToListAsync();
             }
             return _mapper.Map<List<GameDTO>>(games);
         }
@@ -146,6 +146,84 @@ namespace GameStore.BLL.Services.GamesServices
             }
             catch { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.dontSave; return result; }
 
+            result.IsSucceeded = true;
+            return result;
+        }
+
+        public async Task<ResultServiceModel> FastUpdateGameAsync(GameDTO game)
+        {
+            ResultServiceModel result = new();
+
+            Game currentGame = await _dbContext.Games.Where(x => x.Id == game.Id)
+                                              .Include(pl => pl.GamePlatforms)
+                                              .Include(k => k.GameKeys)
+                                              .FirstOrDefaultAsync();
+
+            if (currentGame is null) { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.recordNoExist; return result; }
+
+            //Цена
+            if(currentGame.Price != game.Price)
+            {
+                currentGame.Price = game.Price;
+            }
+
+            //Видимость на сайте
+            if(currentGame.IsVisible != game.IsVisible)
+            {
+                currentGame.IsVisible = game.IsVisible;
+            }
+
+            //Акция 
+            if(currentGame.IsShare != game.IsShare)
+            {
+                currentGame.IsShare = game.IsShare;
+            }
+
+            //Акция - цена
+            if(currentGame.SharePrice != game.SharePrice)
+            {
+                currentGame.SharePrice = game.SharePrice;
+            }
+
+            //Ключи от игр
+            if (game.UploadGameKeys is not null)
+            {
+                int[] currentGamePlatforms = currentGame.GamePlatforms.Select(x => x.Id).ToArray();
+                List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys, currentGamePlatforms);
+                currentGame.GameKeys.AddRange(newKeys);
+            }
+
+            try
+            {
+                _dbContext.Games.Update(currentGame);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.dontSave; return result; }
+
+            result.IsSucceeded = true;
+            return result;
+        }
+
+        public async Task<ResultServiceModel> DeleteGameAsync(long gameId, bool isSoft) 
+        { 
+            ResultServiceModel result = new();
+
+            Game game = await _dbContext.Games.Where(x => x.Id == gameId).FirstOrDefaultAsync();
+            if(game is null) { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.recordNoExist; return result; }
+
+            if(isSoft is true)
+            {
+                game.IsDeleted = true;
+                game.IsVisible = false;
+            }
+            else
+            {
+               _dbContext.Games.Remove(game);
+            }
+
+            try { await _dbContext.SaveChangesAsync(); }
+            catch { result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.dontSave; return result; }
+           
             result.IsSucceeded = true;
             return result;
         }

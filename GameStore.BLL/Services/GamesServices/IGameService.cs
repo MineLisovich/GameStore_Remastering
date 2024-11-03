@@ -10,6 +10,8 @@ namespace GameStore.BLL.Services.GamesServices
         Task<GameDTO> GetGameByIdAsync(long id);
         Task<ResultServiceModel> CreateGameAsync(GameDTO game);
         Task<ResultServiceModel> UpdateGameAsync(GameDTO game);
+        Task<ResultServiceModel> FastUpdateGameAsync(GameDTO game);
+        Task<ResultServiceModel> DeleteGameAsync(long gameId, bool isSoft);
         
         
         //SELECT LIST

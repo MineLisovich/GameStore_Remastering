@@ -13,42 +13,47 @@
             //Загрузка данных об играх
             AjaxActionGetGamesData("");
 
-           //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
-           //AddHandlerClickForButtonsOfActionModals('modalEditUserProfileData','profile');
+           //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК
+           AddHandlerClickForButtonsOfActionModals('modalFastEditGame', 'gamesManager');
           
            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
-           // AddHandlerShownModalForCreateEditModal("modalEditUserProfileData", "editUserDataForm");
-            ShowModalLastAction();
+           AddHandlerShownModalForCreateEditModal("modalFastEditGame", "fastEditGameDataForm");
+           
+           //
+           ShowModalLastAction();
+
+            GameManagerBTNControll();
         });
         // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
-        // function GetURLForAjaxByActionType(actionType) {
-        //     var url = "";
-        //     switch (actionType) {
-        //         case "edit":
-        //             url = '@Url.Action("GetPartialWorkOnData", "UserProfile")';
-        //             break;
-        //         case "delete":
-        //             url = '@Url.Action("DeleteUserAccount", "UserProfile")';
-        //             break;
-        //     }
-        //     return url;
-        // }
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "GamesManager")';
+                    break;
+                case "delete":
+                    url = '@Url.Action("SoftDeleteGame", "GamesManager")';
+                    break;
+                case "hardDelete":
+                    url = '@Url.Action("HardDeleteGame", "GamesManager")';
+                    break;
+            }
+            return url;
+        }
+
         // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
-        // function SettingBehaviorOfModalWindow(boxId, section) {
-
-        //     if (section == "userdata") {
-        //         //Превью аватара
-        //         PreviewAvatar();
-        //     }
-        //     else if (section == "changePass") {
-
-        //     }
-        // }
+        function SettingBehaviorOfModalWindow(boxId, section) {
+            SettingsSharePriceInput();
+            SettingsGameKeyInput();
+       
+        }
 
         function GetUrlForLoadGameData(){
             var url = '@Url.Action("LoadGamesData","GamesManager")';
             return url;
         }
+
+
     </script>
 }
 
@@ -69,10 +74,6 @@
     </div>
 
 </div>
-
-
-@* ВРЕМЕННО *@
-@await Html.PartialAsync("_Partial.FastEditGameForm")
 
 <div id="modalWrapper">
 </div>

@@ -131,7 +131,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 var defaultCulture = new CultureInfo("ru-RU");
-defaultCulture.NumberFormat.NumberDecimalSeparator = ",";
+defaultCulture.NumberFormat.NumberDecimalSeparator = ".";
 defaultCulture.DateTimeFormat.DateSeparator = "/";
 var localizationOptions = new RequestLocalizationOptions
 {

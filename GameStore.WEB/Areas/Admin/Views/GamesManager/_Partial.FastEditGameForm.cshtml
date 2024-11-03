@@ -1,44 +1,71 @@
-﻿
+﻿@model DataGameModel
 
 <div class="modal fade modal-js" id="modalFastEditGame" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">
-                    Быстрое редактирование - 
+                    Быстрое редактирование - @Model.Game.Name
                 </h5>
             </div>
-            <form id="fastEditGameDataForm" asp-area="Admin" asp-controller="" asp-action="" method="post" enctype="multipart/form-data">
+            <form id="fastEditGameDataForm" asp-area="Admin" asp-controller="GamesManager" asp-action="FastEditGame" method="post" enctype="multipart/form-data">
 
                 <div class="modal-body">
+                    <input asp-for="Game.Id" readonly hidden />
+
+                    @* ЦЕНА *@
+                    <div class="form-group">
+                        <label asp-for=Game.Price>Цена:</label>
+                        <div class=" input-group">
+                            <span class="input-group-text">BYN</span>
+                            <span class="input-group-text">0.00</span>
+                            <input asp-for=Game.Price type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
+                        </div>
+                        <span asp-validation-for="Game.Price" class="validError"></span>
+                    </div>
 
                     @* ВИДИМОСТЬ НА САЙТЕ *@
                     <div class="form-group form-check form-switch">
-                        <input type="checkbox" id="vis" class="form-check-input" />
-                        <label class="form-check-label" id="vis">Видимость на сайте</label>
+                        <input type="checkbox" asp-for=Game.IsVisible class="form-check-input" />
+                        <label class="form-check-label" asp-for=Game.IsVisible>Видимость на сайте</label>
                     </div>
 
                      @* АКЦИЯ *@
                     <div class="form-group form-check form-switch">
-                        <input type="checkbox" id="sh" class="form-check-input" />
-                        <label class="form-check-label" id="sh">Акция</label>
+                        <input type="checkbox" asp-for=Game.IsShare  class="form-check-input" />
+                        <label class="form-check-label" asp-for=Game.IsShare>Акция</label>
                     </div>
 
                     @* АКЦИЯ - ЦЕНА *@
                     <div class="form-group">
-                        <label>Акционная цена:</label>
+                        <label asp-for =Game.SharePrice>Акционная цена:</label>
                         <div class=" input-group">
                             <span class="input-group-text">BYN</span>
                             <span class="input-group-text">0.00</span>
-                            <input type="text" class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Сумма в бел. рублях (с точкой и двумя знакими)">
+
+                            @if(Model.Game.IsShare is false)
+                            {
+                                <input asp-for=Game.SharePrice type="text"
+                                       class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                       title="Сумма в бел. рублях (с точкой и двумя знакими)" disabled/>
+                            }
+                            else
+                            {
+                                <input asp-for=Game.SharePrice type="text"
+                                       class="form-control" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                       title="Сумма в бел. рублях (с точкой и двумя знакими)" />
+                            }
+
+                          
                         </div>
                     </div>
 
                     @* КЛЮЧИ ОТ ИГРЫ *@
                     <div class="form-group">
                         <label>Ключи от игры:</label>
-                        <input name="UploadGameKeys" type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
+                        <input asp-for=Game.UploadGameKeys type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
                     </div>
+
 
                  </div>
                
