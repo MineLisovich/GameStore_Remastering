@@ -41,7 +41,6 @@ namespace GameStore.BLL.Services.GamesServices
             Game game = await _dbContext.Games.Where(x => x.Id == id)
                                               .Include(gr => gr.GameGanres)
                                               .Include(d => d.Developer)
-                                              .Include(p => p.GamePlatforms)
                                               .Include(l => l.GameLabels)
                                               .Include(s => s.Screenshots)
                                               .FirstOrDefaultAsync();
@@ -61,7 +60,6 @@ namespace GameStore.BLL.Services.GamesServices
             newGame.Description = game.Description;
             newGame.GameGanres = await GetSelectedGanre(game.GameGanresIds);
             newGame.DeveloperId = game.DeveloperId;
-            newGame.GamePlatforms = await GetSelectedPlatforms(game.GamePlatformsIds);
             newGame.GameLabels = await GetSelectedLabels(game.GameLabelsIds);
             newGame.ReleaseDate = game.ReleaseDate;
             newGame.Price = game.Price;
@@ -79,7 +77,7 @@ namespace GameStore.BLL.Services.GamesServices
             newGame.PosterName = (game.UploadPoster is not null) ? game.UploadPoster.FileName : null;
             newGame.Poster = (game.UploadPoster is not null) ? UploadPoster(game.UploadPoster) : null;
             newGame.Screenshots = (game.UploadScreenshots is not null) ? UploadGameScreenshot(game.UploadScreenshots) : null;
-            newGame.GameKeys = (game.UploadGameKeys is not null) ? UploadGameKeys(game.UploadGameKeys, game.GamePlatformsIds) : null;
+            newGame.GameKeys = (game.UploadGameKeys is not null) ? UploadGameKeys(game.UploadGameKeys) : null;
 
             try
             {
@@ -99,7 +97,6 @@ namespace GameStore.BLL.Services.GamesServices
             Game currentGame = await _dbContext.Games.Where(x => x.Id == game.Id)
                                               .Include(gr => gr.GameGanres)
                                               .Include(d => d.Developer)
-                                              .Include(p => p.GamePlatforms)
                                               .Include(l => l.GameLabels)
                                               .Include(s => s.Screenshots)
                                               .Include(k => k.GameKeys)
@@ -110,7 +107,6 @@ namespace GameStore.BLL.Services.GamesServices
             currentGame.Description = game.Description;
             currentGame.GameGanres = await GetSelectedGanre(game.GameGanresIds);
             currentGame.DeveloperId = game.DeveloperId;
-            currentGame.GamePlatforms = await GetSelectedPlatforms(game.GamePlatformsIds);
             currentGame.GameLabels = await GetSelectedLabels(game.GameLabelsIds);
             currentGame.ReleaseDate = game.ReleaseDate;
             currentGame.Price = game.Price;
@@ -135,7 +131,7 @@ namespace GameStore.BLL.Services.GamesServices
         
             if (game.UploadGameKeys is not null)
             {
-                List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys, game.GamePlatformsIds);
+                List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys);
                 currentGame.GameKeys.AddRange(newKeys);
             }
 
@@ -155,7 +151,6 @@ namespace GameStore.BLL.Services.GamesServices
             ResultServiceModel result = new();
 
             Game currentGame = await _dbContext.Games.Where(x => x.Id == game.Id)
-                                              .Include(pl => pl.GamePlatforms)
                                               .Include(k => k.GameKeys)
                                               .FirstOrDefaultAsync();
 
@@ -188,8 +183,7 @@ namespace GameStore.BLL.Services.GamesServices
             //Ключи от игр
             if (game.UploadGameKeys is not null)
             {
-                int[] currentGamePlatforms = currentGame.GamePlatforms.Select(x => x.Id).ToArray();
-                List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys, currentGamePlatforms);
+                List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys);
                 currentGame.GameKeys.AddRange(newKeys);
             }
 
@@ -292,7 +286,7 @@ namespace GameStore.BLL.Services.GamesServices
             return screens;
         }
 
-        private List<GameKey> UploadGameKeys(IFormFile uploadKeys, int[] platformsIds)
+        private List<GameKey> UploadGameKeys(IFormFile uploadKeys)
         {
             List<GameKey> keys = new();
             if (uploadKeys != null && uploadKeys.Length > 0)
@@ -306,11 +300,7 @@ namespace GameStore.BLL.Services.GamesServices
                         var parts = line.Split('/');
                         if (parts.Length == 2 && int.TryParse(parts[0], out int platformId))
                         {
-                            if (platformsIds.Contains(platformId))
-                            {
-                                keys.Add(new GameKey { PlatformId = platformId, Key = parts[1] });
-                            }
-
+                            keys.Add(new GameKey { PlatformId = platformId, Key = parts[1], IsActive = true });
                         }
                     }
                 }
@@ -334,23 +324,6 @@ namespace GameStore.BLL.Services.GamesServices
                 }
             }
             return genres;
-        }
-
-        private async Task<List<GamePlatform>> GetSelectedPlatforms(int[] platformsIds)
-        {
-            List<GamePlatform> platforms = new();
-            if (platformsIds is not null)
-            {
-                foreach (int platformId in platformsIds)
-                {
-                    GamePlatform get = await _dbContext.GamePlatforms.Where(x => x.Id == platformId).FirstOrDefaultAsync();
-                    if (get != null)
-                    {
-                        platforms.Add(get);
-                    }
-                }
-            }
-            return platforms;
         }
 
         private async Task<List<GameLabel>> GetSelectedLabels(int[] gamesLabelsIds)

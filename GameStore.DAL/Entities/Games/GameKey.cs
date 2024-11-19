@@ -36,5 +36,11 @@ namespace GameStore.DAL.Entities.Games
         /// Игровая платформа
         /// </summary>
         public GamePlatform? Platform { get; set; }
+
+
+        /// <summary>
+        /// Ключ активный? (то есть его ещё не купили)
+        /// </summary>
+        public bool IsActive { get; set; } = true;
     }
 }

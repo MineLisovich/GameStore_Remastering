@@ -38,11 +38,6 @@ namespace GameStore.DAL.Entities.Games
         public GameDeveloper? Developer { get; set; }
 
         /// <summary>
-        /// Список игровых платформ
-        /// </summary>
-        public List<GamePlatform> GamePlatforms { get; set; } = new();
-
-        /// <summary>
         /// Дата выхода игры
         /// </summary>
         [Column(TypeName = "date")]
@@ -135,6 +130,11 @@ namespace GameStore.DAL.Entities.Games
         /// Игра удалена (фэйковое удаление игры)
         /// </summary>
         public bool IsDeleted { get; set; } = false;
+
+        /// <summary>
+        /// Количество проданных копий
+        /// </summary>
+        public long CountSold { get; set; }
 
     }
 }

@@ -13,6 +13,5 @@ namespace GameStore.DAL.Entities.Dictionaries
         /// Наименование платформы
         /// </summary>
         public required string Name { get; set; }
-        public List<Game> Games { get; set; } = new();
     }
 }

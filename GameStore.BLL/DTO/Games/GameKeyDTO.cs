@@ -35,5 +35,10 @@ namespace GameStore.BLL.DTO.Games
         /// Игровая платформа
         /// </summary>
         public GamePlatformDTO Platform { get; set; } = null;
+
+        /// <summary>
+        /// Ключ активный? (то есть его ещё не купили)
+        /// </summary>
+        public bool IsActive { get; set; } = true;
     }
 }

@@ -109,15 +109,6 @@
                     <span asp-validation-for="Game.DeveloperId" class="validError"></span>
                 </div>
 
-                @* ПЛАТФОРМА *@
-                <div class="form-group">
-                    <label asp-for=Game.GamePlatformsIds> Выберите игровую платформу(ы): *</label>
-                    <select asp-for=Game.GamePlatformsIds asp-items=Model.SelectListItemsGamePlatforms class="form-select js-mulsel" multiple="multiple">
-                      
-                    </select>
-                    <span asp-validation-for="Game.GamePlatformsIds" class="validError"></span>
-                </div>
-
                 @* ЯРЛЫКИ ИГРЫ *@
                 <div class="form-group">
                     <label asp-for=Game.GameLabelsIds> Выберите ярлыки (особенности) игры: *</label>

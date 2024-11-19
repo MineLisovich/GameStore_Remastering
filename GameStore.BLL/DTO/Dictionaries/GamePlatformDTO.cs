@@ -16,6 +16,5 @@ namespace GameStore.BLL.DTO.Dictionaries
         /// </summary>
         [Required(ErrorMessage = "Поле обязательно для заполнения!")]
         public string Name { get; set; }
-        public List<GameDTO> Games { get; set; } = new();
     }
 }

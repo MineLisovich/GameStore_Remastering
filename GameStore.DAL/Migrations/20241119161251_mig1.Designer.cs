@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GsDbContext))]
-    [Migration("20241026193557_mig1")]
+    [Migration("20241119161251_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -38,21 +38,6 @@ namespace GameStore.DAL.Migrations
                     b.HasIndex("GamesId");
 
                     b.ToTable("GameGameLabel");
-                });
-
-            modelBuilder.Entity("GameGamePlatform", b =>
-                {
-                    b.Property<int>("GamePlatformsId")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("GamesId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("GamePlatformsId", "GamesId");
-
-                    b.HasIndex("GamesId");
-
-                    b.ToTable("GameGamePlatform");
                 });
 
             modelBuilder.Entity("GameGenre", b =>
@@ -474,6 +459,9 @@ namespace GameStore.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("CountSold")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Cpu")
                         .HasColumnType("text");
 
@@ -539,62 +527,67 @@ namespace GameStore.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(23),
+                            CountSold = 0L,
+                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1453),
                             DeveloperId = 1,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Grand The Auto 5",
                             Price = 34.33m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(26)
+                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1455)
                         },
                         new
                         {
                             Id = 2L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(31),
+                            CountSold = 0L,
+                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1458),
                             DeveloperId = 9,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "The First Player",
                             Price = 120.50m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(31)
+                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459)
                         },
                         new
                         {
                             Id = 3L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(32),
+                            CountSold = 0L,
+                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459),
                             DeveloperId = 3,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "The Wither 3",
                             Price = 79.00m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(33)
+                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1460)
                         },
                         new
                         {
                             Id = 4L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(34),
+                            CountSold = 0L,
+                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461),
                             DeveloperId = 5,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Just Dance",
                             Price = 66.33m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(35)
+                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461)
                         },
                         new
                         {
                             Id = 5L,
-                            DateAddedSite = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(36),
+                            CountSold = 0L,
+                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462),
                             DeveloperId = 2,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Far cry 5",
                             Price = 67.88m,
-                            ReleaseDate = new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(36)
+                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462)
                         });
                 });
 
@@ -608,6 +601,9 @@ namespace GameStore.DAL.Migrations
 
                     b.Property<long>("GameId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -880,21 +876,6 @@ namespace GameStore.DAL.Migrations
                     b.HasOne("GameStore.DAL.Entities.Dictionaries.GameLabel", null)
                         .WithMany()
                         .HasForeignKey("GameLabelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GameStore.DAL.Entities.Games.Game", null)
-                        .WithMany()
-                        .HasForeignKey("GamesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GameGamePlatform", b =>
-                {
-                    b.HasOne("GameStore.DAL.Entities.Dictionaries.GamePlatform", null)
-                        .WithMany()
-                        .HasForeignKey("GamePlatformsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

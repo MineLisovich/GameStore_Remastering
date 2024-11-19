@@ -47,18 +47,6 @@ namespace GameStore.BLL.DTO.Games
         /// </summary>
         public GameDeveloperDTO Developer { get; set; } = null;
 
-
-        /// <summary>
-        /// Техническое поле. Временно хранит выбранные Id игровых платформ из выподающего списка
-        /// </summary>
-        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
-        public int[] GamePlatformsIds { get; set; }
-
-        /// <summary>
-        /// Список игровых платформ
-        /// </summary>
-        public List<GamePlatformDTO> GamePlatforms { get; set; } = new();
-
         /// <summary>
         /// Дата выхода игры
         /// </summary>
@@ -181,5 +169,11 @@ namespace GameStore.BLL.DTO.Games
         /// Техническое поле. Подтверждение что данные все данные введены 
         /// </summary>
         public bool IsConfirmActions { get; set; } = false;
+
+
+        /// <summary>
+        /// Количество проданных копий
+        /// </summary>
+        public long CountSold { get; set; }
     }
 }

@@ -120,7 +120,6 @@ namespace GameStore.WEB.Areas.Admin.Controllers
                 if(isFastEditMode is false)
                 {
                     model.Game.GameGanresIds = (model.Game.GameGanres.Count() > 0) ? model.Game.GameGanres.Select(x => x.Id).ToArray() : [];
-                    model.Game.GamePlatformsIds = (model.Game.GamePlatforms.Count() > 0) ? model.Game.GamePlatforms.Select(x => x.Id).ToArray() : [];
                     model.Game.GameLabelsIds = (model.Game.GameLabels.Count() > 0) ? model.Game.GameLabels.Select(x => x.Id).ToArray() : [];
                 }
             }
@@ -139,7 +138,6 @@ namespace GameStore.WEB.Areas.Admin.Controllers
         {
             model.SelectListItemsGameGenres = new SelectList(await _gameService.GetGenresForSelectList(), "Id","Name");
             model.SelectListItemsGameDevelopers = new SelectList(await _gameService.GetDevelopersForSelectList(), "Id", "Name");
-            model.SelectListItemsGamePlatforms = new SelectList(await _gameService.GetPlatromsForSelectList(), "Id", "Name");
             model.SelectListItemsGameLabels = new SelectList(await _gameService.GetLabelsForSelectList(), "Id", "Name");
 
             return model;

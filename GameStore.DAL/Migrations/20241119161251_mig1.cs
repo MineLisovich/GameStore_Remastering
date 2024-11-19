@@ -154,7 +154,8 @@ namespace GameStore.DAL.Migrations
                     Weight = table.Column<int>(type: "integer", nullable: true),
                     DateAddedSite = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CountSold = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -277,30 +278,6 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GameGamePlatform",
-                columns: table => new
-                {
-                    GamePlatformsId = table.Column<int>(type: "integer", nullable: false),
-                    GamesId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameGamePlatform", x => new { x.GamePlatformsId, x.GamesId });
-                    table.ForeignKey(
-                        name: "FK_GameGamePlatform_Dictionaries_GamePlatforms_GamePlatformsId",
-                        column: x => x.GamePlatformsId,
-                        principalTable: "Dictionaries_GamePlatforms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GameGamePlatform_Games_Games_GamesId",
-                        column: x => x.GamesId,
-                        principalTable: "Games_Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GameGenre",
                 columns: table => new
                 {
@@ -332,7 +309,8 @@ namespace GameStore.DAL.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(type: "text", nullable: false),
                     GameId = table.Column<long>(type: "bigint", nullable: false),
-                    PlatformId = table.Column<int>(type: "integer", nullable: false)
+                    PlatformId = table.Column<int>(type: "integer", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -475,14 +453,14 @@ namespace GameStore.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Games_Games",
-                columns: new[] { "Id", "Cpu", "DateAddedSite", "Description", "DeveloperId", "Gpu", "IsDeleted", "IsShare", "IsVisible", "Name", "Os", "Poster", "PosterName", "Price", "Ram", "ReleaseDate", "SharePrice", "Weight", "YtLinkGameTrailer" },
+                columns: new[] { "Id", "CountSold", "Cpu", "DateAddedSite", "Description", "DeveloperId", "Gpu", "IsDeleted", "IsShare", "IsVisible", "Name", "Os", "Poster", "PosterName", "Price", "Ram", "ReleaseDate", "SharePrice", "Weight", "YtLinkGameTrailer" },
                 values: new object[,]
                 {
-                    { 1L, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(23), null, 1, null, false, false, false, "Grand The Auto 5", null, null, null, 34.33m, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(26), null, null, null },
-                    { 2L, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(31), null, 9, null, false, false, false, "The First Player", null, null, null, 120.50m, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(31), null, null, null },
-                    { 3L, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(32), null, 3, null, false, false, false, "The Wither 3", null, null, null, 79.00m, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(33), null, null, null },
-                    { 4L, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(34), null, 5, null, false, false, false, "Just Dance", null, null, null, 66.33m, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(35), null, null, null },
-                    { 5L, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(36), null, 2, null, false, false, false, "Far cry 5", null, null, null, 67.88m, null, new DateTime(2024, 10, 26, 19, 35, 57, 255, DateTimeKind.Utc).AddTicks(36), null, null, null }
+                    { 1L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1453), null, 1, null, false, false, false, "Grand The Auto 5", null, null, null, 34.33m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1455), null, null, null },
+                    { 2L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1458), null, 9, null, false, false, false, "The First Player", null, null, null, 120.50m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459), null, null, null },
+                    { 3L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459), null, 3, null, false, false, false, "The Wither 3", null, null, null, 79.00m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1460), null, null, null },
+                    { 4L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461), null, 5, null, false, false, false, "Just Dance", null, null, null, 66.33m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461), null, null, null },
+                    { 5L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462), null, 2, null, false, false, false, "Far cry 5", null, null, null, 67.88m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462), null, null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -514,11 +492,6 @@ namespace GameStore.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GameGameLabel_GamesId",
                 table: "GameGameLabel",
-                column: "GamesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GameGamePlatform_GamesId",
-                table: "GameGamePlatform",
                 column: "GamesId");
 
             migrationBuilder.CreateIndex(
@@ -578,9 +551,6 @@ namespace GameStore.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "GameGameLabel");
-
-            migrationBuilder.DropTable(
-                name: "GameGamePlatform");
 
             migrationBuilder.DropTable(
                 name: "GameGenre");
