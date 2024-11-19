@@ -120,3 +120,14 @@ div.loginRegHeader{
 .s_gameinfo {
     margin-left: 0.625rem;
 }
+
+
+.centered-block {
+    height: 50vh;
+    width: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
