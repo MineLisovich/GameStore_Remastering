@@ -29,6 +29,12 @@ namespace GameStore.WEB.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult GamePage(long gameId)
+        {
+            return View();
+        }
         #endregion
     }
 }

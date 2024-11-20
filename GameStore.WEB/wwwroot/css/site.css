@@ -145,3 +145,9 @@ div.loginRegHeader{
     background-color: white; /* Фон, чтобы заголовок был видимым */
     z-index: 1000; /* Убедитесь, что заголовок будет выше других элементов */
 }
+
+.gamePageMainInfo {
+    position: sticky;
+    background-color: white; /* Фон, чтобы заголовок был видимым */
+    top: 0; /* Отступ от верхней части экрана */
+}
