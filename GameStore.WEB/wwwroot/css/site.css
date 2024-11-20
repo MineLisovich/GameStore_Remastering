@@ -131,3 +131,17 @@ div.loginRegHeader{
     align-items: center;
     text-align: center;
 }
+
+.game {
+    width:35vh;
+}
+.game:hover {
+    box-shadow: 0 0 10px royalblue; /* shadow appears on hover */
+}
+
+.titleText {
+    position: sticky;
+    top: 0; /* Отступ от верхней части экрана */
+    background-color: white; /* Фон, чтобы заголовок был видимым */
+    z-index: 1000; /* Убедитесь, что заголовок будет выше других элементов */
+}
