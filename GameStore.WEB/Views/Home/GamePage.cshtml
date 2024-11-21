@@ -1,7 +1,20 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Game Name";
 }
+
+@section js {
+    <script>
+        $("#showvideo").off("click").on("click", function () {
+            $("#modalGameVideo").modal("show");
+        });
+        
+        $("#addtoshcart").off("click").on("click", function ()
+        {
+           $("#modalAddToShoppingCart").modal("show");
+        });
+    </script>
+}
+
 
 <div class="row mt-5 mb-3">
 
@@ -14,9 +27,9 @@
             <div>
                 <img src="~/img/gamesposters/2077.png" />
             </div>
-           
+
             <div class="mt-2">
-                <button class="btn btn-outline-primary btn-lg">
+                <button type="button" id="showvideo" class="btn btn-outline-primary btn-lg">
                     <i class="fa-solid fa-play"></i>
                     Смотреть трейлер
                 </button>
@@ -25,7 +38,7 @@
                 <div class="m-1 p-1 h4"><s>74</s> 66 BYN</div>
                 <div class="btn-group mx-auto mb-3  float-end btn-lg">
                     <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
-                    <button type="button" class="btn btn-success btn-lg">В Корзину</button>
+                    <button type="button" id="addtoshcart" class="btn btn-success btn-lg">В Корзину</button>
                 </div>
             </div>
         </div>
@@ -54,7 +67,7 @@
                 <div class="d-flex flex-wrap">
                     <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
                     <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
-                     <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
+                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
                     <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
                     <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
                     <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
@@ -72,7 +85,7 @@
             <div class="text-center">
                 <button class="btn btn-outline-danger btn-lg">
                     <i class="fa-solid fa-flag"></i>
-                   Сообщить о проблеме
+                    Сообщить о проблеме
                 </button>
             </div>
         </div>
@@ -81,23 +94,23 @@
 
     <div class="col-md-9">
 
-      <div class="row">
-          <div class="h6 text-wrap">
+        <div class="row">
+            <div class="h6 text-wrap">
                 Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
                 Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
                 Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
                 Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
                 Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
             </div>
-      </div>
+        </div>
 
-      <div class="row">
+        <div class="row">
             @await Html.PartialAsync("_Partial.Index.Slider")
-      </div>
+        </div>
 
         <div class="row mt-2">
-           <div>
-               <h4>Системные требования:</h4>
+            <div>
+                <h4>Системные требования:</h4>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Операционная система:</li>
                     <li class="list-group-item">Процессор:</li>
@@ -105,7 +118,27 @@
                     <li class="list-group-item">Оперативная память:</li>
                     <li class="list-group-item">Занимаймое место на диске:</li>
                 </ul>
-           </div>
+            </div>
         </div>
     </div>
+</div>
+
+
+
+@await Html.PartialAsync("_Partial.GamePage.Modal.Video")
+
+
+<div id="modalWrapper">
+@await Html.PartialAsync("_Partial.Index.Modal.AddInShCart")
+</div>
+
+<div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+    @await Html.PartialAsync("_Partial.Action.Warning")
+    @await Html.PartialAsync("_Partial.Action.Success")
+    @await Html.PartialAsync("_Partial.Action.Error") 
+</div>
+
+<div id="lastActionDataWrapper">
+ @*    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction) *@
 </div>
