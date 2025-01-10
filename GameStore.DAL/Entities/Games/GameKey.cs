@@ -39,8 +39,14 @@ namespace GameStore.DAL.Entities.Games
 
 
         /// <summary>
-        /// Ключ активный? (то есть его ещё не купили)
+        /// Id стутуса ключа
         /// </summary>
-        public bool IsActive { get; set; } = true;
+        [ForeignKey(nameof(GameKeyStatus))]
+        public int StatusId { get; set; }
+        
+        /// <summary>
+        /// Статус ключа
+        /// </summary>
+        public GameKeyStatus? GameKeyStatus { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GameStore.DAL.Predefined.Identity;
+﻿using GameStore.DAL.Predefined.Dictionaries;
+using GameStore.DAL.Predefined.Identity;
 
 namespace GameStore.BLL.Predefined
 {
@@ -7,7 +8,8 @@ namespace GameStore.BLL.Predefined
     /// </summary>
     public class PredefinedManager
     {
-        private PdRoles? _roleNames;
+        private PdRoles _roleNames;
+        private PdGameKeyStatuses _gameKeyStatuses;
 
         /// <summary>
         /// Роли в системе
@@ -21,6 +23,21 @@ namespace GameStore.BLL.Predefined
                     _roleNames = new PdRoles();
                 }
                 return _roleNames;
+            }
+        }
+
+        /// <summary>
+        /// Статусы ключа от игр
+        /// </summary>
+        public PdGameKeyStatuses GameKeyStatuses
+        {
+            get 
+            {
+                if(_gameKeyStatuses is null)
+                {
+                    _gameKeyStatuses = new PdGameKeyStatuses();
+                }
+                return _gameKeyStatuses;
             }
         }
     }

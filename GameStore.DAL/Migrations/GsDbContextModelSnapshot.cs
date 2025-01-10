@@ -266,6 +266,40 @@ namespace GameStore.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("GameStore.DAL.Entities.Dictionaries.GameKeyStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dictionaries_GameKeyStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Активный"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Забронирован"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Неактивный"
+                        });
+                });
+
             modelBuilder.Entity("GameStore.DAL.Entities.Dictionaries.GameLabel", b =>
                 {
                     b.Property<int>("Id")
@@ -525,66 +559,66 @@ namespace GameStore.DAL.Migrations
                         {
                             Id = 1L,
                             CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1453),
+                            DateAddedSite = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4727),
                             DeveloperId = 1,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Grand The Auto 5",
                             Price = 34.33m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1455)
+                            ReleaseDate = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4730)
                         },
                         new
                         {
                             Id = 2L,
                             CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1458),
+                            DateAddedSite = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4733),
                             DeveloperId = 9,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "The First Player",
                             Price = 120.50m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459)
+                            ReleaseDate = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4734)
                         },
                         new
                         {
                             Id = 3L,
                             CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459),
+                            DateAddedSite = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4735),
                             DeveloperId = 3,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "The Wither 3",
                             Price = 79.00m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1460)
+                            ReleaseDate = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4735)
                         },
                         new
                         {
                             Id = 4L,
                             CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461),
+                            DateAddedSite = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4736),
                             DeveloperId = 5,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Just Dance",
                             Price = 66.33m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461)
+                            ReleaseDate = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4736)
                         },
                         new
                         {
                             Id = 5L,
                             CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462),
+                            DateAddedSite = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4737),
                             DeveloperId = 2,
                             IsDeleted = false,
                             IsShare = false,
                             IsVisible = false,
                             Name = "Far cry 5",
                             Price = 67.88m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462)
+                            ReleaseDate = new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4738)
                         });
                 });
 
@@ -599,9 +633,6 @@ namespace GameStore.DAL.Migrations
                     b.Property<long>("GameId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text");
@@ -609,11 +640,16 @@ namespace GameStore.DAL.Migrations
                     b.Property<int>("PlatformId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
                     b.HasIndex("PlatformId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Games_Keys", (string)null);
                 });
@@ -923,7 +959,15 @@ namespace GameStore.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GameStore.DAL.Entities.Dictionaries.GameKeyStatus", "GameKeyStatus")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Game");
+
+                    b.Navigation("GameKeyStatus");
 
                     b.Navigation("Platform");
                 });

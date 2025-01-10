@@ -42,6 +42,19 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Dictionaries_GameKeyStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dictionaries_GameKeyStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Dictionaries_GameLabels",
                 columns: table => new
                 {
@@ -310,11 +323,17 @@ namespace GameStore.DAL.Migrations
                     Key = table.Column<string>(type: "text", nullable: false),
                     GameId = table.Column<long>(type: "bigint", nullable: false),
                     PlatformId = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    StatusId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games_Keys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Keys_Dictionaries_GameKeyStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Dictionaries_GameKeyStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Games_Keys_Dictionaries_GamePlatforms_PlatformId",
                         column: x => x.PlatformId,
@@ -406,6 +425,16 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Dictionaries_GameKeyStatuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Активный" },
+                    { 2, "Забронирован" },
+                    { 3, "Неактивный" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Dictionaries_GameLabels",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -456,11 +485,11 @@ namespace GameStore.DAL.Migrations
                 columns: new[] { "Id", "CountSold", "Cpu", "DateAddedSite", "Description", "DeveloperId", "Gpu", "IsDeleted", "IsShare", "IsVisible", "Name", "Os", "Poster", "PosterName", "Price", "Ram", "ReleaseDate", "SharePrice", "Weight", "YtLinkGameTrailer" },
                 values: new object[,]
                 {
-                    { 1L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1453), null, 1, null, false, false, false, "Grand The Auto 5", null, null, null, 34.33m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1455), null, null, null },
-                    { 2L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1458), null, 9, null, false, false, false, "The First Player", null, null, null, 120.50m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459), null, null, null },
-                    { 3L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459), null, 3, null, false, false, false, "The Wither 3", null, null, null, 79.00m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1460), null, null, null },
-                    { 4L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461), null, 5, null, false, false, false, "Just Dance", null, null, null, 66.33m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461), null, null, null },
-                    { 5L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462), null, 2, null, false, false, false, "Far cry 5", null, null, null, 67.88m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462), null, null, null }
+                    { 1L, 0L, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4727), null, 1, null, false, false, false, "Grand The Auto 5", null, null, null, 34.33m, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4730), null, null, null },
+                    { 2L, 0L, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4733), null, 9, null, false, false, false, "The First Player", null, null, null, 120.50m, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4734), null, null, null },
+                    { 3L, 0L, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4735), null, 3, null, false, false, false, "The Wither 3", null, null, null, 79.00m, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4735), null, null, null },
+                    { 4L, 0L, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4736), null, 5, null, false, false, false, "Just Dance", null, null, null, 66.33m, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4736), null, null, null },
+                    { 5L, 0L, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4737), null, 2, null, false, false, false, "Far cry 5", null, null, null, 67.88m, null, new DateTime(2025, 1, 10, 15, 22, 30, 154, DateTimeKind.Utc).AddTicks(4738), null, null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -513,6 +542,11 @@ namespace GameStore.DAL.Migrations
                 name: "IX_Games_Keys_PlatformId",
                 table: "Games_Keys",
                 column: "PlatformId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_Keys_StatusId",
+                table: "Games_Keys",
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_Screenshots_GameId",
@@ -572,6 +606,9 @@ namespace GameStore.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Dictionaries_Genres");
+
+            migrationBuilder.DropTable(
+                name: "Dictionaries_GameKeyStatuses");
 
             migrationBuilder.DropTable(
                 name: "Dictionaries_GamePlatforms");

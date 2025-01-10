@@ -100,6 +100,7 @@ builder.Services.AddAutoMapper(x =>
     x.AddProfile<GameLabelProfile>();
     x.AddProfile<GamePlatformProfile>();
     x.AddProfile<GenreProfile>();
+    x.AddProfile<GameKeyStatusProfile>();
 
     //Games
     x.AddProfile<GameProfile>();

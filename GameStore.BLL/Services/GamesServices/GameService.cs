@@ -3,6 +3,7 @@ using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.DTO.Games;
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Infrastrcture.Singletons;
+using GameStore.BLL.Predefined;
 using GameStore.DAL.Domain;
 using GameStore.DAL.Entities.Dictionaries;
 using GameStore.DAL.Entities.Games;
@@ -289,6 +290,7 @@ namespace GameStore.BLL.Services.GamesServices
 
         private List<GameKey> UploadGameKeys(IFormFile uploadKeys)
         {
+            PredefinedManager pd = new();
             GameKeyCryptography gkc = GameKeyCryptography.GetIstance();
             List<GameKey> keys = new();
             if (uploadKeys != null && uploadKeys.Length > 0)
@@ -303,7 +305,7 @@ namespace GameStore.BLL.Services.GamesServices
                         if (parts.Length == 2 && int.TryParse(parts[0], out int platformId))
                         {
                             string key = gkc.Encrypt(parts[1]);
-                            keys.Add(new GameKey { PlatformId = platformId, Key = key, IsActive = true });
+                            keys.Add(new GameKey { PlatformId = platformId, Key = key, StatusId = pd.GameKeyStatuses.active.Id });
                         }
                     }
                 }

@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Data;
 
 namespace GameStore.DAL.Domain
 {
@@ -23,6 +21,7 @@ namespace GameStore.DAL.Domain
         public DbSet<GamePlatform> GamePlatforms { get; set; }
         public DbSet<GameDeveloper> GameDevelopers { get; set; }
         public DbSet<GameLabel> GameLabels { get; set; }
+        public DbSet<GameKeyStatus> GameKeyStatuses { get; set; }
 
         //-- Games
         public DbSet<Game> Games { get; set; }
@@ -44,6 +43,7 @@ namespace GameStore.DAL.Domain
             builder.Entity<GamePlatform>().ToTable("Dictionaries_GamePlatforms");
             builder.Entity<GameDeveloper>().ToTable("Dictionaries_GameDevelopers");
             builder.Entity<GameLabel>().ToTable("Dictionaries_GameLabels");
+            builder.Entity<GameKeyStatus>().ToTable("Dictionaries_GameKeyStatuses");
 
             //-- Games
             builder.Entity<Game>().ToTable("Games_Games");
@@ -61,9 +61,10 @@ namespace GameStore.DAL.Domain
             builder.Entity<GamePlatform>().HasData(new Predefined.Dictionaries.PdGamePlatforms().ListGamePlatforms);
             builder.Entity<GameDeveloper>().HasData(new Predefined.Dictionaries.PdGameDevelopers().ListGameDevelopers);
             builder.Entity<GameLabel>().HasData(new Predefined.Dictionaries.PdGameLabels().Listlabels);
+            builder.Entity<GameKeyStatus>().HasData(new Predefined.Dictionaries.PdGameKeyStatuses().ListGameKeyStatuses);
 
             //-- Games
-            builder.Entity<Game>().HasData(new Predefined.Games.PdGames().testGames);
+            builder.Entity<Game>().HasData(new Predefined.Games.PdGames().testGames); //FOR DELETE
             #endregion
         }
 
