@@ -10,6 +10,9 @@ namespace GameStore.BLL.Predefined
     {
         private PdRoles _roleNames;
         private PdGameKeyStatuses _gameKeyStatuses;
+        private PdGameDevelopers _gameDevelopers;
+        private PdGameLabels _gameLabels;
+        private PdGenres _genres;
 
         /// <summary>
         /// Роли в системе
@@ -40,5 +43,42 @@ namespace GameStore.BLL.Predefined
                 return _gameKeyStatuses;
             }
         }
+
+        public PdGameDevelopers GameDevelopers
+        {
+            get
+            {
+                if (_gameDevelopers is null)
+                {
+                    _gameDevelopers = new PdGameDevelopers();
+                }
+                return _gameDevelopers;
+            }
+        }
+
+        public PdGameLabels GameLabels
+        {
+            get
+            {
+                if ( _gameLabels is null)
+                {
+                   _gameLabels = new PdGameLabels();
+                }
+                return _gameLabels;
+            }
+        }
+
+        public PdGenres Genres
+        {
+            get
+            {
+                if( _genres is null)
+                {
+                    _genres = new PdGenres();
+                }
+                return _genres;
+            }
+        }
+
     }
 }
