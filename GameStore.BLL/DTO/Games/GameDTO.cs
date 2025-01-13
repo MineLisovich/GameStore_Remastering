@@ -105,6 +105,8 @@ namespace GameStore.BLL.DTO.Games
         /// </summary>
         public string SliderName { get; set; } = null;
 
+        public IFormFile UploadSliderImg { get; set; }
+
         /// <summary>
         /// Скриншоты игры
         /// </summary>

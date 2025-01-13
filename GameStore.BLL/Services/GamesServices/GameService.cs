@@ -80,6 +80,9 @@ namespace GameStore.BLL.Services.GamesServices
             newGame.Poster = (game.UploadPoster is not null) ? UploadPoster(game.UploadPoster) : null;
             newGame.Screenshots = (game.UploadScreenshots is not null) ? UploadGameScreenshot(game.UploadScreenshots) : null;
             newGame.GameKeys = (game.UploadGameKeys is not null) ? UploadGameKeys(game.UploadGameKeys) : null;
+            newGame.isShowInSlider = game.isShowInSlider;
+            newGame.SliderName = (game.UploadSliderImg is not null) ? game.UploadSliderImg.FileName : null;
+            newGame.SliderImg = (game.UploadSliderImg is not null) ?  UploadPoster(game.UploadSliderImg) : null;
 
             try
             {
@@ -117,10 +120,11 @@ namespace GameStore.BLL.Services.GamesServices
             currentGame.Gpu = game.Gpu;
             currentGame.Cpu = game.Cpu;
             currentGame.Ram = game.Ram;
-            currentGame.Weight = game.Weight; 
-           
+            currentGame.Weight = game.Weight;
+            currentGame.isShowInSlider = game.isShowInSlider;
+
             //Медиа файлы
-            if(game.UploadPoster is not null)
+            if (game.UploadPoster is not null)
             {
                 currentGame.PosterName = game.UploadPoster.FileName;
                 currentGame.Poster = UploadPoster(game.UploadPoster);
@@ -135,6 +139,13 @@ namespace GameStore.BLL.Services.GamesServices
             {
                 List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys);
                 currentGame.GameKeys.AddRange(newKeys);
+            }
+
+            if(game.UploadSliderImg is not null)
+            {
+             
+                currentGame.SliderName = (game.UploadSliderImg is not null) ? game.UploadSliderImg.FileName : null;
+                currentGame.SliderImg = (game.UploadSliderImg is not null) ? UploadPoster(game.UploadSliderImg) : null;
             }
 
             try
