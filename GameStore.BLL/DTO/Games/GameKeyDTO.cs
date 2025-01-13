@@ -1,4 +1,5 @@
 ﻿using GameStore.BLL.DTO.Dictionaries;
+using GameStore.BLL.DTO.Identity;
 
 namespace GameStore.BLL.DTO.Games
 {
@@ -46,5 +47,15 @@ namespace GameStore.BLL.DTO.Games
         /// Статус ключа
         /// </summary>
         public GameKeyStatusDTO GameKeyStatus { get; set; } = null;
+
+        /// <summary>
+        /// ID Корзины
+        /// </summary>
+        public long? ShoppingCartId { get; set; } = null;
+
+        /// <summary>
+        /// Корзина
+        /// </summary>
+        public ShoppingCartDTO ShoppingCart { get; set; } = null;
     }
 }

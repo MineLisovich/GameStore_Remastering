@@ -91,6 +91,21 @@ namespace GameStore.BLL.DTO.Games
         public string YtLinkGameTrailer { get; set; } = null;
 
         /// <summary>
+        /// Показывать в слайдере на главной странице
+        /// </summary>
+        public bool isShowInSlider { get; set; } = false;
+
+        /// <summary>
+        /// Картинка слайдера
+        /// </summary>
+        public byte[] SliderImg { get; set; } = null;
+
+        /// <summary>
+        /// Наименование картинки слайдера
+        /// </summary>
+        public string SliderName { get; set; } = null;
+
+        /// <summary>
         /// Скриншоты игры
         /// </summary>
         public List<GameScreenshotDTO> Screenshots { get; set; } = new();

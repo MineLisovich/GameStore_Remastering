@@ -37,5 +37,10 @@ namespace GameStore.DAL.Entities.Identity
         /// Пользовательский Id - нужен для отображения в области Админ (чтобы не видеть guid)
         /// </summary>
         public long CustomUserId { get; set; }
+
+        /// <summary>
+        /// Корзина
+        /// </summary>
+        public List<ShoppingCart> ShoppingCarts { get; set; } = new();
     }
 }

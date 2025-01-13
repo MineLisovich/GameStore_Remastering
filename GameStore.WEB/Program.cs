@@ -93,9 +93,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(config =>
 //Automapper profiles
 builder.Services.AddAutoMapper(x =>
 {
-    //Identity
-    x.AddProfile<AppUserProfile>();
-    
     //Dictionaries
     x.AddProfile<GameDeveloperProfile>();
     x.AddProfile<GameLabelProfile>();
@@ -107,6 +104,11 @@ builder.Services.AddAutoMapper(x =>
     x.AddProfile<GameProfile>();
     x.AddProfile<GameKeyProfile>();
     x.AddProfile<GameScreenshotProfile>();
+
+    //Identity
+    x.AddProfile<AppUserProfile>();
+    x.AddProfile<ShoppingCartProfile>();
+
 });
 
 //BLL Services

@@ -74,6 +74,21 @@ namespace GameStore.DAL.Entities.Games
         public string? YtLinkGameTrailer { get; set; }
 
         /// <summary>
+        /// Показывать в слайдере на главной странице
+        /// </summary>
+        public bool isShowInSlider { get; set; } = false;
+
+        /// <summary>
+        /// Картинка слайдера
+        /// </summary>
+        public byte[]? SliderImg { get; set; }
+
+        /// <summary>
+        /// Наименование картинки слайдера
+        /// </summary>
+        public string? SliderName { get; set; }
+
+        /// <summary>
         /// Скриншоты игры
         /// </summary>
         public List<GameScreenshot> Screenshots { get; set; } = new();

@@ -13,9 +13,7 @@ namespace GameStore.DAL.Domain
         public GsDbContext(DbContextOptions<GsDbContext> options) : base(options) { }
 
         #region DB SETS
-        //-- Identity
-        public DbSet<AppUser> AppUsers { get; set; }
-
+       
         //-- Dictionaries
         public DbSet<Genre> Genres { get; set; }
         public DbSet<GamePlatform> GamePlatforms { get; set; }
@@ -27,6 +25,11 @@ namespace GameStore.DAL.Domain
         public DbSet<Game> Games { get; set; }
         public DbSet<GameKey> GameKeys { get; set; }
         public DbSet<GameScreenshot> GameScreenshots { get; set; }
+
+        //-- Identity
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -34,10 +37,7 @@ namespace GameStore.DAL.Domain
             base.OnModelCreating(builder);
 
             #region DB CREATION
-            
-            //--Identity
-            builder.Entity<AppUser>().ToTable("Users");
-          
+
             //-- Dictionaries
             builder.Entity<Genre>().ToTable("Dictionaries_Genres");
             builder.Entity<GamePlatform>().ToTable("Dictionaries_GamePlatforms");
@@ -49,12 +49,13 @@ namespace GameStore.DAL.Domain
             builder.Entity<Game>().ToTable("Games_Games");
             builder.Entity<GameKey>().ToTable("Games_Keys");
             builder.Entity<GameScreenshot>().ToTable("Games_Screenshots");
+
+            //--Identity
+            builder.Entity<AppUser>().ToTable("Users");
+            builder.Entity<ShoppingCart>().ToTable("Users_ShoppingCarts");
             #endregion
 
             #region SEED DATA
-
-            // -- Identity
-            builder.Entity<IdentityRole>().HasData(new Predefined.Identity.PdRoles().RoleList);
 
             //-- Dictionaries
             builder.Entity<Genre>().HasData(new Predefined.Dictionaries.PdGenres().ListGanres);
@@ -63,8 +64,8 @@ namespace GameStore.DAL.Domain
             builder.Entity<GameLabel>().HasData(new Predefined.Dictionaries.PdGameLabels().Listlabels);
             builder.Entity<GameKeyStatus>().HasData(new Predefined.Dictionaries.PdGameKeyStatuses().ListGameKeyStatuses);
 
-            //-- Games
-            builder.Entity<Game>().HasData(new Predefined.Games.PdGames().testGames); //FOR DELETE
+            // -- Identity
+            builder.Entity<IdentityRole>().HasData(new Predefined.Identity.PdRoles().RoleList);
             #endregion
         }
 
