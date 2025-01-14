@@ -20,6 +20,7 @@ using GameStore.DAL.Entities.Dictionaries;
 using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.Services.GamesServices;
 using GameStore.BLL.Services.DevModeServices;
+using GameStore.BLL.Services.HomeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,6 +123,7 @@ builder.Services.AddScoped<DictionaryService<GameDeveloper, GameDeveloperDTO>>()
 builder.Services.AddScoped<DictionaryService<GamePlatform, GamePlatformDTO>>();
 builder.Services.AddScoped<DictionaryService<GameLabel, GameLabelDTO>>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 
 //DevModeServices
 builder.Services.AddScoped<IAddPdGame, AddPdGame>();
@@ -154,19 +156,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-//app.UseStatusCodePages(async context =>
-//{
-//    // var request = context.HttpContext.Request;
-//    var response = context.HttpContext.Response;
-//    if (response.StatusCode == (int)HttpStatusCode.NotFound)
-//    {
-//        response.Redirect("/error/NotFoundPage");
-//    }
-//    if (response.StatusCode == (int)HttpStatusCode.Forbidden)
-//    {
-//        response.Redirect("/error/ForbiddenResource");
-//    }
-//});
 
 //EndPoints
 app.MapControllerRoute(

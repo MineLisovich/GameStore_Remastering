@@ -1,4 +1,5 @@
-﻿using GameStore.DAL.Predefined.Dictionaries;
+﻿using GameStore.BLL.Predefined.ConstPredefineds;
+using GameStore.DAL.Predefined.Dictionaries;
 using GameStore.DAL.Predefined.Identity;
 
 namespace GameStore.BLL.Predefined
@@ -13,6 +14,7 @@ namespace GameStore.BLL.Predefined
         private PdGameDevelopers _gameDevelopers;
         private PdGameLabels _gameLabels;
         private PdGenres _genres;
+        private PdTypesSelectedGames _typesSelectedGames;
 
         /// <summary>
         /// Роли в системе
@@ -77,6 +79,18 @@ namespace GameStore.BLL.Predefined
                     _genres = new PdGenres();
                 }
                 return _genres;
+            }
+        }
+
+        public PdTypesSelectedGames SelectedGames
+        {
+            get 
+            {
+                if(_typesSelectedGames is null)
+                {
+                    _typesSelectedGames = new PdTypesSelectedGames();
+                }
+                return _typesSelectedGames;
             }
         }
 
