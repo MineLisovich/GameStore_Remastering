@@ -10,12 +10,45 @@
 <div class="row">
     @await Html.PartialAsync("_Partial.Index.Slider")
 </div>
+<!-- promo area -->
+<div class="promo-area user-select-none">
+    <div class="container">
+            <div class="row mx-auto">
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo1">
+                    <i class="fa fa-key"></i>
+                    <p>Лицензионные ключи </p>
+                </div>
+            </div>
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo2">
+                    <i class="fa fa-gear"></i>
+                    <p>Гарантированная техподдержка</p>
+                </div>
+            </div>
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo3">
+                    <i class="fa fa-ticket"></i>
+                    <p>Регулярные акции, скидки и бонусы</p>
+                </div>
+            </div>
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo4">
+                    <i class="fa fa-cart-plus"></i>
+                    <p>Удобная оплата <br>игр</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End promo area -->
 
 @* БЛОКИ *@
 <div class="row mt-5 mb-3">
     @* БЛОК НОВИНКИ *@
     <div class="col-md-4">
-        <h2 class="text-center  titleText shadow">Новинки</h2>
+        <h2 class="text-center  titleText borderS shadow p-1 bg-gradient text-light user-select-none">Новинки</h2>
         <div class="game mt-5 mb-3 mx-auto borderS">
 
                 <div class="text-center">
@@ -107,7 +140,7 @@
 
     @* БЛОК ЛИДЕРЫ ПРОДАЖ *@
     <div class="col-md-4">
-        <h2 class="text-center  titleText shadow">Лидеры продаж</h2>
+        <h2 class="text-center  titleText borderS shadow p-1 bg-gradient text-light user-select-none">Лидеры продаж</h2>
         <div class="game mt-5 mb-3 mx-auto borderS">
 
             <div class="text-center">
@@ -140,7 +173,7 @@
 
     @* БЛОК СКОРО ВЫЙДЕТ*@
     <div class="col-md-4">
-        <h2 class="text-center  titleText shadow">Скоро выйдет</h2>
+        <h2 class="text-center  titleText borderS shadow p-1  bg-gradient text-light user-select-none">Скоро выйдет</h2>
         <div class="game mt-5 mb-3 mx-auto borderS">
 
             <div class="text-center">
