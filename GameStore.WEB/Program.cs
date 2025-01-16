@@ -19,6 +19,8 @@ using GameStore.BLL.Services.DictionariesServices;
 using GameStore.DAL.Entities.Dictionaries;
 using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.Services.GamesServices;
+using GameStore.BLL.Services.DevModeServices;
+using GameStore.BLL.Services.HomeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,19 +94,22 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(config =>
 //Automapper profiles
 builder.Services.AddAutoMapper(x =>
 {
-    //Identity
-    x.AddProfile<AppUserProfile>();
-    
     //Dictionaries
     x.AddProfile<GameDeveloperProfile>();
     x.AddProfile<GameLabelProfile>();
     x.AddProfile<GamePlatformProfile>();
     x.AddProfile<GenreProfile>();
+    x.AddProfile<GameKeyStatusProfile>();
 
     //Games
     x.AddProfile<GameProfile>();
     x.AddProfile<GameKeyProfile>();
     x.AddProfile<GameScreenshotProfile>();
+
+    //Identity
+    x.AddProfile<AppUserProfile>();
+    x.AddProfile<ShoppingCartProfile>();
+
 });
 
 //BLL Services
@@ -118,6 +123,10 @@ builder.Services.AddScoped<DictionaryService<GameDeveloper, GameDeveloperDTO>>()
 builder.Services.AddScoped<DictionaryService<GamePlatform, GamePlatformDTO>>();
 builder.Services.AddScoped<DictionaryService<GameLabel, GameLabelDTO>>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
+
+//DevModeServices
+builder.Services.AddScoped<IAddPdGame, AddPdGame>();
 
 
 //Middleware
@@ -147,19 +156,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-//app.UseStatusCodePages(async context =>
-//{
-//    // var request = context.HttpContext.Request;
-//    var response = context.HttpContext.Response;
-//    if (response.StatusCode == (int)HttpStatusCode.NotFound)
-//    {
-//        response.Redirect("/error/NotFoundPage");
-//    }
-//    if (response.StatusCode == (int)HttpStatusCode.Forbidden)
-//    {
-//        response.Redirect("/error/ForbiddenResource");
-//    }
-//});
 
 //EndPoints
 app.MapControllerRoute(

@@ -3,6 +3,7 @@ using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.DTO.Games;
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Infrastrcture.Singletons;
+using GameStore.BLL.Predefined;
 using GameStore.DAL.Domain;
 using GameStore.DAL.Entities.Dictionaries;
 using GameStore.DAL.Entities.Games;
@@ -79,6 +80,9 @@ namespace GameStore.BLL.Services.GamesServices
             newGame.Poster = (game.UploadPoster is not null) ? UploadPoster(game.UploadPoster) : null;
             newGame.Screenshots = (game.UploadScreenshots is not null) ? UploadGameScreenshot(game.UploadScreenshots) : null;
             newGame.GameKeys = (game.UploadGameKeys is not null) ? UploadGameKeys(game.UploadGameKeys) : null;
+            newGame.isShowInSlider = game.isShowInSlider;
+            newGame.SliderName = (game.UploadSliderImg is not null) ? game.UploadSliderImg.FileName : null;
+            newGame.SliderImg = (game.UploadSliderImg is not null) ?  UploadPoster(game.UploadSliderImg) : null;
 
             try
             {
@@ -116,10 +120,11 @@ namespace GameStore.BLL.Services.GamesServices
             currentGame.Gpu = game.Gpu;
             currentGame.Cpu = game.Cpu;
             currentGame.Ram = game.Ram;
-            currentGame.Weight = game.Weight; 
-           
+            currentGame.Weight = game.Weight;
+            currentGame.isShowInSlider = game.isShowInSlider;
+
             //Медиа файлы
-            if(game.UploadPoster is not null)
+            if (game.UploadPoster is not null)
             {
                 currentGame.PosterName = game.UploadPoster.FileName;
                 currentGame.Poster = UploadPoster(game.UploadPoster);
@@ -134,6 +139,13 @@ namespace GameStore.BLL.Services.GamesServices
             {
                 List<GameKey> newKeys = UploadGameKeys(game.UploadGameKeys);
                 currentGame.GameKeys.AddRange(newKeys);
+            }
+
+            if(game.UploadSliderImg is not null)
+            {
+             
+                currentGame.SliderName = (game.UploadSliderImg is not null) ? game.UploadSliderImg.FileName : null;
+                currentGame.SliderImg = (game.UploadSliderImg is not null) ? UploadPoster(game.UploadSliderImg) : null;
             }
 
             try
@@ -289,6 +301,7 @@ namespace GameStore.BLL.Services.GamesServices
 
         private List<GameKey> UploadGameKeys(IFormFile uploadKeys)
         {
+            PredefinedManager pd = new();
             GameKeyCryptography gkc = GameKeyCryptography.GetIstance();
             List<GameKey> keys = new();
             if (uploadKeys != null && uploadKeys.Length > 0)
@@ -303,7 +316,7 @@ namespace GameStore.BLL.Services.GamesServices
                         if (parts.Length == 2 && int.TryParse(parts[0], out int platformId))
                         {
                             string key = gkc.Encrypt(parts[1]);
-                            keys.Add(new GameKey { PlatformId = platformId, Key = key, IsActive = true });
+                            keys.Add(new GameKey { PlatformId = platformId, Key = key, StatusId = pd.GameKeyStatuses.active.Id });
                         }
                     }
                 }

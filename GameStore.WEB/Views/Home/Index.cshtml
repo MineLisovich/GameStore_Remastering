@@ -1,8 +1,210 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HomePageModel
+@{
+    ViewData["Title"] = "Главная страница";
+    SliderModel sliderModel = new();
+    sliderModel.IsSingleGamePage = Model.IsSingleGamePage;
+    sliderModel.SliderGames = Model.SliderGames;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section js{
+
+}
+
+@* СЛАЙДЕР *@
+<div class="row">
+    @await Html.PartialAsync("_Partial.Index.Slider", sliderModel)
+</div>
+<!-- promo area -->
+<div class="promo-area user-select-none">
+    <div class="container">
+            <div class="row mx-auto">
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo1">
+                    <i class="fa fa-key"></i>
+                    <p>Лицензионные ключи </p>
+                </div>
+            </div>
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo2">
+                    <i class="fa fa-gear"></i>
+                    <p>Гарантированная техподдержка</p>
+                </div>
+            </div>
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo3">
+                    <i class="fa fa-ticket"></i>
+                    <p>Регулярные акции, скидки и бонусы</p>
+                </div>
+            </div>
+                <div class="col-md-3 col-sm-6 mx-auto">
+                <div class="single-promo promo4">
+                    <i class="fa fa-cart-plus"></i>
+                    <p>Удобная оплата <br>игр</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End promo area -->
+
+@* БЛОКИ *@
+<div class="row mt-5 mb-3">
+    @* БЛОК НОВИНКИ *@
+    <div class="col-md-4">
+        <h2 class="text-center  titleText borderS shadow p-1 bg-gradient text-light user-select-none">Новинки</h2>
+       
+
+        @foreach(GameDTO nw  in Model.NewGames)
+        {
+            <div class="game mt-5 mb-3 mx-auto borderS">
+                <div class="text-center">
+                    @Html.Raw("<img  src=\"data:image/png;base64,"
+                             + Convert.ToBase64String(nw.Poster) + "\" />")
+                </div>
+
+                <div class="text-center">
+                    <h4><a asp-area="" asp-controller="Home" asp-action="GamePage" asp-route-gameId ="@nw.Id">@nw.Name</a></h4>
+                </div>
+
+                <div class="m-1">
+                    <p>
+                        @(nw.Description.Length > 150 ? nw.Description.Substring(0, 150) + "..." : nw.Description)
+                    </p>
+                </div>
+
+                <div class="d-flex flex-wrap">
+
+                    @foreach (var lable in nw.GameGanres)
+                    {
+                        <div class="bg-ganre m-1 h6 p-1 text-white">@lable.Name</div>
+                    }
+                </div>
+
+                <div class="d-flex flex-wrap  h5">
+                    <div class="m-1 p-1">
+                        @if (nw.IsShare is true) { <s> @nw.Price</s>  @nw.SharePrice } else{ @nw.Price } BYN
+                   </div>
+
+                    <div class="btn-group mx-auto mb-3  float-end">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
+                       
+                        @if(nw.GameKeys.Count()>0)
+                        {
+                            <button type="button" class="btn btn-success">В Корзину</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        }
+
+     
+
+       
+    </div>
+
+    @* БЛОК ЛИДЕРЫ ПРОДАЖ *@
+    <div class="col-md-4">
+        <h2 class="text-center  titleText borderS shadow p-1 bg-gradient text-light user-select-none">Лидеры продаж</h2>
+
+        @foreach (GameDTO nw in Model.SalesLeaders)
+        {
+            <div class="game mt-5 mb-3 mx-auto borderS">
+                <div class="text-center">
+                    @Html.Raw("<img  src=\"data:image/png;base64,"
+                             + Convert.ToBase64String(nw.Poster) + "\" />")
+                </div>
+
+                <div class="text-center">
+                    <h4><a asp-area="" asp-controller="Home" asp-action="GamePage" asp-route-gameId="@nw.Id">@nw.Name</a></h4>
+                </div>
+
+                <div class="m-1">
+                    <p>
+                        @(nw.Description.Length > 150 ? nw.Description.Substring(0, 150) + "..." : nw.Description)
+                    </p>
+                </div>
+
+                <div class="d-flex flex-wrap">
+
+                    @foreach (var lable in nw.GameGanres)
+                    {
+                        <div class="bg-ganre m-1 h6 p-1 text-white">@lable.Name</div>
+                    }
+                </div>
+
+                <div class="d-flex flex-wrap  h5">
+                    <div class="m-1 p-1">
+                        @if (nw.IsShare is true)
+                        {
+                            <s> @nw.Price</s>  @nw.SharePrice
+                        }
+                        else
+                        {
+                            @nw.Price
+                        } BYN
+                    </div>
+
+                    <div class="btn-group mx-auto mb-3  float-end">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
+
+                        @if (nw.GameKeys.Count() > 0)
+                        {
+                            <button type="button" class="btn btn-success">В Корзину</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+    @* БЛОК СКОРО ВЫЙДЕТ*@
+    <div class="col-md-4">
+        <h2 class="text-center  titleText borderS shadow p-1  bg-gradient text-light user-select-none">Скоро выйдет</h2>
+
+        @foreach (GameDTO nw in Model.ComingSoon)
+        {
+            <div class="game mt-5 mb-3 mx-auto borderS">
+                <div class="text-center">
+                    @Html.Raw("<img  src=\"data:image/png;base64,"
+                             + Convert.ToBase64String(nw.Poster) + "\" />")
+                </div>
+
+                <div class="text-center">
+                    <h4><a asp-area="" asp-controller="Home" asp-action="GamePage" asp-route-gameId="@nw.Id">@nw.Name</a></h4>
+                </div>
+
+                <div class="m-1">
+                    <p>
+                        @(nw.Description.Length > 150 ? nw.Description.Substring(0, 150) + "..." : nw.Description)
+                    </p>
+                </div>
+
+                <div class="d-flex flex-wrap">
+
+                    @foreach (var lable in nw.GameGanres)
+                    {
+                        <div class="bg-ganre m-1 h6 p-1 text-white">@lable.Name</div>
+                    }
+                </div>
+
+                <div class="d-flex flex-wrap  h5">
+                    <p class="m-1">Дата выхода: @nw.ReleaseDate.ToString("dd.MM.yyyy")</p>
+                </div>
+
+            </div>
+        }
+    </div>
 </div>

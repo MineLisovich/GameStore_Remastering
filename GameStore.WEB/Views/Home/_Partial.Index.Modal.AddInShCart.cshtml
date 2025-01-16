@@ -1,0 +1,44 @@
+﻿<div class="modal fade modal-js" id="modalAddToShoppingCart" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Добавление в корзину</h5>
+            </div>
+
+            <div class="modal-body">
+                <div class="ordercart">
+                    <div class="ordergameinfo d-flex shadow">
+                        <div class="s_gameposter">
+                            <img src="~/img/gamesposters/gameposter.jpg" />
+                        </div>
+                        <div class="s_gameinfo">
+                            <h5>Cyberpunk 2077</h5>
+                            <p><b>Цена:</b> 76 BYN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form id="addToShoppingCartForm" asp-controller="" asp-action="" method="post">
+
+                @*  *@
+                <div class="modal-body">
+                <div class="form-group">
+                    <label> Выберите платформу: *</label>
+                    <select class="form-select js-single">
+                        <option selected disabled></option>
+                        <option value="1">STEAM</option>
+                        <option value="2">STEAM2</option>
+
+                    </select>
+                @*     <span asp-validation-for="Game.DeveloperId" class="validError"></span> *@
+                </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnBackFromCreateEditMode" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                    <button type="submit" class="btn btn-outline-success">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

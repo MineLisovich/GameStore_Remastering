@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GsDbContext))]
-    [Migration("20241119161251_mig1")]
+    [Migration("20250113173332_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -266,6 +266,45 @@ namespace GameStore.DAL.Migrations
                         {
                             Id = 39,
                             Name = "Digital Extremes"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Name = "CD Projekt Red"
+                        });
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Dictionaries.GameKeyStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dictionaries_GameKeyStatuses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Активный"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Забронирован"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Неактивный"
                         });
                 });
 
@@ -511,84 +550,26 @@ namespace GameStore.DAL.Migrations
                     b.Property<decimal?>("SharePrice")
                         .HasColumnType("numeric");
 
+                    b.Property<byte[]>("SliderImg")
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("SliderName")
+                        .HasColumnType("text");
+
                     b.Property<int?>("Weight")
                         .HasColumnType("integer");
 
                     b.Property<string>("YtLinkGameTrailer")
                         .HasColumnType("text");
 
+                    b.Property<bool>("isShowInSlider")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DeveloperId");
 
                     b.ToTable("Games_Games", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1453),
-                            DeveloperId = 1,
-                            IsDeleted = false,
-                            IsShare = false,
-                            IsVisible = false,
-                            Name = "Grand The Auto 5",
-                            Price = 34.33m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1455)
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1458),
-                            DeveloperId = 9,
-                            IsDeleted = false,
-                            IsShare = false,
-                            IsVisible = false,
-                            Name = "The First Player",
-                            Price = 120.50m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459)
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459),
-                            DeveloperId = 3,
-                            IsDeleted = false,
-                            IsShare = false,
-                            IsVisible = false,
-                            Name = "The Wither 3",
-                            Price = 79.00m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1460)
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461),
-                            DeveloperId = 5,
-                            IsDeleted = false,
-                            IsShare = false,
-                            IsVisible = false,
-                            Name = "Just Dance",
-                            Price = 66.33m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461)
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            CountSold = 0L,
-                            DateAddedSite = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462),
-                            DeveloperId = 2,
-                            IsDeleted = false,
-                            IsShare = false,
-                            IsVisible = false,
-                            Name = "Far cry 5",
-                            Price = 67.88m,
-                            ReleaseDate = new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462)
-                        });
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Games.GameKey", b =>
@@ -602,9 +583,6 @@ namespace GameStore.DAL.Migrations
                     b.Property<long>("GameId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text");
@@ -612,11 +590,21 @@ namespace GameStore.DAL.Migrations
                     b.Property<int>("PlatformId")
                         .HasColumnType("integer");
 
+                    b.Property<long?>("ShoppingCartId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
                     b.HasIndex("PlatformId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Games_Keys", (string)null);
                 });
@@ -723,6 +711,37 @@ namespace GameStore.DAL.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Identity.ShoppingCart", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Users_ShoppingCarts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -926,9 +945,23 @@ namespace GameStore.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GameStore.DAL.Entities.Identity.ShoppingCart", "ShoppingCart")
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartId");
+
+                    b.HasOne("GameStore.DAL.Entities.Dictionaries.GameKeyStatus", "GameKeyStatus")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Game");
 
+                    b.Navigation("GameKeyStatus");
+
                     b.Navigation("Platform");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Games.GameScreenshot", b =>
@@ -940,6 +973,17 @@ namespace GameStore.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Identity.ShoppingCart", b =>
+                {
+                    b.HasOne("GameStore.DAL.Entities.Identity.AppUser", "User")
+                        .WithMany("ShoppingCarts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -998,6 +1042,11 @@ namespace GameStore.DAL.Migrations
                     b.Navigation("GameKeys");
 
                     b.Navigation("Screenshots");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Identity.AppUser", b =>
+                {
+                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

@@ -42,6 +42,19 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Dictionaries_GameKeyStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dictionaries_GameKeyStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Dictionaries_GameLabels",
                 columns: table => new
                 {
@@ -147,6 +160,9 @@ namespace GameStore.DAL.Migrations
                     Poster = table.Column<byte[]>(type: "bytea", nullable: true),
                     PosterName = table.Column<string>(type: "text", nullable: true),
                     YtLinkGameTrailer = table.Column<string>(type: "text", nullable: true),
+                    isShowInSlider = table.Column<bool>(type: "boolean", nullable: false),
+                    SliderImg = table.Column<byte[]>(type: "bytea", nullable: true),
+                    SliderName = table.Column<string>(type: "text", nullable: true),
                     Os = table.Column<string>(type: "text", nullable: true),
                     Cpu = table.Column<string>(type: "text", nullable: true),
                     Gpu = table.Column<string>(type: "text", nullable: true),
@@ -254,6 +270,29 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users_ShoppingCarts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users_ShoppingCarts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_ShoppingCarts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GameGameLabel",
                 columns: table => new
                 {
@@ -302,34 +341,6 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games_Keys",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Key = table.Column<string>(type: "text", nullable: false),
-                    GameId = table.Column<long>(type: "bigint", nullable: false),
-                    PlatformId = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games_Keys", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Games_Keys_Dictionaries_GamePlatforms_PlatformId",
-                        column: x => x.PlatformId,
-                        principalTable: "Dictionaries_GamePlatforms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Games_Keys_Games_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games_Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Games_Screenshots",
                 columns: table => new
                 {
@@ -348,6 +359,46 @@ namespace GameStore.DAL.Migrations
                         principalTable: "Games_Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Games_Keys",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Key = table.Column<string>(type: "text", nullable: false),
+                    GameId = table.Column<long>(type: "bigint", nullable: false),
+                    PlatformId = table.Column<int>(type: "integer", nullable: false),
+                    StatusId = table.Column<int>(type: "integer", nullable: false),
+                    ShoppingCartId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games_Keys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Keys_Dictionaries_GameKeyStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Dictionaries_GameKeyStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_Keys_Dictionaries_GamePlatforms_PlatformId",
+                        column: x => x.PlatformId,
+                        principalTable: "Dictionaries_GamePlatforms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_Keys_Games_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games_Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_Keys_Users_ShoppingCarts_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "Users_ShoppingCarts",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -402,7 +453,18 @@ namespace GameStore.DAL.Migrations
                     { 36, "DevCAT Studios" },
                     { 37, "Dhruva Interactive" },
                     { 38, "Die Gute Fabrik" },
-                    { 39, "Digital Extremes" }
+                    { 39, "Digital Extremes" },
+                    { 40, "CD Projekt Red" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Dictionaries_GameKeyStatuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Активный" },
+                    { 2, "Забронирован" },
+                    { 3, "Неактивный" }
                 });
 
             migrationBuilder.InsertData(
@@ -449,18 +511,6 @@ namespace GameStore.DAL.Migrations
                     { 13, "Платформер" },
                     { 14, "Ужасы" },
                     { 15, "Образовательная игра" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Games_Games",
-                columns: new[] { "Id", "CountSold", "Cpu", "DateAddedSite", "Description", "DeveloperId", "Gpu", "IsDeleted", "IsShare", "IsVisible", "Name", "Os", "Poster", "PosterName", "Price", "Ram", "ReleaseDate", "SharePrice", "Weight", "YtLinkGameTrailer" },
-                values: new object[,]
-                {
-                    { 1L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1453), null, 1, null, false, false, false, "Grand The Auto 5", null, null, null, 34.33m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1455), null, null, null },
-                    { 2L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1458), null, 9, null, false, false, false, "The First Player", null, null, null, 120.50m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459), null, null, null },
-                    { 3L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1459), null, 3, null, false, false, false, "The Wither 3", null, null, null, 79.00m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1460), null, null, null },
-                    { 4L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461), null, 5, null, false, false, false, "Just Dance", null, null, null, 66.33m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1461), null, null, null },
-                    { 5L, 0L, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462), null, 2, null, false, false, false, "Far cry 5", null, null, null, 67.88m, null, new DateTime(2024, 11, 19, 16, 12, 50, 831, DateTimeKind.Utc).AddTicks(1462), null, null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -515,6 +565,16 @@ namespace GameStore.DAL.Migrations
                 column: "PlatformId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Games_Keys_ShoppingCartId",
+                table: "Games_Keys",
+                column: "ShoppingCartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_Keys_StatusId",
+                table: "Games_Keys",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Games_Screenshots_GameId",
                 table: "Games_Screenshots",
                 column: "GameId");
@@ -529,6 +589,11 @@ namespace GameStore.DAL.Migrations
                 table: "Users",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ShoppingCarts_UserId",
+                table: "Users_ShoppingCarts",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -565,19 +630,25 @@ namespace GameStore.DAL.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Dictionaries_GameLabels");
 
             migrationBuilder.DropTable(
                 name: "Dictionaries_Genres");
 
             migrationBuilder.DropTable(
+                name: "Dictionaries_GameKeyStatuses");
+
+            migrationBuilder.DropTable(
                 name: "Dictionaries_GamePlatforms");
 
             migrationBuilder.DropTable(
+                name: "Users_ShoppingCarts");
+
+            migrationBuilder.DropTable(
                 name: "Games_Games");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Dictionaries_GameDevelopers");

@@ -1,4 +1,5 @@
 ﻿using GameStore.DAL.Entities.Dictionaries;
+using GameStore.DAL.Entities.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameStore.DAL.Entities.Games
@@ -39,8 +40,25 @@ namespace GameStore.DAL.Entities.Games
 
 
         /// <summary>
-        /// Ключ активный? (то есть его ещё не купили)
+        /// Id стутуса ключа
         /// </summary>
-        public bool IsActive { get; set; } = true;
+        [ForeignKey(nameof(GameKeyStatus))]
+        public int StatusId { get; set; }
+        
+        /// <summary>
+        /// Статус ключа
+        /// </summary>
+        public GameKeyStatus? GameKeyStatus { get; set; }
+
+        /// <summary>
+        /// ID Корзины
+        /// </summary>
+        [ForeignKey(nameof(ShoppingCart))]
+        public long? ShoppingCartId { get; set; } = null;
+        
+        /// <summary>
+        /// Корзина
+        /// </summary>
+        public ShoppingCart? ShoppingCart { get; set; }
     }
 }

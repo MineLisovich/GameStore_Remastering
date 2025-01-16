@@ -4,6 +4,7 @@
     bool isCreateMethod = (Model.Game.Id == 0) ? true : false;
     string actionName = (isCreateMethod is true) ? "CreateGame": "EditGame";
     ViewData["Title"] = (isCreateMethod is true) ? "Создание игры" : "Редактирование игры";
+    string disableSliderField = (Model.Game.isShowInSlider is false) ? "disabled" : "";
 }
 
 @section js
@@ -13,6 +14,15 @@
         $(document).ready(function () {
             InitializationMultiSelect2("js-mulsel");
             InitializationSelect2("js-single");
+        });
+
+        // Отслеживаем изменение состояния слайдера
+        $('#Game_isShowInSlider').change(function () {
+            if ($(this).is(':checked')) {
+                $("#Game_UploadSliderImg").prop("disabled", false);
+            } else {
+                $("#Game_UploadSliderImg").prop("disabled", true);
+            }
         });
 
         //Poster
@@ -51,8 +61,24 @@
                 };
 
                 scReader.readAsDataURL(scFile); // Читаем файл как Data URL
-            }
-            
+            }          
+        });
+
+        //Slider
+        const sliderInput = $('#Game_UploadSliderImg');
+        const sliderPreview = $('#sliderPreview-js');
+        sliderInput.on('change', (e) => {
+            const file = sliderInput[0].files[0];
+            const slreader = new FileReader();
+
+            slreader.onload = (event) => {
+                const imageDataUrlsl = event.target.result;
+                const imgsl = $('<img >').attr('src', imageDataUrlsl);
+                imgsl.css({ 'border': '1px solid black' });
+                sliderPreview.empty().append(imgsl);
+            };
+
+            slreader.readAsDataURL(file);
         });
 
     </script>
@@ -162,6 +188,24 @@
                     <input asp-for=Game.UploadGameKeys type="file" class="form-control" accept=".txt" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Формат файла .txt, Шаблон содержание файла: 1/XXXXXX; Где 1 - платформа, X- ключ" />
                 </div>
 
+                @* ПОКАЗЫВАТЬ В СЛАЙДЕРЕ НА ГЛАВНОЙ СТРАНИЦЕ *@
+                <div class="form-group form-check form-switch">
+                    <input type="checkbox" asp-for=Game.isShowInSlider class="form-check-input" />
+                    <label class="form-check-label" asp-for=Game.isShowInSlider>Показывать в слайдере на главной странице</label>
+                </div>
+
+                @* КАРТИНКА ДЛЯ СЛАЙДЕРА *@
+                <div class="form-group">
+                    <label>Картинка для слайдера:</label>
+                    <input  asp-for=Game.UploadSliderImg type="file" 
+                    class="form-control" accept=".png" 
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom" 
+                    title="Формат скриншотов .png, рекомендуемое разрешение картинки: 1920x1080"
+                 
+                    disabled="@disableSliderField"/>
+                </div>
+
                 <h4 class="text-center mt-3">Системные требования (форма записи: Рекомендуемые / Минимальные)</h4>
 
                 @* ОПЕРАЦИОННАЯ СИСТЕМА *@
@@ -251,6 +295,17 @@
                         </div>
                       
                     }
+                }
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <h5>Картинка для слайдера</h5>
+            <div id="sliderPreview-js">
+                @if (Model.Game.SliderImg is not null && Model.Game.SliderImg.Length != 0)
+                {
+                    @Html.Raw("<img  src=\"data:image/png;base64,"
+                             + Convert.ToBase64String(Model.Game.SliderImg) + "\" />")
                 }
             </div>
         </div>

@@ -1,4 +1,5 @@
 ﻿using GameStore.BLL.DTO.Dictionaries;
+using GameStore.BLL.DTO.Identity;
 
 namespace GameStore.BLL.DTO.Games
 {
@@ -36,9 +37,25 @@ namespace GameStore.BLL.DTO.Games
         /// </summary>
         public GamePlatformDTO Platform { get; set; } = null;
 
+
         /// <summary>
-        /// Ключ активный? (то есть его ещё не купили)
+        /// Id стутуса ключа
         /// </summary>
-        public bool IsActive { get; set; } = true;
+        public int StatusId { get; set; }
+
+        /// <summary>
+        /// Статус ключа
+        /// </summary>
+        public GameKeyStatusDTO GameKeyStatus { get; set; } = null;
+
+        /// <summary>
+        /// ID Корзины
+        /// </summary>
+        public long? ShoppingCartId { get; set; } = null;
+
+        /// <summary>
+        /// Корзина
+        /// </summary>
+        public ShoppingCartDTO ShoppingCart { get; set; } = null;
     }
 }
