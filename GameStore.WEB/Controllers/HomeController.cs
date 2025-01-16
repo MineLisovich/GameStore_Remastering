@@ -45,9 +45,10 @@ namespace GameStore.WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult GamePage(long gameId)
+        public async Task <IActionResult> GamePage(long gameId)
         {
-            return View();
+            SingleGamePageModel model = await CreateSingleGamePageModel(gameId,TempData);
+            return View(model);
         }
         #endregion
 
@@ -94,6 +95,29 @@ namespace GameStore.WEB.Controllers
             model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
             return model;
         }
+        
+        private async Task<SingleGamePageModel> CreateSingleGamePageModel(long gameId ,ITempDataDictionary TempData)
+        {
+            SingleGamePageModel model = new();
+            model.IsSingleGamePage = true;
+            model.Game = await _homeService.GetGameByIdAsync(gameId);
+
+            if (model.Game is not null)
+            {
+                model.Screenshots = model.Game.Screenshots;
+                model.Genres = model.Game.GameGanres;
+                model.Platforms = model.Game.GameKeys.DistinctBy(x=>x.PlatformId).Select(x=>x.Platform).ToList();
+            }
+            else
+            {
+                model.ErrorVM.Title = "Ой, что-то пошло не так";
+                model.ErrorVM.Message = "Не удалось найти игру. Попробуйте позже. Если проблема не исчезла, сообщите нам о проблеме! Сообщить можно на вкладке Поддержка.";
+            }
+            
+
+            return model;
+        }
+        
         #endregion
     }
 }

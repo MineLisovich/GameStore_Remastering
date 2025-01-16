@@ -1,5 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Game Name";
+﻿@model SingleGamePageModel
+
+@{
+    ViewData["Title"] = (Model.Game is null) ?  Model.ErrorVM.Title : Model.Game.Name;
+    string nodata = "Нет данных";
+    SliderModel sliderModel = new();
+    if(Model.Screenshots.Count() > 0)
+    {
+        sliderModel.IsSingleGamePage = Model.IsSingleGamePage;
+        sliderModel.Screenshots = Model.Screenshots;
+    }
+  
 }
 
 @section js {
@@ -19,13 +29,14 @@
 <div class="row mt-5 mb-3">
 
     <div class="col-md-3">
-        <div class="gamePageMainInfo borderS p-2 text-center shadow">
+        <div class="gamePageMainInfo singlegame-area borderS p-2 text-center ">
             <div class="">
-                <h4>Наименование игры</h4>
+                <h4>@Model.Game.Name</h4>
             </div>
 
             <div>
-                <img src="~/img/gamesposters/2077.png" />
+                @Html.Raw("<img  src=\"data:image/png;base64,"
+                         + Convert.ToBase64String(Model.Game.Poster) + "\" />")
             </div>
 
             <div class="mt-2">
@@ -35,29 +46,32 @@
                 </button>
             </div>
             <div class="d-flex flex-wrap  h5 mt-2">
-                <div class="m-1 p-1 h4"><s>74</s> 66 BYN</div>
+              
+                <div class="m-1 p-1 h4">
+                  
+                   
+                    @if (Model.Game.IsShare is true)
+                    {
+                        <s> @Model.Game.Price</s>  @Model.Game.SharePrice
+                    }
+                    else
+                    {
+                        @((Model.Game.GameKeys.Count() > 0) ? Model.Game.Price : "")
+                    }
+                    @((Model.Game.GameKeys.Count() > 0) ? "BYN" : "")
+                </div>
+                
+                
                 <div class="btn-group mx-auto mb-3  float-end btn-lg">
                     <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
-                    <button type="button" id="addtoshcart" class="btn btn-success btn-lg">В Корзину</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="gamePageInfo mt-3 p-2 borderS">
-            <div class="">
-                <div class="d-flex flex-wrap h6">
-                    <div class="">Разработчик: СД Проджект Рэд</div>
-                    <div class="">Дата выхода: 22.02.2020</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="gamePageInfo mt-3 p-2 borderS">
-            <div class="">
-                <div class="d-flex flex-wrap">
-                    <div class="bg-primary m-1 h6 p-1 text-white">Steam</div>
-                    <div class="bg-primary m-1 h6 p-1 text-white">Epic Games</div>
-                    <div class="bg-primary m-1 h6 p-1 text-white">Rockstar Launcher</div>
+                    @if (Model.Game.GameKeys.Count() > 0)
+                    {
+                        <button type="button" id="addtoshcart" class="btn btn-success btn-lg">В Корзину</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-success  btn-lg" disabled>Нет в наличии</button>
+                    }
                 </div>
             </div>
         </div>
@@ -65,18 +79,30 @@
         <div class="gamePageInfo mt-3 p-2 borderS">
             <div class="">
                 <div class="d-flex flex-wrap">
-                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">Action</div>
-                    <div class="bg-secondary m-1 h6 p-1 text-white">RPG</div>
+                    <div class="mtxt">Разработчик: @Model.Game.Developer.Name</div>
+                    <div class="mtxt">Дата выхода: @Model.Game.ReleaseDate.ToString("dd.MM.yyyy")</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gamePageInfo mt-3 p-2 borderS">
+            <div class="">
+                <div class="d-flex flex-wrap mtxt">
+                    @foreach (var pl in Model.Platforms)
+                    {
+                        <div class="bg-platform m-1  p-1 text-white">@pl.Name</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="gamePageInfo mt-3 p-2 borderS">
+            <div class="">
+                <div class="d-flex flex-wrap mtxt">
+                    @foreach(var gn in Model.Genres)
+                    {
+                        <div class="bg-ganre m-1 p-1 text-white">@gn.Name</div>
+                    }
                 </div>
             </div>
         </div>
@@ -94,29 +120,29 @@
 
     <div class="col-md-9">
 
-        <div class="row">
-            <div class="h6 text-wrap">
-                Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
-                Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
-                Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
-                Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
-                Cyberpunk 2077 — приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках устройства, позволяющего обрести бессмертие. Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.
+        <div class="row singlegame-area mb-3">
+            <div class="text-wrap description-text">
+               @Model.Game.Description    
             </div>
         </div>
 
-        <div class="row">
-            @await Html.PartialAsync("_Partial.Index.Slider")
-        </div>
+        @if(Model.Screenshots.Count() > 0)
+        {
+            <div class="row">
+                @await Html.PartialAsync("_Partial.Index.Slider", sliderModel)
+            </div>
+        }
+      
 
-        <div class="row mt-2">
-            <div>
+        <div class="row mt-2 singlegame-area mt-3 mb-3">
+            <div class="mtxt">
                 <h4>Системные требования:</h4>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Операционная система:</li>
-                    <li class="list-group-item">Процессор:</li>
-                    <li class="list-group-item">Видиокарта:</li>
-                    <li class="list-group-item">Оперативная память:</li>
-                    <li class="list-group-item">Занимаймое место на диске:</li>
+                    <li class="list-group-item">Операционная система: @((Model.Game.Os is null) ? nodata : Model.Game.Os)</li>
+                    <li class="list-group-item">Процессор: @((Model.Game.Cpu is null) ? nodata : Model.Game.Cpu) </li>
+                    <li class="list-group-item">Видиокарта: @((Model.Game.Gpu is null) ? nodata : Model.Game.Gpu)</li>
+                    <li class="list-group-item">Оперативная память: @((Model.Game.Ram is null) ? nodata : Model.Game.Ram)</li>
+                    <li class="list-group-item">Занимаймое место на диске: @((Model.Game.Weight is null) ? nodata : Model.Game.Weight)гб</li>
                 </ul>
             </div>
         </div>
@@ -125,7 +151,7 @@
 
 
 
-@await Html.PartialAsync("_Partial.GamePage.Modal.Video")
+@await Html.PartialAsync("_Partial.GamePage.Modal.Video", Model.Game.YtLinkGameTrailer)
 
 
 <div id="modalWrapper">

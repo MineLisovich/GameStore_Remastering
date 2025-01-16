@@ -8,11 +8,6 @@ namespace GameStore.WEB.Models.HomeModels.HomePageModels
     public class HomePageModel : HomePageBaseModel
     {
         /// <summary>
-        /// Список: Игры для слайдера 
-        /// </summary>
-        public List<GameDTO> SliderGames { get; set; }
-
-        /// <summary>
         /// Список: Новинки
         /// </summary>
         public List<GameDTO> NewGames { get; set; }
