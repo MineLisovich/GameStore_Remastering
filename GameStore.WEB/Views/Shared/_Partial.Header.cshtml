@@ -38,7 +38,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-area="" asp-controller="UserProfile" asp-action="GetUserProfile">Профиль</a></li>
-                            <li><a class="dropdown-item" href="#">Корзина</a></li>
+                            <li><a class="dropdown-item" asp-area="Order" asp-controller="ShoppingCart" asp-action="GetShoppingCart">Корзина</a></li>
                             <li><hr class="dropdown-divider"></li>
                             @if(isAdmin is true)
                             {
