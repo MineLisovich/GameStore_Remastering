@@ -1,6 +1,7 @@
 ﻿using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Predefined;
 using GameStore.BLL.Services.ShoppingCartServices;
+using GameStore.WEB.Areas.Order.Models;
 using GameStore.WEB.Infrastrcture;
 using GameStore.WEB.Models.HomeModels.HomePageModels;
 using Microsoft.AspNetCore.Authorization;
@@ -22,9 +23,28 @@ namespace GameStore.WEB.Areas.Order.Controllers
         }
 
         #region PUBLIC METHODS - GET
-        public IActionResult GetShoppingCart()
+        [HttpGet]
+        public async Task <IActionResult> GetShoppingCart()
         {
-            return View();
+            ShoppingCartDataModel model = await CreateShoppingCartDataModel(TempData);
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteGameFromShoppingCart(bool isDeleteAll, long gameKeyId = 0)
+        {
+            ResultServiceModel result = await _shoppingCartService.DeleteItemsInShoppingCartAsync(User.Identity.Name, isDeleteAll, gameKeyId);
+            ShoppingCartDataModel model = await CreateShoppingCartDataModel(TempData);
+            StandartUserActionTypes actionTypes = new();
+           
+            return PartialView("_Partial.ShoppingCart.Items", model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetActualPriceShoppingCart()
+        {
+            decimal actualPrice = await _shoppingCartService.GetActualShoppingCartAsync(User.Identity.Name);
+            return Json(actualPrice);
         }
         #endregion
 
@@ -96,6 +116,13 @@ namespace GameStore.WEB.Areas.Order.Controllers
         #endregion
 
         #region PRIVATE METHODS
+        private async Task<ShoppingCartDataModel> CreateShoppingCartDataModel(ITempDataDictionary TempData)
+        {
+            ShoppingCartDataModel model = new();
+            model.ShoppingCart = await _shoppingCartService.GetActiveShoppingCartAsync(User.Identity.Name);
+            model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
+            return model;
+        }
         #endregion
     }
 }

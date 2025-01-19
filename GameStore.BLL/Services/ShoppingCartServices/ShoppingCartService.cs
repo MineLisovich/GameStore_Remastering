@@ -68,11 +68,56 @@ namespace GameStore.BLL.Services.ShoppingCartServices
             return result;
         }
 
+        public async Task<ResultServiceModel> DeleteItemsInShoppingCartAsync(string userEmail, bool isDeleteAll, long gameKeyId = 0)
+        {
+            ResultServiceModel result = new();
+            PredefinedManager pd = new();
+
+            ShoppingCart cart = await GetActiveShCart(userEmail);
+
+            if(isDeleteAll is true)
+            {
+                List<GameKey> games = cart.GamesKeys.ToList();
+
+                foreach (GameKey gameKey in games) { 
+                    gameKey.StatusId = pd.GameKeyStatuses.active.Id;
+                }
+                cart.TotalPrice = 0;
+                cart.GamesKeys.Clear();
+            }
+            else
+            {
+                GameKey gameKey = cart.GamesKeys.FirstOrDefault(x => x.Id == gameKeyId);
+                cart.TotalPrice -= (gameKey.Game.IsShare is true) ? gameKey.Game.SharePrice.Value : gameKey.Game.Price;
+                gameKey.StatusId = pd.GameKeyStatuses.active.Id;
+                cart.GamesKeys.Remove(gameKey);
+            }
+
+            try
+            {
+                _dbContext.ShoppingCarts.Update(cart);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch { result.IsSucceeded = false; result.ErrorMes = "Ошибка"; return result; }
+
+            result.IsSucceeded = true;
+            return result;
+        }
+
+        public async Task<decimal> GetActualShoppingCartAsync(string userEmail)
+        {
+            ShoppingCart cart = await GetActiveShCart(userEmail);
+
+            return cart.TotalPrice;
+        }
+
+
         private async Task<ShoppingCart> GetActiveShCart(string userEmail)
         {
             AppUser user = await _dbContext.AppUsers.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
             ShoppingCart shoppingCart = await _dbContext.ShoppingCarts.Where(x => x.UserId == user.Id && x.IsActive == true)
                                                                       .Include(x => x.GamesKeys).ThenInclude(x => x.Game)
+                                                                      .Include(x => x.GamesKeys).ThenInclude(x => x.Platform)
                                                                       .FirstOrDefaultAsync();
             return shoppingCart;
         }

@@ -27,7 +27,7 @@ namespace GameStore.BLL.DTO.Identity
         /// <summary>
         /// Игры
         /// </summary>
-        List<GameKeyDTO> GamesKeys { get; set; } = new();
+        public  List<GameKeyDTO> GamesKeys { get; set; } = new();
 
         /// <summary>
         /// Финальная стоимость корзины
