@@ -7,6 +7,32 @@
 }
 
 @section js{
+    <script src="~/js/shoppingcart/shopcart.js"></script>
+    <script>
+        // ШАГ 1. НАСТРОЙКА ОБЩЕГО ПОВЕДЕНИЯ МОДАЛОК
+        $(document).ready(function () {
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
+            AddHandlerClickForButtonsOfActionModals('modalAddToShoppingCart', 'addToShoppingCart');
+
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+            AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
+        });
+
+        // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "Home")';
+                    break;
+            }
+            return url;
+        }
+
+        // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+        function SettingBehaviorOfModalWindow(boxId, section) { }
+
+    </script>
 
 }
 
@@ -86,19 +112,23 @@
                         @if (nw.IsShare is true) { <s> @nw.Price</s>  @nw.SharePrice } else{ @nw.Price } BYN
                    </div>
 
-                    <div class="btn-group mx-auto mb-3  float-end">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
-                       
-                        @if(nw.GameKeys.Count()>0)
-                        {
-                            <button type="button" class="btn btn-success">В Корзину</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
-                        }
+                   @if(User.Identity.IsAuthenticated)
+                   {
+                        <div class="btn-group mx-auto mb-3  float-end">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
 
-                    </div>
+                            @if (nw.GameKeys.Count() > 0)
+                            {
+                                <button type="button" data-gameId="@nw.Id" class="btn btn-success btn-add-shopcart-js">В Корзину</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
+                            }
+
+                        </div>
+                   }
+                   
                 </div>
 
             </div>
@@ -151,19 +181,24 @@
                         } BYN
                     </div>
 
-                    <div class="btn-group mx-auto mb-3  float-end">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="btn-group mx-auto mb-3  float-end">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
 
-                        @if (nw.GameKeys.Count() > 0)
-                        {
-                            <button type="button" class="btn btn-success">В Корзину</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
-                        }
+                            @if (nw.GameKeys.Count() > 0)
+                            {
+                                <button type="button" data-gameId="@nw.Id" class="btn btn-success btn-add-shopcart-js">В Корзину</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
+                            }
 
-                    </div>
+                        </div>
+                    }
+
+                   
                 </div>
 
             </div>
@@ -207,4 +242,18 @@
             </div>
         }
     </div>
+</div>
+
+<div id="modalWrapper">
+</div>
+
+<div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+    @await Html.PartialAsync("_Partial.Action.Warning")
+    @await Html.PartialAsync("_Partial.Action.Success")
+    @await Html.PartialAsync("_Partial.Action.Error")
+</div>
+
+<div id="lastActionDataWrapper">
+    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
 </div>

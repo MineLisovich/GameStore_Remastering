@@ -17,7 +17,7 @@ namespace GameStore.BLL.DTO.Identity
         /// <summary>
         /// Id пользователя
         /// </summary>
-        public required string UserId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// Пользователь
@@ -27,7 +27,7 @@ namespace GameStore.BLL.DTO.Identity
         /// <summary>
         /// Игры
         /// </summary>
-        List<GameKeyDTO> Games { get; set; } = new();
+        public  List<GameKeyDTO> GamesKeys { get; set; } = new();
 
         /// <summary>
         /// Финальная стоимость корзины

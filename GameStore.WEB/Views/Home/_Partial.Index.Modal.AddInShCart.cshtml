@@ -1,4 +1,6 @@
-﻿<div class="modal fade modal-js" id="modalAddToShoppingCart" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+﻿@model HomeDataModel
+
+<div class="modal fade modal-js" id="modalAddToShoppingCart" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,28 +11,27 @@
                 <div class="ordercart">
                     <div class="ordergameinfo d-flex shadow">
                         <div class="s_gameposter">
-                            <img src="~/img/gamesposters/gameposter.jpg" />
+                            @Html.Raw("<img  src=\"data:image/png;base64,"
+                                     + Convert.ToBase64String(Model.Game.Poster) + "\" />")
                         </div>
                         <div class="s_gameinfo">
-                            <h5>Cyberpunk 2077</h5>
-                            <p><b>Цена:</b> 76 BYN</p>
+                            <h5>@Model.Game.Name</h5>
+                            <p><b>Цена:</b> @((Model.Game.IsShare is true) ? Model.Game.SharePrice : Model.Game.Price) BYN</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <form id="addToShoppingCartForm" asp-controller="" asp-action="" method="post">
+            <form id="addToShoppingCartForm" asp-area="Order" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" method="post">
 
-                @*  *@
+                <input readonly asp-for="Game.Id" hidden/>
                 <div class="modal-body">
                 <div class="form-group">
                     <label> Выберите платформу: *</label>
-                    <select class="form-select js-single">
+                    <select asp-for="PlatformId" asp-items = "Model.SelectItemsPlatforms" class="form-select js-single">
                         <option selected disabled></option>
-                        <option value="1">STEAM</option>
-                        <option value="2">STEAM2</option>
-
+                     
                     </select>
-                @*     <span asp-validation-for="Game.DeveloperId" class="validError"></span> *@
+                    <span asp-validation-for="PlatformId" class="validError"></span>
                 </div>
                 </div>
 

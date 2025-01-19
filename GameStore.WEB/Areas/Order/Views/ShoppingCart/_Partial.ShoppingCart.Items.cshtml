@@ -1,0 +1,43 @@
+﻿@model ShoppingCartDataModel
+
+
+@if (Model.ShoppingCart.GamesKeys.Count()> 0)
+{
+    @foreach (var item in Model.ShoppingCart.GamesKeys)
+    {
+        <div class="shopcart-item d-flex description-text borderS mx-auto">
+            <div class="item-img">
+                @Html.Raw("<img  src=\"data:image/png;base64,"
+                         + Convert.ToBase64String(item.Game.Poster) + "\" />")
+            </div>
+            <div class="item-name">
+                <a asp-area="" asp-controller="Home" asp-action="GamePage" asp-route-gameId="@item.Game.Id">@item.Game.Name</a>
+            </div>
+            <div class="item-platform">@item.Platform.Name</div>
+            <div class="item-price">
+                @if (item.Game.IsShare is true)
+                {
+                    @item.Game.SharePrice
+                }
+                else
+                {
+                    @item.Game.Price
+                }
+
+                BYN
+            </div>
+            <div class="item-btn-control">
+                <button type="button" data-section="delItem" data-gamekeyId="@item.Id" class="btn btn-lg btn-outline-danger js-del-btn">Удалить из корзины</button>
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <div class="row">
+        <div class="borderS justify-content-center text-center fst-italic">
+            <h1 class="">Корзина пустая ((</h1>
+        </div>
+    </div>
+}

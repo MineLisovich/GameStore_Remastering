@@ -29,7 +29,7 @@ namespace GameStore.DAL.Entities.Identity
         /// <summary>
         /// Игры
         /// </summary>
-        List<GameKey> Games { get; set; } = new();
+        public List<GameKey> GamesKeys { get; set; } = new();
 
         /// <summary>
         /// Финальная стоимость корзины

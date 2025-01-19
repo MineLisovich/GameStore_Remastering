@@ -50,5 +50,7 @@
         /// Выключить 2fa
         /// </summary>
         public readonly UserActionResult Disable2FA = new() { Id = 9, Name = "Выключить 2fa" };
+
+        public readonly UserActionResult CleaerAllShoppingCart = new() {Id = 10, Name= "Полная очитска корзины" };
     }
 }

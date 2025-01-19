@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Order\Views\Shared\" />
     <Folder Include="wwwroot\css\datatables\" />
     <Folder Include="wwwroot\js\datatables\" />
   </ItemGroup>

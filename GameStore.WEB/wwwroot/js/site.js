@@ -159,6 +159,9 @@ function GetData(actionType, id, section) {
         case "gamesManager":
             data = { gameId: id };
             break;
+        case "addToShoppingCart":
+            data = { gameId: id };
+            break;
   
     }
     return data;

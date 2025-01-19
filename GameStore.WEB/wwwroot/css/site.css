@@ -259,3 +259,65 @@ div.loginRegHeader {
     .mtxt div {
         font-weight: bold; /* Делаем первую букву жирной */
     }
+
+
+.shopcart-area {
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 1.25rem;
+   /* height: 34.375rem;*/
+    max-height: 34.375rem;
+    background-color: white; /* Светлый фон для текста */
+    border-radius: 0.5rem; /* Закругленные углы */
+    box-shadow: 0 2px 10px #5a88ca; /* Тень для глубины */
+    width: 130vh;
+    overflow-y: auto;
+}
+.shopcart-item {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+}
+.item-num {
+    margin-right: 1.25rem;
+    padding-right: 1.25rem;
+    font-size: 1.2em; /* Увеличиваем размер шрифта */
+    font-weight: bold; /* Делаем первую букву жирной */
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.item-img {
+    padding-right: 1.25rem;
+}
+    .item-img img {
+        width: 9.375rem;
+        height: 10.625rem;
+        border-radius: 0.5rem;
+    }
+.item-name, .item-platform, .item-price {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-right: 1.25rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+.item-price {
+
+    font-weight: bold; /* Делаем первую букву жирной */
+}
+.item-btn-control {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left:auto;
+}
+
+.btn-area {
+    padding: 1.25rem;
+    width: 130vh;
+    margin: 0 auto; /* Центрируем контейнер */
+}
+
+.btn-manager-shopcart {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+}

@@ -1,0 +1,140 @@
+﻿@model ShoppingCartDataModel
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+@section js
+{
+    <script>
+
+      
+        $(document).ready(function () {
+            btnManager();
+        });
+
+        function btnManager()
+        {
+            $(".js-del-btn").off("click").on("click", function () {
+                var section = $(this).attr("data-section");
+                var gameKeyId = (section == "delItem") ? $(this).attr("data-gamekeyId") : 0;
+                var isDeleteAll = (section == "delItem") ? false : true;
+                AjaxActionSoppingCart(isDeleteAll, gameKeyId, section);
+            });
+
+        }
+
+
+        function AjaxActionSoppingCart(isDeleteAll, gameKeyId, section) {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: '@Url.Action("DeleteGameFromShoppingCart", "ShoppingCart")',
+                data: { isDeleteAll: isDeleteAll, gameKeyId: gameKeyId},
+                dataType: "html",
+                success: function (data) {
+                    switch (section) {
+                        case "delAll":
+                            location.reload();
+                            break;
+                        case "delItem":
+                            $(".shcart-js").empty().append(data);
+                            btnManager();
+                            getTotalPrice();
+                            break;
+                    }
+                  
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Ошибка !!!');
+                }
+            });
+        }
+
+        function getTotalPrice()
+        {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: '@Url.Action("GetActualPriceShoppingCart", "ShoppingCart")',
+                data: { },
+                dataType: "json",
+                success: function (data) {
+
+                    // Обновляем текст кнопки с актуальной ценой
+                    $('.orderButton').text('Оформить заказ: ' + data + ' BYN');
+
+                    if(data == 0)
+                    {
+                        $(".js-del-btn").prop("disabled", true);
+                        $('.orderButton').prop("disabled", true);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Ошибка !!!');
+                }
+            });
+        }
+
+    </script>
+}
+
+<div class="row">
+    <h1>Корзина</h1>
+</div>
+
+@if(Model.ShoppingCart is not null && Model.ShoppingCart.GamesKeys.Count() > 0)
+{
+    <div class="row">
+        <div class="shopcart-area shcart-js">
+
+            @await Html.PartialAsync("_Partial.ShoppingCart.Items", Model)
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="btn-area d-flex">
+            <div class="btn-report-area">
+                <button class="btn btn-outline-danger btn-lg">
+                    <i class="fa-solid fa-flag"></i>
+                    Сообщить о проблеме
+                </button>
+            </div>
+
+            <div class="btn-group btn-manager-shopcart" role="group">
+
+                <button type="button" data-section="delAll" class="btn btn-lg btn-outline-danger js-del-btn">Очистить корзину</button>
+                <button type="button" class="btn btn-lg btn-outline-success orderButton">Оформить заказ: @Model.ShoppingCart.TotalPrice BYN</button>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="modalWrapper">
+    </div>
+
+    <div id="modalActionWrapper">
+        @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+        @await Html.PartialAsync("_Partial.Action.Warning")
+        @await Html.PartialAsync("_Partial.Action.Success")
+        @await Html.PartialAsync("_Partial.Action.Error")
+    </div>
+
+    <div id="lastActionDataWrapper">
+       @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="borderS justify-content-center text-center fst-italic">
+            <h1 class="">Корзина пустая ((</h1>
+        </div>
+    </div>
+}
+
+
+
+
+
+
