@@ -35,6 +35,9 @@ function ShowModalLastAction() {
         case "9":
             message = (actionResult) ? ("2FA выключена. " + actionDopInfo) : ("Не удалось выключить 2FA. " + actionDopInfo);
             break;
+        case "10":
+            message = actionDopInfo;
+            break;
     }
     // 3) выбираем toast или  modal и заполняем данными
     var toast = (actionResult == true) ? $("#modalActionSuccess") : $("#modalActionError");

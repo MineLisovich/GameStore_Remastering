@@ -130,6 +130,7 @@ namespace GameStore.WEB.Controllers
                 model.ErrorVM.Title = "Ой, что-то пошло не так";
                 model.ErrorVM.Message = "Не удалось найти игру. Попробуйте позже. Если проблема не исчезла, сообщите нам о проблеме! Сообщить можно на вкладке Поддержка.";
             }
+            model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
             
 
             return model;

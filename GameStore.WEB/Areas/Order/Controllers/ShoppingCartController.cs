@@ -1,5 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using GameStore.BLL.Infrastrcture;
+using GameStore.BLL.Predefined;
+using GameStore.BLL.Services.ShoppingCartServices;
+using GameStore.WEB.Infrastrcture;
+using GameStore.WEB.Models.HomeModels.HomePageModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Newtonsoft.Json;
 
 namespace GameStore.WEB.Areas.Order.Controllers
 {
@@ -7,9 +14,88 @@ namespace GameStore.WEB.Areas.Order.Controllers
     [Authorize]
     public class ShoppingCartController : Controller
     {
+        private readonly IShoppingCartService _shoppingCartService;
+
+        public ShoppingCartController(IShoppingCartService shoppingCartService)
+        {
+            _shoppingCartService = shoppingCartService;
+        }
+
+        #region PUBLIC METHODS - GET
         public IActionResult GetShoppingCart()
         {
             return View();
         }
+        #endregion
+
+        #region PUBLIC METHODS - POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToShoppingCart(HomeDataModel model)
+        {
+            string referrerUrl = Request.Headers.Referer;
+
+            ResultServiceModel result = await _shoppingCartService.AddToShoppingCartAsync(User.Identity.Name, model.Game.Id, model.PlatformId);
+
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Create.Id);
+
+            if(referrerUrl.Contains("GamePage"))
+            {
+                return RedirectToAction("GamePage", "Home", new { Area = "", gameId = model.Game.Id });
+            }
+            else if(referrerUrl.Contains("Catalog"))
+            {
+                return RedirectToAction("Catalog", "Home", new { Area = "" });
+            }
+            else if(referrerUrl.Contains("Discounts"))
+            {
+                return RedirectToAction("Discounts", "Home", new { Area = "" });
+            }
+            else
+            {
+                return RedirectToAction("Index","Home", new { Area = ""});
+            }
+           
+        }
+        #endregion
+
+        #region PRIVATE METHODS - TEMP DATA 
+        private UserActionResult GetInfoAboutLastActionFromTempData(ITempDataDictionary TempData)
+        {
+            UserActionResult lastAction = (TempData.ContainsKey("LastAction")) ? JsonConvert.DeserializeObject<UserActionResult>((string)TempData["LastAction"]) : new();
+            return lastAction;
+        }
+
+        private ITempDataDictionary SetTempDataForInfoAboutLastAction(ResultServiceModel result, int actionTypeId)
+        {
+            PredefinedManager pd = new();
+            StandartUserActionTypes actionTypes = new();
+            string mainMessage = "";
+            if (actionTypeId == actionTypes.Create.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Игра успешно добавлена в корзину" : "Не удалось добавить игру в корзину";
+            }
+            else if(actionTypeId == actionTypes.Delete.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Игра успешно удалена из корзины" : "Не удалось удалить игру из корзины";
+            }
+            else if (actionTypeId == actionTypes.CleaerAllShoppingCart.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Вся корзина успешно очищена" : "Не удалось очистить всю корзину";
+            }
+
+            UserActionResult lastAction = new();
+            lastAction.Id = actionTypeId;
+            lastAction.IsSuccess = result.IsSucceeded;
+            lastAction.DopInfo = mainMessage + ". " + result.ErrorMes;
+            TempData["LastAction"] = JsonConvert.SerializeObject(lastAction);
+            return TempData;
+
+        }
+        #endregion
+
+        #region PRIVATE METHODS
+        #endregion
     }
 }

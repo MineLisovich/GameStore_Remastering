@@ -21,6 +21,7 @@ using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.Services.GamesServices;
 using GameStore.BLL.Services.DevModeServices;
 using GameStore.BLL.Services.HomeServices;
+using GameStore.BLL.Services.ShoppingCartServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,6 +125,7 @@ builder.Services.AddScoped<DictionaryService<GamePlatform, GamePlatformDTO>>();
 builder.Services.AddScoped<DictionaryService<GameLabel, GameLabelDTO>>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
 //DevModeServices
 builder.Services.AddScoped<IAddPdGame, AddPdGame>();

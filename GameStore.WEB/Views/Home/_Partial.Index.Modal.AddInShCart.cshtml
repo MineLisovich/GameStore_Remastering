@@ -1,4 +1,5 @@
 ﻿@model HomeDataModel
+
 <div class="modal fade modal-js" id="modalAddToShoppingCart" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -20,9 +21,9 @@
                     </div>
                 </div>
             </div>
-            <form id="addToShoppingCartForm" asp-controller="" asp-action="" method="post">
+            <form id="addToShoppingCartForm" asp-area="Order" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" method="post">
 
-                @*  *@
+                <input readonly asp-for="Game.Id" hidden/>
                 <div class="modal-body">
                 <div class="form-group">
                     <label> Выберите платформу: *</label>
