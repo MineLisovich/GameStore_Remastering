@@ -309,3 +309,15 @@ div.loginRegHeader {
     margin-bottom: auto;
     margin-left:auto;
 }
+
+.btn-area {
+    padding: 1.25rem;
+    width: 130vh;
+    margin: 0 auto; /* Центрируем контейнер */
+}
+
+.btn-manager-shopcart {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+}
