@@ -1,3 +1,4 @@
+using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Predefined;
 using GameStore.BLL.Services.HomeServices;
@@ -11,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace GameStore.WEB.Controllers
 {
-    [AllowAnonymous]
+  
     public class HomeController : Controller
     {
         private readonly IHomeService _homeService;
@@ -23,28 +24,44 @@ namespace GameStore.WEB.Controllers
 
         #region PUBLIC METHODS - GET
         [HttpGet]
+        [AllowAnonymous]
         public async Task <IActionResult> Index()
         {
             HomePageModel model = await CreateHomePageModel(TempData);
             return View(model);
         }
+
         [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetPartialWorkOnData (long gameId)
+        {
+            HomeDataModel model = await CreateHomeDataModel(gameId);
+            return PartialView("_Partial.Index.Modal.AddInShCart", model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Catalog()
         {
             return View();
         }
+
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Discounts()
         {
             return View();
         }
+
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Support()
         {
             return View();
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task <IActionResult> GamePage(long gameId)
         {
             SingleGamePageModel model = await CreateSingleGamePageModel(gameId,TempData);
@@ -118,6 +135,15 @@ namespace GameStore.WEB.Controllers
             return model;
         }
         
+
+        private async Task<HomeDataModel> CreateHomeDataModel(long gameId)
+        {
+            HomeDataModel model = new();
+            model.Game = await _homeService.GetGameByIdForPartial(gameId);
+            List<GamePlatformDTO> platforms = model.Game.GameKeys.DistinctBy(x => x.PlatformId).Select(x => x.Platform).ToList();
+            model.SelectItemsPlatforms = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(platforms, "Id", "Name");
+            return model;
+        }
         #endregion
     }
 }

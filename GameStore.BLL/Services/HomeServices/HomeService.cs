@@ -55,5 +55,13 @@ namespace GameStore.BLL.Services.HomeServices
                                               .FirstOrDefaultAsync();
             return _mapper.Map<GameDTO>(game);
         }
+
+       public async Task<GameDTO> GetGameByIdForPartial(long gameId)
+       {
+            Game game = await _dbContext.Games.Where(x => x.Id == gameId && x.IsDeleted == false && x.IsVisible == true)
+                                             .Include(p => p.GameKeys).ThenInclude(x => x.Platform)
+                                             .FirstOrDefaultAsync();
+            return _mapper.Map<GameDTO>(game);
+       }
     }
 }

@@ -13,14 +13,35 @@
 }
 
 @section js {
+    <script src="~/js/shoppingcart/shopcart.js"></script>
+    <script>
+        // ШАГ 1. НАСТРОЙКА ОБЩЕГО ПОВЕДЕНИЯ МОДАЛОК
+        $(document).ready(function () {
+                    //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
+             AddHandlerClickForButtonsOfActionModals('modalAddToShoppingCart', 'addToShoppingCart');
+
+                //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+                    AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
+                });
+
+                // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+                function GetURLForAjaxByActionType(actionType) {
+                    var url = "";
+                    switch (actionType) {
+                        case "edit":
+                            url = '@Url.Action("GetPartialWorkOnData", "Home")';
+                            break;
+                    }
+                    return url;
+                }
+
+                // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+                function SettingBehaviorOfModalWindow(boxId, section) { }
+
+    </script>
     <script>
         $("#showvideo").off("click").on("click", function () {
             $("#modalGameVideo").modal("show");
-        });
-        
-        $("#addtoshcart").off("click").on("click", function ()
-        {
-           $("#modalAddToShoppingCart").modal("show");
         });
     </script>
 }
@@ -61,18 +82,21 @@
                     @((Model.Game.GameKeys.Count() > 0) ? "BYN" : "")
                 </div>
                 
-                
-                <div class="btn-group mx-auto mb-3  float-end btn-lg">
+                @if(User.Identity.IsAuthenticated)
+                {
+                              <div class="btn-group mx-auto mb-3  float-end btn-lg">
                     <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
                     @if (Model.Game.GameKeys.Count() > 0)
                     {
-                        <button type="button" id="addtoshcart" class="btn btn-success btn-lg">В Корзину</button>
+                       <button type="button" data-gameId="@Model.Game.Id" class="btn btn-success btn-lg btn-add-shopcart-js">В Корзину</button>
                     }
                     else
                     {
                         <button type="button" class="btn btn-success  btn-lg" disabled>Нет в наличии</button>
                     }
-                </div>
+                </div> 
+                }
+     
             </div>
         </div>
 
@@ -151,14 +175,15 @@
 
 
 
-@await Html.PartialAsync("_Partial.GamePage.Modal.Video", Model.Game.YtLinkGameTrailer)
+
 
 
 <div id="modalWrapper">
-@await Html.PartialAsync("_Partial.Index.Modal.AddInShCart")
+ 
 </div>
 
 <div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.GamePage.Modal.Video", Model.Game.YtLinkGameTrailer)
     @await Html.PartialAsync("_Partial.Action.DataNotSaved")
     @await Html.PartialAsync("_Partial.Action.Warning")
     @await Html.PartialAsync("_Partial.Action.Success")
@@ -166,5 +191,5 @@
 </div>
 
 <div id="lastActionDataWrapper">
- @*    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction) *@
+    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
 </div>
