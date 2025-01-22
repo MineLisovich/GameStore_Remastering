@@ -58,7 +58,7 @@ namespace GameStore.WEB.Areas.Order.Controllers
             ResultServiceModel result = await _shoppingCartService.AddToShoppingCartAsync(User.Identity.Name, model.Game.Id, model.PlatformId);
 
             StandartUserActionTypes actionTypes = new();
-            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Create.Id);
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.AddGameToShoppingCart.Id);
 
             if(referrerUrl.Contains("GamePage"))
             {
@@ -92,7 +92,7 @@ namespace GameStore.WEB.Areas.Order.Controllers
             PredefinedManager pd = new();
             StandartUserActionTypes actionTypes = new();
             string mainMessage = "";
-            if (actionTypeId == actionTypes.Create.Id)
+            if (actionTypeId == actionTypes.AddGameToShoppingCart.Id)
             {
                 mainMessage = (result.IsSucceeded) ? "Игра успешно добавлена в корзину" : "Не удалось добавить игру в корзину";
             }

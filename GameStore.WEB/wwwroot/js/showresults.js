@@ -38,6 +38,9 @@ function ShowModalLastAction() {
         case "10":
             message = actionDopInfo;
             break;
+        case "11":
+            message = actionDopInfo;
+            break;
     }
     // 3) выбираем toast или  modal и заполняем данными
     var toast = (actionResult == true) ? $("#modalActionSuccess") : $("#modalActionError");
