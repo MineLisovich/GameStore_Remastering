@@ -3,6 +3,37 @@
     ViewData["Title"] = "Каталог";
 }
 
-<h1>Каталог</h1>
+@section js
+{
+    <script src="~/js/companets.js"></script>
+    <script>
+        $(document).ready(function () {
+            InitializationMultiSelect2("js-mulsel");
+            InitializationSelect2("js-single");
+        });
+    </script>
+}
 
-@await Html.PartialAsync("_Partial.InDevelopment")
+<div class="row mt-5 mb-3">
+   
+   @*  ФИЛЬТРАЦИЯ ИГР  *@
+   @await Html.PartialAsync("_Partial.Catalog.FiltersFields")
+   
+
+   @*  СПИСОК ИГР *@
+    <div class="col-md-9 mb-2">
+      @*  СТРОКА ПОИСКА  *@
+      <div class="row search-area">
+            <input id="searchGame" type="text" class="form-control" placeholder="Поиск игры по наименованию (Регистр букв важен)" autocomplete="off" />
+      </div>
+
+      <div class="row games-area">
+            <div id="js-gemes" class="d-flex gamesArea">
+                @*   ИГРЫ ПОТОМ (УДАЛИТЬ) *@
+                @await Html.PartialAsync("_Partial.Catalog.Games")
+
+            
+            </div>
+      </div>
+    </div>
+</div>

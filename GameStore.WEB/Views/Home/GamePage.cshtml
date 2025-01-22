@@ -132,6 +132,18 @@
         </div>
 
         <div class="gamePageInfo mt-3 p-2 borderS">
+            <div class="">
+                <div class="d-flex flex-wrap mtxt">
+                    @foreach (var l in Model.Game.GameLabels)
+                    {
+                        <div class="bg-glables m-1 p-1 text-white">@l.Name</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="gamePageInfo mt-3 p-2 borderS">
             <div class="text-center">
                 <button class="btn btn-outline-danger btn-lg">
                     <i class="fa-solid fa-flag"></i>

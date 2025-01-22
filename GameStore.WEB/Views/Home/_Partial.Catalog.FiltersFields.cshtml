@@ -1,0 +1,50 @@
+﻿@*  ФИЛЬТРАЦИЯ ИГР  *@
+<div class="col-md-3">
+    <div class="filtersgame-area">
+        <form>
+            @* ЖАНР *@
+            <div class="filter-genre  form-group">
+                <label for="filtergenre">Жанр(ы):</label>
+                <select name="filtergenre" class="form-select js-mulsel" multiple="multiple">
+                    <option value="value">text1</option>
+                    <option value="value">text2</option>
+                    <option value="value">text2</option>
+                </select>
+            </div>
+
+            @* РАЗРАБОТЧИК *@
+            <div class="filter-develop  form-group">
+                <label for="filterdev">Разработчик:</label>
+                <select name="filterdev" class="form-select js-single">
+                    <option value="" selected disabled></option>
+                    <option value="value">text1</option>
+                    <option value="value">text2</option>
+                    <option value="value">text2</option>
+                </select>
+            </div>
+
+            @* ЦЕНА (ОТ И ДО) *@
+            <div class="filter-price  form-group">
+                <label for="filterprice">Цена (BYN):</label>
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="number" class="form-control" id="priceFrom" placeholder="От">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" id="priceTo" placeholder="До">
+                    </div>
+                </div>
+            </div>
+
+            @* ОСОБЕННОСТИ ИГРЫ *@
+            <div class="filter-lable  form-group">
+                <label for="filterlable">Особенности игры:</label>
+                <select name="filterlable" class="form-select js-mulsel" multiple="multiple">
+                    <option value="value">text1</option>
+                    <option value="value">text2</option>
+                    <option value="value">text2</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
