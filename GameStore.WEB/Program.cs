@@ -22,6 +22,7 @@ using GameStore.BLL.Services.GamesServices;
 using GameStore.BLL.Services.DevModeServices;
 using GameStore.BLL.Services.HomeServices;
 using GameStore.BLL.Services.ShoppingCartServices;
+using GameStore.BLL.Services.CatalogServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -126,6 +127,8 @@ builder.Services.AddScoped<DictionaryService<GameLabel, GameLabelDTO>>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<ICatalogService, CatalogService>();
+
 
 //DevModeServices
 builder.Services.AddScoped<IAddPdGame, AddPdGame>();

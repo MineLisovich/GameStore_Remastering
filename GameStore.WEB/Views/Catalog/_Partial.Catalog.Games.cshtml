@@ -1,0 +1,77 @@
+﻿@model CatalogModel
+
+
+@if(Model.Games.Count() > 0)
+{
+    foreach(var g in Model.Games)
+    {
+
+        <div class="game mt-5 mb-3 mx-auto borderS">
+            <div class="text-center">
+                @Html.Raw("<img  src=\"data:image/png;base64,"
+                         + Convert.ToBase64String(g.Poster) + "\" />")
+            </div>
+
+            <div class="text-center">
+                <h4><a asp-area="" asp-controller="Home" asp-action="GamePage" asp-route-gameId="@g.Id">@g.Name</a></h4>
+            </div>
+
+            <div class="m-1">
+                <p>
+                    @(g.Description.Length > 150 ? g.Description.Substring(0, 150) + "..." : g.Description)
+                </p>
+            </div>
+
+            <div class="d-flex flex-wrap ">
+                @foreach(var ganre in g.GameGanres)
+                {
+                    <div class="bg-ganre m-1 p-1 text-white">@ganre.Name</div>
+                } 
+            </div>
+
+            <div class="d-flex flex-wrap ">
+                @foreach(var l in g.GameLabels)
+                {
+                    <div class="bg-glables m-1 p-1 text-white">@l.Name</div>
+                }
+               
+             
+            </div>
+
+            <div class="d-flex flex-wrap  h5">
+                <div class="m-1 p-1">
+                    @if (g.IsShare is true)
+                    {
+                        <s> @g.Price</s>  @g.SharePrice
+                    }
+                    else
+                    {
+                        @g.Price
+                    } BYN
+                </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="btn-group mx-auto mb-3  float-end">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
+                        @if (g.GameKeys.Count() > 0)
+                        {
+                            <button type="button" data-gameId="@g.Id" class="btn btn-success btn-add-shopcart-js">В Корзину</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
+                        }
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    }
+}
+else
+{
+    <h3 class="text-center">Не найдено</h3>
+}

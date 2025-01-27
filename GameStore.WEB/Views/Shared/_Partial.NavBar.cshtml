@@ -13,8 +13,7 @@
             <div class="navbar-nav me-auto">
                 <!-- Добавляем класс me-auto для выравнивания -->
                 <a class="nav-link @((isIndex) ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                <a class="nav-link @((isCatalog) ? "active" : "")" asp-area=""  asp-controller="Home" asp-action="Catalog">Каталог</a>
-                <a class="nav-link @((isDiscounts) ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Discounts">Скидки</a>
+                <a class="nav-link @((isCatalog) ? "active" : "")" asp-area="" asp-controller="Catalog" asp-action="Catalog">Каталог</a>
                 <a class="nav-link @((isSupport) ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Support">Поддержка</a>
             </div>
              @* <form class="d-flex">

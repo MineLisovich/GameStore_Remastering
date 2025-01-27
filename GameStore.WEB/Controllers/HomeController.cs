@@ -39,19 +39,6 @@ namespace GameStore.WEB.Controllers
             return PartialView("_Partial.Index.Modal.AddInShCart", model);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Catalog()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Discounts()
-        {
-            return View();
-        }
 
         [HttpGet]
         [AllowAnonymous]
