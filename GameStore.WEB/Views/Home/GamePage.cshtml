@@ -1,15 +1,15 @@
 ﻿@model SingleGamePageModel
 
 @{
-    ViewData["Title"] = (Model.Game is null) ?  Model.ErrorVM.Title : Model.Game.Name;
+    ViewData["Title"] = (Model.Game is null) ? Model.ErrorVM.Title : Model.Game.Name;
     string nodata = "Нет данных";
     SliderModel sliderModel = new();
-    if(Model.Screenshots.Count() > 0)
+    if (Model.Screenshots.Count() > 0)
     {
         sliderModel.IsSingleGamePage = Model.IsSingleGamePage;
         sliderModel.Screenshots = Model.Screenshots;
     }
-  
+
 }
 
 @section js {
@@ -17,26 +17,27 @@
     <script>
         // ШАГ 1. НАСТРОЙКА ОБЩЕГО ПОВЕДЕНИЯ МОДАЛОК
         $(document).ready(function () {
-                    //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
-             AddHandlerClickForButtonsOfActionModals('modalAddToShoppingCart', 'addToShoppingCart');
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
+            AddHandlerClickForButtonsOfActionModals('modalAddToShoppingCart', 'addToShoppingCart');
 
-                //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
-                    AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
-                });
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+            AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
+            AddToShpCrt();
+        });
 
-                // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
-                function GetURLForAjaxByActionType(actionType) {
-                    var url = "";
-                    switch (actionType) {
-                        case "edit":
-                            url = '@Url.Action("GetPartialWorkOnData", "Home")';
-                            break;
-                    }
-                    return url;
-                }
+        // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "Home")';
+                    break;
+            }
+            return url;
+        }
 
-                // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
-                function SettingBehaviorOfModalWindow(boxId, section) { }
+        // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+        function SettingBehaviorOfModalWindow(boxId, section) { }
 
     </script>
     <script>
@@ -67,10 +68,10 @@
                 </button>
             </div>
             <div class="d-flex flex-wrap  h5 mt-2">
-              
+
                 <div class="m-1 p-1 h4">
-                  
-                   
+
+
                     @if (Model.Game.IsShare is true)
                     {
                         <s> @Model.Game.Price</s>  @Model.Game.SharePrice
@@ -81,22 +82,22 @@
                     }
                     @((Model.Game.GameKeys.Count() > 0) ? "BYN" : "")
                 </div>
-                
-                @if(User.Identity.IsAuthenticated)
+
+                @if (User.Identity.IsAuthenticated)
                 {
-                              <div class="btn-group mx-auto mb-3  float-end btn-lg">
-                    <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
-                    @if (Model.Game.GameKeys.Count() > 0)
-                    {
-                       <button type="button" data-gameId="@Model.Game.Id" class="btn btn-success btn-lg btn-add-shopcart-js">В Корзину</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-success  btn-lg" disabled>Нет в наличии</button>
-                    }
-                </div> 
+                    <div class="btn-group mx-auto mb-3  float-end btn-lg">
+                        <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
+                        @if (Model.Game.GameKeys.Count() > 0)
+                        {
+                            <button type="button" data-gameId="@Model.Game.Id" class="btn btn-success btn-lg btn-add-shopcart-js">В Корзину</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-success  btn-lg" disabled>Нет в наличии</button>
+                        }
+                    </div>
                 }
-     
+
             </div>
         </div>
 
@@ -123,7 +124,7 @@
         <div class="gamePageInfo mt-3 p-2 borderS">
             <div class="">
                 <div class="d-flex flex-wrap mtxt">
-                    @foreach(var gn in Model.Genres)
+                    @foreach (var gn in Model.Genres)
                     {
                         <div class="bg-ganre m-1 p-1 text-white">@gn.Name</div>
                     }
@@ -158,17 +159,17 @@
 
         <div class="row singlegame-area mb-3">
             <div class="text-wrap description-text">
-               @Model.Game.Description    
+                @Model.Game.Description
             </div>
         </div>
 
-        @if(Model.Screenshots.Count() > 0)
+        @if (Model.Screenshots.Count() > 0)
         {
             <div class="row">
                 @await Html.PartialAsync("_Partial.Index.Slider", sliderModel)
             </div>
         }
-      
+
 
         <div class="row mt-2 singlegame-area mt-3 mb-3">
             <div class="mtxt">
@@ -191,7 +192,6 @@
 
 
 <div id="modalWrapper">
- 
 </div>
 
 <div id="modalActionWrapper">
@@ -199,7 +199,7 @@
     @await Html.PartialAsync("_Partial.Action.DataNotSaved")
     @await Html.PartialAsync("_Partial.Action.Warning")
     @await Html.PartialAsync("_Partial.Action.Success")
-    @await Html.PartialAsync("_Partial.Action.Error") 
+    @await Html.PartialAsync("_Partial.Action.Error")
 </div>
 
 <div id="lastActionDataWrapper">

@@ -7,21 +7,51 @@
 {
     <script src="~/js/companets.js"></script>
     <script src="~/js/catalog/catalog.js"></script>
+    <script src="~/js/shoppingcart/shopcart.js"></script>
 
     <script>
         $(document).ready(function () {
+            
+
             InitializationMultiSelect2("js-mulsel");
 
             //Загрузка данных об играх
             AjaxActionGetGamesData("");
 
             GameBTNControll();
+          
         });
+
+        // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "Home")';
+                    break;
+            }
+            return url;
+        }
+
+        // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+        function SettingBehaviorOfModalWindow(boxId, section) { }
 
         function GetUrlForLoadGameData() {
             var url = '@Url.Action("LoadGamesData", "Catalog")';
             return url;
         }
+
+        function SetSettings() {
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
+            AddHandlerClickForButtonsOfActionModals('modalAddToShoppingCart', 'addToShoppingCart');
+
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+            AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
+
+            AddToShpCrt();
+        }
+
+
     </script>
 }
 

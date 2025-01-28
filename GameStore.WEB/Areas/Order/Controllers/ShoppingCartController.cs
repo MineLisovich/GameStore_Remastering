@@ -66,7 +66,7 @@ namespace GameStore.WEB.Areas.Order.Controllers
             }
             else if(referrerUrl.Contains("Catalog"))
             {
-                return RedirectToAction("Catalog", "Home", new { Area = "" });
+                return RedirectToAction("Index", "Catalog", new { Area = "" });
             }
             else if(referrerUrl.Contains("Discounts"))
             {

@@ -11,6 +11,7 @@ function AjaxActionGetGamesData(nameGame) {
         success: function (data) {
             $("#js-gemes").empty();
             $("#js-gemes").append(data);
+            SetSettings();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert('Ошибка загрузки данных!!!');
@@ -26,5 +27,4 @@ function GameBTNControll() {
         var inpdata = $("#searchGame").val();
         AjaxActionGetGamesData(inpdata);
     });
-
 }
