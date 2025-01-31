@@ -16,6 +16,8 @@
 
             //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
             AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
+
+            AddToShpCrt();
         });
 
         // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
@@ -101,9 +103,9 @@
 
                 <div class="d-flex flex-wrap">
 
-                    @foreach (var lable in nw.GameGanres)
+                    @foreach (var g in nw.GameGanres)
                     {
-                        <div class="bg-ganre m-1 h6 p-1 text-white">@lable.Name</div>
+                        <div class="bg-ganre m-1 h6 p-1 text-white">@g.Name</div>
                     }
                 </div>
 

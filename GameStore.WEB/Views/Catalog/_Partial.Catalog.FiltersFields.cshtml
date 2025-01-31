@@ -1,0 +1,59 @@
+﻿@model CatalogModel
+
+@*  ФИЛЬТРАЦИЯ ИГР  *@
+<div class="col-md-3">
+    <div class="filtersgame-area">
+        <form>
+            @* ЖАНР *@
+            <div class="filter-genre  form-group">
+                <label asp-for=GenreIds>Жанр(ы):</label>
+                <select asp-for=GenreIds asp-items=Model.SelectItemsGenres class="form-select js-mulsel" multiple="multiple">
+                  
+                </select>
+            </div>
+
+            @* РАЗРАБОТЧИК *@
+            <div class="filter-develop  form-group">
+                <label asp-for=DeveloperIds>Разработчик(и):</label>
+                <select asp-for=DeveloperIds asp-items=Model.SelectItemsDevelopers class="form-select js-mulsel" multiple="multiple">
+               
+                </select>
+            </div>
+
+            @* ЦЕНА (ОТ И ДО) *@
+            <div class="filter-price  form-group">
+                <label asp-for=PriceFrom>Цена (BYN):</label>
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="number" class="form-control" asp-for=PriceFrom placeholder="От">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" asp-for=PriceTo placeholder="До">
+                    </div>
+                </div>
+            </div>
+
+            @* ОСОБЕННОСТИ ИГРЫ *@
+            <div class="filter-lable  form-group">
+                <label asp-for=GameLableIds>Особенность(и) игры:</label>
+                <select asp-for=GameLableIds asp-items=Model.SelectItemsLables class="form-select js-mulsel" multiple="multiple">
+                   
+                </select>
+            </div>
+
+            @* ПЛАТФОРМЫ *@
+            <div class="filter-lable  form-group">
+                <label asp-for=PlatformIds>Платформа(ы):</label>
+                <select asp-for=PlatformIds asp-items=Model.SelectItemsPlatforms class="form-select js-mulsel" multiple="multiple">
+                  
+                </select>
+            </div>
+
+            @* АКЦИЯ *@
+            <div class="form-group form-check form-switch">
+                <input asp-for=IsShare type="checkbox" class="form-check-input" />
+                <label class="form-check-label" asp-for=IsShare>Продаётся по скидке</label>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,8 +1,8 @@
 ﻿@{
     string method = ViewContext.RouteData.Values["action"].ToString();
-    bool isIndex = (method.Contains("Index"));
-    bool isCatalog = (method.Contains("Catalog"));
-    bool isDiscounts = (method.Contains("Discounts"));
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    bool isIndex = (method.Contains("Index") && !controller.Contains("Catalog"));
+    bool isCatalog = (controller.Contains("Catalog"));
     bool isSupport = (method.Contains("Support"));
 
 }
@@ -13,8 +13,7 @@
             <div class="navbar-nav me-auto">
                 <!-- Добавляем класс me-auto для выравнивания -->
                 <a class="nav-link @((isIndex) ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                <a class="nav-link @((isCatalog) ? "active" : "")" asp-area=""  asp-controller="Home" asp-action="Catalog">Каталог</a>
-                <a class="nav-link @((isDiscounts) ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Discounts">Скидки</a>
+                <a class="nav-link @((isCatalog) ? "active" : "")" asp-area="" asp-controller="Catalog" asp-action="Index">Каталог</a>
                 <a class="nav-link @((isSupport) ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Support">Поддержка</a>
             </div>
              @* <form class="d-flex">

@@ -1,0 +1,104 @@
+﻿@model CatalogModel
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+@section js
+{
+    <script src="~/js/companets.js"></script>
+    <script src="~/js/catalog/catalog.js"></script>
+    <script src="~/js/shoppingcart/shopcart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            
+
+            InitializationMultiSelect2("js-mulsel");
+
+            //Загрузка данных об играх
+            AjaxActionGetGamesData("");
+
+            GameBTNControll();
+          
+        });
+
+        // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "Home")';
+                    break;
+            }
+            return url;
+        }
+
+        // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+        function SettingBehaviorOfModalWindow(boxId, section) { }
+
+        function GetUrlForLoadGameData(typeUrl) {
+            var url = "";
+
+            switch (typeUrl){
+                case "search":
+                    url = '@Url.Action("LoadGamesData", "Catalog")';
+                    break;
+
+                case "filter":
+                    url = '@Url.Action("FilterGamesData", "Catalog")';
+                    break;
+            }
+
+
+
+             
+            return url;
+        }
+
+        function SetSettings() {
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
+            AddHandlerClickForButtonsOfActionModals('modalAddToShoppingCart', 'addToShoppingCart');
+
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+            AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
+
+            AddToShpCrt();
+        }
+
+
+    </script>
+}
+
+<div class="row mt-5 mb-3">
+
+    @*  ФИЛЬТРАЦИЯ ИГР  *@
+    @await Html.PartialAsync("_Partial.Catalog.FiltersFields", Model)
+
+
+    @*  СПИСОК ИГР *@
+    <div class="col-md-9 mb-2">
+        @*  СТРОКА ПОИСКА  *@
+        <div class="row search-area">
+            <input id="searchGame" type="text" class="form-control" placeholder="Поиск игры по наименованию" autocomplete="off" />
+        </div>
+
+        <div class="row games-area">
+            <div id="js-gemes" class="d-flex gamesArea">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalWrapper">
+</div>
+
+<div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+    @await Html.PartialAsync("_Partial.Action.Warning")
+    @await Html.PartialAsync("_Partial.Action.Success")
+    @await Html.PartialAsync("_Partial.Action.Error")
+</div>
+
+<div id="lastActionDataWrapper">
+    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
+</div>

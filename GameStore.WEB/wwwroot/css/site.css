@@ -252,6 +252,9 @@ div.loginRegHeader {
 .bg-platform {
     background-color: #CA5A88;
 }
+.bg-glables {
+    background-color: #fa8072;
+}
 
 .mtxt {
     font-size: 1.2em; /* Увеличиваем размер шрифта */
@@ -320,4 +323,47 @@ div.loginRegHeader {
     margin-top: auto;
     margin-bottom: auto;
     margin-left: auto;
+}
+
+.filtersgame-area {
+    position: sticky;
+    top: 0; /* Отступ от верхней части экрана */
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 20px;
+    background-color: white; /* Светлый фон для текста */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px #5a88ca; /* Тень для глубины */
+    font-size: 1.2em; /* Увеличиваем размер шрифта */
+}
+
+.filter-genre, .filter-develop, .filter-price, .filter-lable {
+    width: 100%;
+    margin-bottom: 1.25rem;
+}
+
+.search-area {
+    position: sticky;
+    top: 0; /* Отступ от верхней части экрана */
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 20px;
+    background-color: white; /* Светлый фон для текста */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px #5a88ca; /* Тень для глубины */
+    font-size: 1.2em; /* Увеличиваем размер шрифта */
+    margin-bottom: 1.25rem;
+    z-index:100;
+}
+
+.games-area {
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 20px;
+    background-color: white; /* Светлый фон для текста */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px #5a88ca; /* Тень для глубины */
+    font-size: 1.2em; /* Увеличиваем размер шрифта */
+}
+
+.gamesArea {
+    display: flex;
+    flex-wrap: wrap;
 }
