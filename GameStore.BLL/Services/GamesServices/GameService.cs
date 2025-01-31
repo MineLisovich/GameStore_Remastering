@@ -33,10 +33,12 @@ namespace GameStore.BLL.Services.GamesServices
             }
             else
             {
-                games = await sqlQuery.Where(x => x.Name.Contains(nameGame) && x.IsDeleted == false).ToListAsync();
+                games = await sqlQuery.Where(x => x.Name.ToLower().Contains(RepName(nameGame)) && x.IsDeleted == false).ToListAsync();
             }
             return _mapper.Map<List<GameDTO>>(games);
         }
+
+
 
         public async Task<GameDTO> GetGameByIdAsync(long id)
         {
@@ -259,6 +261,10 @@ namespace GameStore.BLL.Services.GamesServices
         #endregion
 
         #region PRIVATE METHODS
+        private string RepName(string name)
+        {
+            return name.ToLower().Trim();
+        }
         private byte[] UploadPoster(IFormFile uploadPoster)
         {
             if (uploadPoster == null) return null;
