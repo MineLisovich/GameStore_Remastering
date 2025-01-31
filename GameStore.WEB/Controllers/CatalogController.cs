@@ -1,4 +1,5 @@
-﻿using GameStore.BLL.Services.CatalogServices;
+﻿using GameStore.BLL.Infrastrcture.Models;
+using GameStore.BLL.Services.CatalogServices;
 using GameStore.WEB.Infrastrcture;
 using GameStore.WEB.Models.HomeModels.CatalogModels;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +38,14 @@ namespace GameStore.WEB.Controllers
         #endregion
 
         #region PUBLIC METHODS - POST
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> FilterGamesData([FromBody] FilterGamesRequest request)
+        {
+            CatalogModel model = new();
+            model.Games = await _catalogService.GetFromFilteredGamesAsync(request);
+            return PartialView("_Partial.Catalog.Games", model);
+        }
         #endregion
 
         #region PRIVATE METHODS - TEMPDATA

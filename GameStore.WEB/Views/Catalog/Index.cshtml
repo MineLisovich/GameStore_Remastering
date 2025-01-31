@@ -36,8 +36,22 @@
         // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
         function SettingBehaviorOfModalWindow(boxId, section) { }
 
-        function GetUrlForLoadGameData() {
-            var url = '@Url.Action("LoadGamesData", "Catalog")';
+        function GetUrlForLoadGameData(typeUrl) {
+            var url = "";
+
+            switch (typeUrl){
+                case "search":
+                    url = '@Url.Action("LoadGamesData", "Catalog")';
+                    break;
+
+                case "filter":
+                    url = '@Url.Action("FilterGamesData", "Catalog")';
+                    break;
+            }
+
+
+
+             
             return url;
         }
 

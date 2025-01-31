@@ -1,8 +1,8 @@
 ﻿@{
     string method = ViewContext.RouteData.Values["action"].ToString();
-    bool isIndex = (method.Contains("Index"));
-    bool isCatalog = (method.Contains("Catalog"));
-    bool isDiscounts = (method.Contains("Discounts"));
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    bool isIndex = (method.Contains("Index") && !controller.Contains("Catalog"));
+    bool isCatalog = (controller.Contains("Catalog"));
     bool isSupport = (method.Contains("Support"));
 
 }
