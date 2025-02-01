@@ -89,9 +89,14 @@
         </div>
       
         <div calss="userinfo">
+            <div class="userdata d-flex">
+                <p class="h5 mt-1 me-3">Баланс: @Model.AppUser.Balance BYN</p>
+                <a class="btn btn-outline-success" href="">Пополнить</a>
+            </div>
             <div class="userdata">
-                <h4>@Model.AppUser.Email</h4>
-                <button type="button" data-section="userdata" data-action="edit" class="btn btn-outline-primary js-btn">Редактировать данные</button>
+                <h4>@Model.AppUser.CustomUserName</h4>
+                <h6><em>@Model.AppUser.Email</em></h6>
+                <button type="button" data-section="userdata" data-action="edit" class="btn btn-outline-primary js-btn">Редактировать учетные данные</button>
             </div>
             <div class="userdata">
                 <h5>Дополнительные функции</h5>

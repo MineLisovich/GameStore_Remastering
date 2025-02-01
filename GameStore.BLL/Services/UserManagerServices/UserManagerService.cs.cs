@@ -65,6 +65,7 @@ namespace GameStore.BLL.Services.UserManagerServices
             appUserDTO.LockoutEnabled = true;
             appUserDTO.LockoutEnd = null;
             appUserDTO.UserName = appUserDTO.Email;
+            appUserDTO.CustomUserName = appUserDTO.Email;
 
             AppUser user = _mapper.Map<AppUser>(appUserDTO);
            

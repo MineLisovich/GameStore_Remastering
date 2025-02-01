@@ -644,12 +644,19 @@ namespace GameStore.DAL.Migrations
                     b.Property<string>("AvatarName")
                         .HasColumnType("text");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("numeric");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
                     b.Property<long>("CustomUserId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("CustomUserName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -943,7 +950,7 @@ namespace GameStore.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("GameStore.DAL.Entities.Identity.ShoppingCart", "ShoppingCart")
-                        .WithMany()
+                        .WithMany("GamesKeys")
                         .HasForeignKey("ShoppingCartId");
 
                     b.HasOne("GameStore.DAL.Entities.Dictionaries.GameKeyStatus", "GameKeyStatus")
@@ -1044,6 +1051,11 @@ namespace GameStore.DAL.Migrations
             modelBuilder.Entity("GameStore.DAL.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Identity.ShoppingCart", b =>
+                {
+                    b.Navigation("GamesKeys");
                 });
 #pragma warning restore 612, 618
         }

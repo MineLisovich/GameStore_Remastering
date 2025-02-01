@@ -47,6 +47,12 @@ namespace GameStore.BLL.Services.UserProfileServices
                 user.AvatarName = uploadAvarar.FileName;
 
             }
+
+            if(user.CustomUserName != userDTO.CustomUserName)
+            {
+                user.CustomUserName = userDTO.CustomUserName;
+            }
+
             if (user.Email != userDTO.Email && userDTO.IsChangeEmail is true)
             {
                 user.Email = userDTO.Email;

@@ -54,7 +54,16 @@ namespace GameStore.BLL.Services.ShoppingCartServices
             if(gameKey is null) { result.IsSucceeded = false; result.ErrorMes = "Для выбранной платформы отсутствуют ключи"; return result; }
            
             gameKey.StatusId = pd.GameKeyStatuses.booked.Id;
-            cart.GamesKeys.Add(gameKey);
+            
+            if (cart.GamesKeys is not null && cart.GamesKeys.Count() >= 1)
+            {
+                cart.GamesKeys.Add(gameKey);
+            }
+            else
+            {
+                cart.GamesKeys = [gameKey];
+            }
+          
             cart.TotalPrice += (gameKey.Game.IsShare is true) ? gameKey.Game.SharePrice.Value : gameKey.Game.Price;
 
             try
