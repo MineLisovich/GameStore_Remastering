@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool isAuth = User.Identity.IsAuthenticated;
+    string js_isAuth = (isAuth) ? "true" : "false";
+}
+
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
@@ -17,17 +22,17 @@
     @await Html.PartialAsync("_Partial.NavBar")
 
     <div class="container">
-      
-            @RenderBody()
-       
+
+        @RenderBody()
+
     </div>
 
     @*Footer*@
-  <footer class="border-top footer text-muted bg-light bg-gradient">
-    <div class="container">
-        &copy; 2024 - GameStore.WEB - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
+    <footer class="border-top footer text-muted bg-light bg-gradient">
+        <div class="container">
+            &copy; 2024 - GameStore.WEB - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -37,6 +42,30 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
     <script src="~/js/select2.min.js" asp-append-version="true"></script>
+
+    <script>
+        var isAuth = @js_isAuth;
+       
+        $(document).ready(function () {
+            if(isAuth == true){
+            //отправляем запрос
+                $.ajax({
+                    cache: true,
+                    type: "GET",
+                    url: '@Url.Action("GetUserInfoForHeader", "Home")',
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $(".js-userInfo-header").empty().append(data);
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $(".js-userInfo-header").empty().append('Ошибка загрузки данных!');
+                    }
+                });
+            }
+        });
+    </script>
     @await RenderSectionAsync("js", required: false)
 </body>
 </html>

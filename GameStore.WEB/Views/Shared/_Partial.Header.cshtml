@@ -33,8 +33,8 @@
                 {
 
                     <div class="btn-group m-2">
-                        <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                           @User.Identity.Name
+                        <button type="button" class="btn btn-primary btn-lg dropdown-toggle js-userInfo-header" data-bs-toggle="dropdown" aria-expanded="false">
+                        @*    @User.Identity.Name *@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-area="" asp-controller="UserProfile" asp-action="GetUserProfile">Профиль</a></li>
