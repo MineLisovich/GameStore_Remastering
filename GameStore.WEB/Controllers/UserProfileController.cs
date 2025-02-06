@@ -122,6 +122,12 @@ namespace GameStore.WEB.Controllers
                 return Json(result);
             }
         }
+
+        [HttpGet]
+        public IActionResult AccountRefill()
+        {
+            return View();
+        }
         #endregion
 
         #region PUBLIC METHODS - POST

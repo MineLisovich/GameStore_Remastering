@@ -91,7 +91,7 @@
         <div calss="userinfo">
             <div class="userdata d-flex">
                 <p class="h5 mt-1 me-3">Баланс: @Model.AppUser.Balance BYN</p>
-                <a class="btn btn-outline-success" href="">Пополнить</a>
+                <a class="btn btn-outline-success" asp-action="AccountRefill" asp-controller="UserProfile">Пополнить</a>
             </div>
             <div class="userdata">
                 <h4>@Model.AppUser.CustomUserName</h4>
