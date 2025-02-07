@@ -126,7 +126,8 @@ namespace GameStore.WEB.Controllers
         [HttpGet]
         public IActionResult AccountRefill()
         {
-            return View();
+            RefillModel model = new();
+            return View(model);
         }
         #endregion
 
@@ -155,6 +156,15 @@ namespace GameStore.WEB.Controllers
             StandartUserActionTypes actionTypes = new();
             ResultServiceModel result = await _userProfileService.ChangeUserPasswordAsync(User.Identity.Name, model.ChangePassword.Password);
             TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.PasswordChange.Id);
+            return RedirectToAction(nameof(GetUserProfile));
+        }
+
+        [HttpPost]
+        public async Task <IActionResult> AccountRefill(RefillModel model)
+        {
+            ResultServiceModel result = await _userProfileService.AccountRefill(model.PaymentSum.Value, User.Identity.Name);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.ReplenishBalance.Id);
             return RedirectToAction(nameof(GetUserProfile));
         }
         #endregion
@@ -240,6 +250,10 @@ namespace GameStore.WEB.Controllers
             else if (actionTypeId == actionTypes.Delete.Id)
             {
                 mainMessage = (result.IsSucceeded) ? "Удаление прошло успешно" : "Не удалось удалить";
+            }
+            else if(actionTypeId == actionTypes.ReplenishBalance.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Баланс успешно пополнен" : "Не удалось пополнить баланс";
             }
 
             UserActionResult lastAction = new();

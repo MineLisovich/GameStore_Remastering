@@ -48,7 +48,7 @@ namespace GameStore.BLL.Services.UserProfileServices
 
             }
 
-            if(user.CustomUserName != userDTO.CustomUserName)
+            if (user.CustomUserName != userDTO.CustomUserName)
             {
                 user.CustomUserName = userDTO.CustomUserName;
             }
@@ -121,10 +121,10 @@ namespace GameStore.BLL.Services.UserProfileServices
 
             string errorWord = (isEnable is true) ? "включении" : "выключении";
 
-            if (user is null) { result.IsSucceeded = false; result.ErrorMes = "При " + errorWord+ " произошла ошибка"; return result; }
+            if (user is null) { result.IsSucceeded = false; result.ErrorMes = "При " + errorWord + " произошла ошибка"; return result; }
 
-           
-            if(user.EmailConfirmed is true)
+
+            if (user.EmailConfirmed is true)
             {
                 user.TwoFactorEnabled = isEnable;
             }
@@ -142,13 +142,13 @@ namespace GameStore.BLL.Services.UserProfileServices
             result.IsSucceeded = true;
             return result;
         }
-   
+
         public async Task<ResultServiceModel> ChangeUserPasswordAsync(string email, string password)
         {
             ResultServiceModel result = new();
 
             AppUser user = await _context.AppUsers.Where(x => x.Email == email).FirstOrDefaultAsync();
-            if(user is null) { result.IsSucceeded=false; result.ErrorMes = "Пользователь не найден"; return result; }
+            if (user is null) { result.IsSucceeded = false; result.ErrorMes = "Пользователь не найден"; return result; }
 
             string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -173,7 +173,27 @@ namespace GameStore.BLL.Services.UserProfileServices
             }
             catch { result.IsSucceeded = false; result.ErrorMes = "Ошибка. Попробуйте позже"; return result; }
 
-            result.IsSucceeded= true;
+            result.IsSucceeded = true;
+            return result;
+        }
+
+        public async Task<ResultServiceModel> AccountRefill(decimal payment, string userEmail)
+        {
+            ResultServiceModel result = new();
+
+            AppUser user = await _context.AppUsers.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
+            if(user is not null)
+            {
+                user.Balance += payment;
+                try
+                {
+                    _context.AppUsers.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch { result.IsSucceeded = false; result.ErrorMes = ""; return result; }
+            }
+
+            result.IsSucceeded = true;
             return result;
         }
     }

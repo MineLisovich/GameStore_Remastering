@@ -1,10 +1,80 @@
-﻿
+﻿@model RefillModel
 @{
     ViewData["Title"] = "Пополнение счета";
 }
 
-<div class="row">
-    <h1>Пополнение счета</h1>
+
+
+<div class="row games-area mt-4">
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-header card-header text-white">
+                        <h3 class="mb-0">Пополнение счета</h3>
+                    </div>
+                    <div class="card-body">
+                        <form asp-area="" asp-controller="UserProfile" asp-action="AccountRefill" method="post">
+                            <!-- Номер карты -->
+                            <div class="mb-3">
+                                <label asp-for=CardNum class="form-label">Номер карты</label>
+                                <input asp-for=CardNum class="form-control" placeholder="0000 0000 0000 0000">
+                                <span asp-validation-for="CardNum" class="validError"></span>
+                            </div>
+
+                            <!-- Срок действия и CVV -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for=ValidDate class="form-label">Срок действия</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           asp-for=ValidDate
+                                           placeholder="MM/ГГ">
+                                    <span asp-validation-for="ValidDate" class="validError"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for=CVV class="form-label">CVV</label>
+                                    <input type="password"
+                                           class="form-control"
+                                           asp-for=CVV
+                                           placeholder="123">
+                                    <span asp-validation-for="CVV" class="validError"></span>
+                                </div>
+                            </div>
+
+                            <!-- Имя владельца -->
+                            <div class="mb-3">
+                                <label asp-for=CardName class="form-label">Имя владельца карты</label>
+                                <input type="text"
+                                       class="form-control"
+                                       asp-for=CardName
+                                       placeholder="IVAN IVANOV">
+                                <span asp-validation-for="CardName" class="validError"></span>
+                            </div>
+
+                            <!-- Сумма оплаты -->
+                            <div class="mb-3">
+                                <label asp-for=PaymentSum class="form-label">Сумма пополнения</label>
+                                <input type="number"
+                                       class="form-control"
+                                       asp-for=PaymentSum
+                                       placeholder="100">
+                                <span asp-validation-for="PaymentSum" class="validError"></span>
+                            </div>
+
+                            <!-- Кнопка отправки -->
+                            <button type="submit" class="btn btn-outline-success w-100">
+                                Пополнить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 

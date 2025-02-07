@@ -367,3 +367,7 @@ div.loginRegHeader {
     display: flex;
     flex-wrap: wrap;
 }
+
+.card-header {
+    background: #5a88ca;
+}

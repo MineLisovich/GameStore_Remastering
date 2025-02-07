@@ -13,5 +13,6 @@ namespace GameStore.BLL.Services.UserProfileServices
         Task<ResultServiceModel> EnableOrDisable2FAAsync(string email, bool isEnable);
         Task<ResultServiceModel> ChangeUserPasswordAsync(string email, string password);
         Task<ResultServiceModel> DeleteUserAccountAsync(string email);
+        Task<ResultServiceModel> AccountRefill(decimal payment, string userEmail);
     }
 }
