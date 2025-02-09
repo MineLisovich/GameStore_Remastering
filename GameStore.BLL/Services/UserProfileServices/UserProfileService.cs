@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using GameStore.BLL.DTO.Games;
 using GameStore.BLL.DTO.Identity;
 using GameStore.BLL.Infrastrcture;
+using GameStore.BLL.Infrastrcture.Singletons;
 using GameStore.DAL.Domain;
+using GameStore.DAL.Entities.Games;
 using GameStore.DAL.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameStore.BLL.Services.UserProfileServices
 {
@@ -182,7 +186,7 @@ namespace GameStore.BLL.Services.UserProfileServices
             ResultServiceModel result = new();
 
             AppUser user = await _context.AppUsers.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
-            if(user is not null)
+            if (user is not null)
             {
                 user.Balance += payment;
                 try
@@ -195,6 +199,60 @@ namespace GameStore.BLL.Services.UserProfileServices
 
             result.IsSucceeded = true;
             return result;
+        }
+
+        public async Task<List<ShoppingCartDTO>> GetLastFiveOrdersUser(string userEmail)
+        {
+
+            AppUser user = await _context.AppUsers.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
+            if (user is null) { return new(); }
+            IQueryable<ShoppingCart> sql = GetSqlQuery(user.Id);
+            List<ShoppingCart> shoppingCarts = await sql.Take(5).ToListAsync();
+            return _mapper.Map<List<ShoppingCartDTO>>(shoppingCarts);
+        }
+
+        public async Task<List<ShoppingCartDTO>> GetOrdersUser(string userEmail)
+        {
+            AppUser user = await _context.AppUsers.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
+            if (user is null) { return new(); }
+            IQueryable<ShoppingCart> sql = GetSqlQuery(user.Id);
+            List<ShoppingCart> shoppingCarts = await sql.ToListAsync();
+            return _mapper.Map<List<ShoppingCartDTO>>(shoppingCarts);
+        }
+
+        private IQueryable<ShoppingCart> GetSqlQuery(string userId)
+        {
+            IQueryable<ShoppingCart> sql = _context.ShoppingCarts.OrderByDescending(x => x.PaymentDate)
+                                                                           .Where(x => x.IsActive == false && x.UserId == userId)
+                                                                           .Include(gk => gk.GamesKeys).ThenInclude(game => game.Game)
+                                                                           .Include(gk => gk.GamesKeys).ThenInclude(pl => pl.Platform);
+            return sql;
+        }
+
+        public async Task<string> GetKeyAsync(long gameKeyId)
+        {
+            string key = await GetDecryptGameKey(gameKeyId);
+            return key;
+        }
+
+        private async Task<string> GetDecryptGameKey(long gameKeyId)
+        {
+            GameKey gameKey = await _context.GameKeys.Where(x => x.Id == gameKeyId).FirstOrDefaultAsync();
+            string key = "Ошибка. Попробуйте позже или дргуой способ получения ключа.";
+
+            if (gameKey is not null)
+            {
+                GameKeyCryptography gkc = GameKeyCryptography.GetIstance();
+                key = gkc.Decrypt(gameKey.Key);
+            }
+
+            return key;
+        }
+
+        public async Task<GameDTO> GetGameByGameKeyIdAsync(long gameKeyId)
+        {
+            GameKey gameKey = await _context.GameKeys.Where(x => x.Id == gameKeyId).Include(game => game.Game).FirstOrDefaultAsync();
+            return _mapper.Map<GameDTO>(gameKey.Game);
         }
     }
 }

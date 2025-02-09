@@ -1,4 +1,5 @@
-﻿using GameStore.BLL.DTO.Identity;
+﻿using GameStore.BLL.DTO.Games;
+using GameStore.BLL.DTO.Identity;
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Predefined;
 using GameStore.BLL.Services.EmailService;
@@ -129,6 +130,76 @@ namespace GameStore.WEB.Controllers
             RefillModel model = new();
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetGameKey(long gameKeyId)
+        {
+            string key = await _userProfileService.GetKeyAsync(gameKeyId);
+            return Json(key);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadGameKeyInFile(long gameKeyId)
+        {
+            GameDTO gameInfo = await _userProfileService.GetGameByGameKeyIdAsync(gameKeyId);
+            string key = await _userProfileService.GetKeyAsync(gameKeyId);
+
+            string fileMessage = $"{gameInfo.Name} - {key}";
+
+            // Создаем поток в памяти
+            var memoryStream = new MemoryStream();
+
+            // Записываем данные в поток
+            using (var writer = new StreamWriter(memoryStream, leaveOpen: true)) // Указываем leaveOpen: true
+            {
+                await writer.WriteAsync(fileMessage);
+                await writer.FlushAsync();
+            }
+
+            // Устанавливаем позицию потока на начало
+            memoryStream.Position = 0;
+
+            // Возвращаем файл пользователю
+            return File(memoryStream, "text/plain", $"{gameInfo.Name}.txt");
+        }
+        [HttpGet]
+        public async Task<IActionResult> SentToEmailGameKey(long gameKeyId)
+        {
+            string referrerUrl = Request.Headers.Referer;
+
+            GameDTO gameInfo = await _userProfileService.GetGameByGameKeyIdAsync(gameKeyId);
+            string key = await _userProfileService.GetKeyAsync(gameKeyId);
+            string htmlBody = $"{gameInfo.Name} - {key}";
+            string plainTextBody = $"Ключ от игры - GameStore";
+
+            ResultServiceModel result = new();
+
+            try
+            {
+                await _emailService.SendEmailAsync(User.Identity.Name, plainTextBody, htmlBody);
+                result.IsSucceeded = true;
+            }
+            catch { result.IsSucceeded = false; }
+
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.SentGameKeyToEmail.Id);
+            if(referrerUrl.Contains("GetUserProfile"))
+            {
+                return RedirectToAction(nameof(GetUserProfile));
+            }
+            else
+            {
+                return RedirectToAction(nameof(HistoryOrders));
+            }
+      
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> HistoryOrders()
+        {
+            UserProfileModel model = await CreateShowOrgersUser(TempData);
+            return View(model);
+        }
         #endregion
 
         #region PUBLIC METHODS - POST
@@ -174,6 +245,7 @@ namespace GameStore.WEB.Controllers
         {
             UserProfileModel model = new();
             model.AppUser = await _userProfileService.GetUserDataByEmailAsync(User.Identity.Name);
+            model.ShoppingCarts = await _userProfileService.GetLastFiveOrdersUser(User.Identity.Name);
             model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
             return model;
         }
@@ -192,7 +264,6 @@ namespace GameStore.WEB.Controllers
 
         }
 
-
         private async Task<IActionResult> DeleteCookie(bool isRedirect)
         {
             //Разлогин. тек. пользователя
@@ -209,6 +280,13 @@ namespace GameStore.WEB.Controllers
             return Json(null);
         }
 
+        private async Task<UserProfileModel> CreateShowOrgersUser(ITempDataDictionary TempData)
+        {
+            UserProfileModel model = new();
+            model.ShoppingCarts = await _userProfileService.GetOrdersUser(User.Identity.Name);
+            model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
+            return model;
+        }
         #endregion
 
         #region PRIVATE METHODS - TEMP DATA
@@ -255,6 +333,12 @@ namespace GameStore.WEB.Controllers
             {
                 mainMessage = (result.IsSucceeded) ? "Баланс успешно пополнен" : "Не удалось пополнить баланс";
             }
+            else if (actionTypeId == actionTypes.SentGameKeyToEmail.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Ключ успешно выслан на Ваш Email" : "Не удалось выслать ключ на Ваш Email";
+            }
+
+
 
             UserActionResult lastAction = new();
             lastAction.Id = actionTypeId;
