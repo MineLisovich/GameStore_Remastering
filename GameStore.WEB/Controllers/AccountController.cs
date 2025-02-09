@@ -122,7 +122,7 @@ namespace GameStore.WEB.Controllers
         public async Task<IActionResult> CreateAccount(AccountModel model)
         {
           
-            AppUser createUser = await _accountService.CreateAccountAsync(model.Email, model.Password);
+            AppUser createUser = await _accountService.CreateAccountAsync(model.CustomUserName,model.Email, model.Password);
             if (createUser is not null)
             {
                 await _signInManager.SignInAsync(createUser, false);

@@ -23,18 +23,16 @@
 
                 @if (User.Identity.IsAuthenticated is false)
                 {
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
-                        </li>
-                    </ul>
+                     <div class="btn-group m-2">
+                            <a class="btn btn-outline-success btn-lg" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
+                    </div>
                 }
                 else
                 {
 
                     <div class="btn-group m-2">
-                        <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                           @User.Identity.Name
+                        <button type="button" class="btn btn-primary btn-lg dropdown-toggle js-userInfo-header" data-bs-toggle="dropdown" aria-expanded="false">
+                        @*    @User.Identity.Name *@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-area="" asp-controller="UserProfile" asp-action="GetUserProfile">Профиль</a></li>
@@ -47,6 +45,7 @@
 
                             <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Выход</a></li>
                         </ul>
+                        <a class="btn btn-outline-success btn-lg" asp-area="" asp-action="AccountRefill" asp-controller="UserProfile">Пополнить</a>
                     </div>
                 }
 

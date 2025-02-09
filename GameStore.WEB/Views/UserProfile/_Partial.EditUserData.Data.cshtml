@@ -19,6 +19,12 @@
     <span class="validError"></span>
 </div>
 <div class="form-group">
+    <label asp-for="AppUser.CustomUserName">Никнейм:</label>
+    <input asp-for=AppUser.CustomUserName  class="form-control"  placeholder="burunduk" />
+    <span asp-validation-for="AppUser.CustomUserName" class="validError"></span>
+</div>
+
+<div class="form-group">
     <label asp-for="AppUser.Email">Email:</label>
     <input asp-for=AppUser.Email type="email" class="form-control" aria-describedby="emailHelp" placeholder="example@gmail.com" />
     <span asp-validation-for="AppUser.Email" class="validError"></span>

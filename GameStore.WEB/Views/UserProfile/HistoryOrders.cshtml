@@ -1,0 +1,44 @@
+﻿@model UserProfileModel
+@{
+    ViewData["Title"] = "История покупок";
+}
+
+@section js{
+    <script src="~/js/UserProfileScripts/showGameKey.js"></script>
+
+    <script>
+
+        // ШАГ 1. НАСТРОЙКА ОБЩЕГО ПОВЕДЕНИЯ МОДАЛОК
+        $(document).ready(function () {
+            ShowGameKey();
+        });
+        function GetUrlForShowGameGey() {
+            return '@Url.Action("GetGameKey", "UserProfile")'
+        }
+    </script>
+}
+
+<h1>История покупок</h1>
+
+@if (Model.ShoppingCarts is not null && Model.ShoppingCarts.Count > 0)
+{
+    @await Html.PartialAsync("_Partial.GetUserProfile.HistoryOrders", Model)
+}
+else
+{
+    <h4>Вы еще ничего не покупали ((</h4>
+}
+
+<div id="modalWrapper">
+</div>
+
+<div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+    @await Html.PartialAsync("_Partial.Action.Warning")
+    @await Html.PartialAsync("_Partial.Action.Success")
+    @await Html.PartialAsync("_Partial.Action.Error")
+</div>
+
+<div id="lastActionDataWrapper">
+    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
+</div>

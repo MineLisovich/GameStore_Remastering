@@ -1,0 +1,35 @@
+﻿@model UserProfileModel
+
+@foreach(var order in Model.ShoppingCarts)
+{
+    <div class="ordercart">
+        <h4>Дата покупки: @order.PaymentDate (@order.TotalPrice BYN)</h4>
+
+
+        @foreach(var gk in order.GamesKeys)
+        {
+            <div class="ordergameinfo d-flex shadow">
+                <div class="s_gameposter">
+                    @Html.Raw("<img src=\"data:image/jpeg;base64,"
+                             + Convert.ToBase64String(gk.Game.Poster) + "\" />")
+                </div>
+                <div class="s_gameinfo">
+                    <h5>@gk.Game.Name</h5>
+                    <p><b>Платформа активации:</b> @gk.Platform.Name</p>
+                 
+                    <div class="row">
+                        <div class="btn-group mb-2">
+                            <button data-gameKeyId="@gk.Id" class="btn btn-primary js-showKeyBtn">Показать ключ</button>
+                            <a asp-area="" asp-controller="UserProfile" asp-action="DownloadGameKeyInFile" asp-route-gameKeyId="@gk.Id" class="btn btn-outline-dark" data-bs-toggle="tooltip" data-bs-placement="right" title="Скачать ключ"><i class="fa-solid fa-file-arrow-down"></i></a>
+                            <a asp-area="" asp-controller="UserProfile" asp-action="SentToEmailGameKey" asp-route-gameKeyId="@gk.Id" class="btn btn-outline-dark" data-bs-toggle="tooltip" data-bs-placement="right" title="Отправить ключ на Email"><i class="fa-solid fa-paper-plane"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="showKey_@gk.Id" class="row mx-auto h5 align-content-center js-showKey">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

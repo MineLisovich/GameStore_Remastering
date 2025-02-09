@@ -11,6 +11,11 @@
     </div>
     <form asp-area="" asp-controller="Account" asp-action="CreateAccount" method="post" >
         <div class="form-group">
+            <label asp-for="CustomUserName">Никнейм:</label>
+            <input asp-for=CustomUserName type="text" class="form-control" placeholder="burunduk" autocomplete="off" />
+            <span asp-validation-for="CustomUserName" class="validError"></span>
+        </div>
+        <div class="form-group">
             <label asp-for="Email">Email:</label>
             <input asp-for=Email type="email" class="form-control" aria-describedby="emailHelp" placeholder="example@gmail.com" autocomplete="off" />
             <span asp-validation-for="Email" class="validError"></span>

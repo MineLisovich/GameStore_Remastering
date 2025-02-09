@@ -9,5 +9,7 @@ namespace GameStore.BLL.Services.HomeServices
         Task<GameDTO> GetGameByIdAsync(long gameId);
 
         Task<GameDTO> GetGameByIdForPartial(long gameId);
+
+        Task<string> GetUserInfoForHeader(string userEmail);
     }
 }

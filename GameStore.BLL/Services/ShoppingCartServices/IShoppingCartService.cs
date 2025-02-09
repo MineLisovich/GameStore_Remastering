@@ -10,6 +10,10 @@ namespace GameStore.BLL.Services.ShoppingCartServices
 
         Task<ResultServiceModel> DeleteItemsInShoppingCartAsync(string userEmail, bool isDeleteAll, long gameKeyId = 0);
 
-        Task<decimal> GetActualShoppingCartAsync(string userEmail);
+        Task<decimal> GetActualPriceShoppingCartAsync(string userEmail);
+
+        Task<ShoppingCartDTO> GetSoppingCartByIdAsync(long shopCartId);
+
+        Task<ResultServiceModel> PaymentShoppingCartByInternalWalletAsync(string userEmail, long shopCartId, decimal totalPrice);
     }
 }

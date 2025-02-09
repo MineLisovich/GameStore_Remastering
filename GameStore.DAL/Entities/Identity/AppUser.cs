@@ -38,6 +38,11 @@ namespace GameStore.DAL.Entities.Identity
         /// </summary>
         public long CustomUserId { get; set; }
 
+        public decimal Balance { get; set; } = 0;
+
+        [Required(ErrorMessage = "Поле обязательно для заполнения!")]
+        public string? CustomUserName { get; set; }
+
         /// <summary>
         /// Корзина
         /// </summary>

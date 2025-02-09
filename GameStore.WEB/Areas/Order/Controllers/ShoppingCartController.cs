@@ -1,4 +1,5 @@
-﻿using GameStore.BLL.Infrastrcture;
+﻿using GameStore.BLL.DTO.Identity;
+using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Predefined;
 using GameStore.BLL.Services.ShoppingCartServices;
 using GameStore.WEB.Areas.Order.Models;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
+using SelectList = Microsoft.AspNetCore.Mvc.Rendering.SelectList;
 
 namespace GameStore.WEB.Areas.Order.Controllers
 {
@@ -43,8 +45,15 @@ namespace GameStore.WEB.Areas.Order.Controllers
         [HttpGet]
         public async Task<JsonResult> GetActualPriceShoppingCart()
         {
-            decimal actualPrice = await _shoppingCartService.GetActualShoppingCartAsync(User.Identity.Name);
+            decimal actualPrice = await _shoppingCartService.GetActualPriceShoppingCartAsync(User.Identity.Name);
             return Json(actualPrice);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPartialWorkOnData(long shopCrtId)
+        {
+            PaymentMethodsModel model =await CreatePaymentMethodsModel(shopCrtId);
+            return PartialView("_Partial.ShoppingCart.PaymentMethods",model);
         }
         #endregion
 
@@ -78,6 +87,30 @@ namespace GameStore.WEB.Areas.Order.Controllers
             }
            
         }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PaymentShoppingCart(PaymentMethodsModel model)
+        {
+            ResultServiceModel result = new();
+            StandartUserActionTypes actionTypes = new();
+            PredefinedManager pd = new();
+
+            if(model.PaymentMethodId != pd.PaymentMethods.internal_wallet.Id)
+            {
+                result.IsSucceeded = false; result.ErrorMes = "Данный способ оплаты временно не доступен";
+            }
+            else
+            {
+                result = await _shoppingCartService.PaymentShoppingCartByInternalWalletAsync(User.Identity.Name, model.ShoppingCartId, model.TotalPrice);
+            }
+            
+
+
+
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.PaymentShoppingCart.Id);
+            return RedirectToAction(nameof(GetShoppingCart));
+        }
         #endregion
 
         #region PRIVATE METHODS - TEMP DATA 
@@ -104,6 +137,10 @@ namespace GameStore.WEB.Areas.Order.Controllers
             {
                 mainMessage = (result.IsSucceeded) ? "Вся корзина успешно очищена" : "Не удалось очистить всю корзину";
             }
+            else if(actionTypeId == actionTypes.PaymentShoppingCart.Id)
+            {
+                mainMessage = (result.IsSucceeded) ? "Оплата прошла успешно. Получить ключи можете в Вашем профиле" : "Оплата не прошла. Пожалуйста попробуйте позже";
+            }
 
             UserActionResult lastAction = new();
             lastAction.Id = actionTypeId;
@@ -121,6 +158,17 @@ namespace GameStore.WEB.Areas.Order.Controllers
             ShoppingCartDataModel model = new();
             model.ShoppingCart = await _shoppingCartService.GetActiveShoppingCartAsync(User.Identity.Name);
             model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
+            return model;
+        }
+
+        private async Task<PaymentMethodsModel> CreatePaymentMethodsModel(long shopCrtId)
+        {
+            PaymentMethodsModel model = new();
+            PredefinedManager pd = new();
+            ShoppingCartDTO cartDTO = await _shoppingCartService.GetSoppingCartByIdAsync(shopCrtId);
+            model.ShoppingCartId = cartDTO.Id;
+            model.TotalPrice = cartDTO.TotalPrice;
+            model.SelectItemsPaymentMethods = new SelectList(pd.PaymentMethods.paymentMethods, "Id", "Name");
             return model;
         }
         #endregion

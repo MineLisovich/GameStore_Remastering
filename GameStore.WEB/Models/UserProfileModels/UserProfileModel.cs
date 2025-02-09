@@ -15,6 +15,8 @@ namespace GameStore.WEB.Models.UserProfileModels
         /// </summary>
         public AppUserDTO AppUser { get; set; }
 
+        public List<ShoppingCartDTO> ShoppingCarts { get; set; } = new();
+
         /// <summary>
         /// Смена пароля
         /// </summary>

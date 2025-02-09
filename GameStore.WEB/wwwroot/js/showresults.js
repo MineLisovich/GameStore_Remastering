@@ -6,6 +6,11 @@ function ShowModalLastAction() {
     var actionResult = $("#actionResult").is(':checked'); // успешно / не успешно
     var actionDopInfo = $("#actionDopInfo").val(); // доп информация (string) - отправлено ли почтовое сообщение, сколько удалено и пр.
     // 2) определяем содержимое модального окна
+    console.log("actionId ", actionId);
+    console.log("actionResult ", actionResult);
+    console.log("actionDopInfo ", actionDopInfo);
+
+
     var message = "";
     switch (actionId) {
         case "1":
@@ -39,6 +44,15 @@ function ShowModalLastAction() {
             message = actionDopInfo;
             break;
         case "11":
+            message = actionDopInfo;
+            break;
+        case "12":
+            message = actionDopInfo;
+            break;
+        case "13":
+            message = actionDopInfo;
+            break;
+        case "14":
             message = actionDopInfo;
             break;
     }

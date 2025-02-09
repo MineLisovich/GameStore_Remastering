@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 
 
+
 namespace GameStore.WEB.Controllers
 {
   
@@ -23,6 +24,15 @@ namespace GameStore.WEB.Controllers
         }
 
         #region PUBLIC METHODS - GET
+        [HttpGet]
+        [Authorize]
+        public async Task<JsonResult> GetUserInfoForHeader()
+        {
+            string userData = await _homeService.GetUserInfoForHeader(User.Identity.Name);
+            return Json(userData);
+        }
+
+
         [HttpGet]
         [AllowAnonymous]
         public async Task <IActionResult> Index()

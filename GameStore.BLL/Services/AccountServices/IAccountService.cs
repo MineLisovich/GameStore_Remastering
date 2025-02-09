@@ -10,6 +10,6 @@ namespace GameStore.BLL.Services.AccountServices
         /// <param name="email">Эл. почта пользователя</param>
         /// <param name="password">Пароль</param>
         /// <returns>true or false</returns>
-        Task<AppUser> CreateAccountAsync(string email, string password);
+        Task<AppUser> CreateAccountAsync(string customUserName,string email, string password);
     }
 }
