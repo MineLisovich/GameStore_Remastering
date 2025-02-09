@@ -45,5 +45,10 @@ namespace GameStore.DAL.Entities.Identity
         /// Дата последнего изменения корзины
         /// </summary>
         public DateTime? UpdateDate { get; set; } = null;
+
+        /// <summary>
+        /// Дата оплаты корзины
+        /// </summary>
+        public DateTime? PaymentDate { get; set; } = null;
     }
 }

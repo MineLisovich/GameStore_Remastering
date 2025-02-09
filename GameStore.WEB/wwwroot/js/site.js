@@ -162,6 +162,9 @@ function GetData(actionType, id, section) {
         case "addToShoppingCart":
             data = { gameId: id };
             break;
+        case "shoppingCart":
+            data = { shopCrtId: id };
+            break;
   
     }
     return data;

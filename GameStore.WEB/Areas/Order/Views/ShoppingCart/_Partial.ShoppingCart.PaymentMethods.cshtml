@@ -1,0 +1,34 @@
+﻿@model PaymentMethodsModel
+
+<div class="modal fade modal-js" id="modalPaymentMethods" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Оплата корзины - @Model.TotalPrice BYN</h5>
+            </div>
+            <form id="PaymentMethodsForm" asp-controller="ShoppingCart" asp-action="PaymentShoppingCart" method="post">
+              
+                <div class="modal-body">
+                    <input readonly asp-for=ShoppingCartId  hidden/>         
+                    <input readonly asp-for=TotalPrice hidden />
+                    
+                    <div class="form-group">
+                        <label> Выберите способ оплаты: *</label>
+                        <select asp-for="PaymentMethodId" asp-items="Model.SelectItemsPaymentMethods" class="form-select">
+                            <option selected disabled></option>
+                        
+
+                        </select>
+                        <span asp-validation-for="PaymentMethodId" class="validError"></span>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnBackFromCreateEditMode" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                    <button type="submit" class="btn btn-outline-success">Оплатить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

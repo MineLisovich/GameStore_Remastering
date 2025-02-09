@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameStore.DAL.Migrations
 {
     [DbContext(typeof(GsDbContext))]
-    [Migration("20250201105335_mig1")]
+    [Migration("20250209090048_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -733,6 +733,9 @@ namespace GameStore.DAL.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");

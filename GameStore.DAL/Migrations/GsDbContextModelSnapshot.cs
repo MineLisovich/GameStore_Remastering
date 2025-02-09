@@ -731,6 +731,9 @@ namespace GameStore.DAL.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
 

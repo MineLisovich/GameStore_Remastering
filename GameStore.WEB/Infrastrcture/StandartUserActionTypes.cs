@@ -56,5 +56,7 @@
         public readonly UserActionResult AddGameToShoppingCart = new() { Id = 11, Name = "Добавление товара в корзину" };
 
         public readonly UserActionResult ReplenishBalance = new() { Id = 12, Name = "Пополнение счета" };
+
+        public readonly UserActionResult PaymentShoppingCart = new() { Id = 13, Name = "Оплата корзины" };
     }
 }

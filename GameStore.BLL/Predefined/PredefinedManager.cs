@@ -15,6 +15,8 @@ namespace GameStore.BLL.Predefined
         private PdGameLabels _gameLabels;
         private PdGenres _genres;
         private PdTypesSelectedGames _typesSelectedGames;
+        private PdPaymentMethods _paymentMethods;
+
 
         /// <summary>
         /// Роли в системе
@@ -91,6 +93,18 @@ namespace GameStore.BLL.Predefined
                     _typesSelectedGames = new PdTypesSelectedGames();
                 }
                 return _typesSelectedGames;
+            }
+        }
+
+        public PdPaymentMethods PaymentMethods
+        {
+            get
+            {
+                if(_paymentMethods is null)
+                {
+                    _paymentMethods = new PdPaymentMethods();
+                }
+                return _paymentMethods;
             }
         }
 

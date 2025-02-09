@@ -113,13 +113,59 @@ namespace GameStore.BLL.Services.ShoppingCartServices
             return result;
         }
 
-        public async Task<decimal> GetActualShoppingCartAsync(string userEmail)
+        public async Task<decimal> GetActualPriceShoppingCartAsync(string userEmail)
         {
             ShoppingCart cart = await GetActiveShCart(userEmail);
 
             return cart.TotalPrice;
         }
 
+        public async Task<ShoppingCartDTO> GetSoppingCartByIdAsync(long shopCartId)
+        {
+            ShoppingCart shopcart = await _dbContext.ShoppingCarts.Where(x=>x.Id == shopCartId).FirstOrDefaultAsync();
+            return _mapper.Map<ShoppingCartDTO>(shopcart);
+        }
+
+        public async Task<ResultServiceModel> PaymentShoppingCartByInternalWalletAsync(string userEmail, long shopCartId, decimal totalPrice)
+        {
+            ResultServiceModel result = new();
+            PredefinedManager pd = new();
+
+            ShoppingCart shoppingCart = await _dbContext.ShoppingCarts.Where(x=>x.Id == shopCartId)
+                                                        .Include(us=>us.User)
+                                                        .Include(gk=>gk.GamesKeys)
+                                                        .FirstOrDefaultAsync();
+            if (shoppingCart is null) 
+            {result.IsSucceeded = false; result.ErrorMes = DefaultErrorMessages.recordNoExist; return result; }
+
+            if(shoppingCart.User.Email != userEmail || shoppingCart.TotalPrice != totalPrice)
+            { result.IsSucceeded = false; result.ErrorMes = "При оплате возникла непредвиденная ошибка."; return result; }
+
+            if(shoppingCart.User.Balance < totalPrice)
+            { result.IsSucceeded = false; result.ErrorMes = "Недостаточно средств на Вашем кошельке"; return result;}
+
+            shoppingCart.IsActive = false;
+            shoppingCart.PaymentDate = DateTime.UtcNow;
+            shoppingCart.User.Balance -= totalPrice;
+            
+            foreach(GameKey gk in shoppingCart.GamesKeys)
+            {
+                gk.StatusId = pd.GameKeyStatuses.not_active.Id;
+            }
+
+            try
+            {
+                _dbContext.ShoppingCarts.Update(shoppingCart);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch {  result.IsSucceeded = false; result.ErrorMes = result.ErrorMes = "При оплате возникла непредвиденная ошибка."; return result; }  
+
+            result.IsSucceeded = true;
+            return result;
+        }
+
+
+        #region PRIVATE METHODS
 
         private async Task<ShoppingCart> GetActiveShCart(string userEmail)
         {
@@ -142,10 +188,10 @@ namespace GameStore.BLL.Services.ShoppingCartServices
             cart.GamesKeys = null;
 
             await _dbContext.ShoppingCarts.AddAsync(cart);
-            await _dbContext.SaveChangesAsync();    
+            await _dbContext.SaveChangesAsync();
 
             return cart;
         }
-      
+        #endregion
     }
 }

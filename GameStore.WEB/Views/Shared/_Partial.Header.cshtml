@@ -23,11 +23,9 @@
 
                 @if (User.Identity.IsAuthenticated is false)
                 {
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
-                        </li>
-                    </ul>
+                     <div class="btn-group m-2">
+                            <a class="btn btn-outline-success btn-lg" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
+                    </div>
                 }
                 else
                 {
@@ -47,6 +45,7 @@
 
                             <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Выход</a></li>
                         </ul>
+                        <a class="btn btn-outline-success btn-lg" asp-area="" asp-action="AccountRefill" asp-controller="UserProfile">Пополнить</a>
                     </div>
                 }
 

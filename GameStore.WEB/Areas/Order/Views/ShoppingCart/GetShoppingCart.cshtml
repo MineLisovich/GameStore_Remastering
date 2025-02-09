@@ -10,7 +10,30 @@
       
         $(document).ready(function () {
             btnManager();
+
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК - Алерты
+            AddHandlerClickForButtonsOfActionModals('modalPaymentMethods', 'shoppingCart');
+
+            //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
+            AddHandlerShownModalForCreateEditModal("modalPaymentMethods", "PaymentMethodsForm");
+
+           
         });
+
+        // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
+        function GetURLForAjaxByActionType(actionType) {
+            var url = "";
+            switch (actionType) {
+                case "edit":
+                    url = '@Url.Action("GetPartialWorkOnData", "ShoppingCart")';
+                    break;
+            }
+            return url;
+        }
+        // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
+        function SettingBehaviorOfModalWindow(boxId, section) {
+        
+        }
 
         function btnManager()
         {
@@ -42,6 +65,8 @@
                             getTotalPrice();
                             break;
                     }
+
+                  
                   
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -75,6 +100,18 @@
             });
         }
 
+
+        $(".js-orderbtn").off('click').on('click', function () {
+            var orderId = $(this).attr("data-orderId");
+            var actionType = "edit";
+            var message = "Вы уверены, что хотите начать оплату?";
+            var title = "";
+            var section = "";
+
+            PrepareWarningModal(orderId, title, message, actionType, section);
+            $("#modalActionWarning").modal('show');
+        });
+
     </script>
 }
 
@@ -102,27 +139,15 @@
             </div>
 
             <div class="btn-group btn-manager-shopcart" role="group">
-
                 <button type="button" data-section="delAll" class="btn btn-lg btn-outline-danger js-del-btn">Очистить корзину</button>
-                <button type="button" class="btn btn-lg btn-outline-success orderButton">Оформить заказ: @Model.ShoppingCart.TotalPrice BYN</button>
-
+                <button type="button" data-orderId="@Model.ShoppingCart.Id" class="btn btn-lg btn-outline-success orderButton js-orderbtn">Оформить заказ: @Model.ShoppingCart.TotalPrice BYN</button>
             </div>
         </div>
     </div>
 
-    <div id="modalWrapper">
-    </div>
 
-    <div id="modalActionWrapper">
-        @await Html.PartialAsync("_Partial.Action.DataNotSaved")
-        @await Html.PartialAsync("_Partial.Action.Warning")
-        @await Html.PartialAsync("_Partial.Action.Success")
-        @await Html.PartialAsync("_Partial.Action.Error")
-    </div>
 
-    <div id="lastActionDataWrapper">
-       @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
-    </div>
+
 }
 else
 {
@@ -132,7 +157,17 @@ else
         </div>
     </div>
 }
-
+<div id="modalWrapper">
+</div>
+<div id="modalActionWrapper">
+    @await Html.PartialAsync("_Partial.Action.DataNotSaved")
+    @await Html.PartialAsync("_Partial.Action.Warning")
+    @await Html.PartialAsync("_Partial.Action.Success")
+    @await Html.PartialAsync("_Partial.Action.Error")
+</div>
+<div id="lastActionDataWrapper">
+    @await Html.PartialAsync("_Partial.ActionResult", Model.LastAction)
+</div>
 
 
 
