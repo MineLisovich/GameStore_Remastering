@@ -48,60 +48,46 @@ function GameBTNControll() {
     var input_isShare = $("#IsShare");
 
     //Сбор данных и отпрвка в ajax
-
-    //ЖАНРЫ
-    $(input_genre).on('change', function () {
+    $('#js-filterBtn').off('click').on('click', function () {
         genreIds = [];
-        genreIds = $(this).val();
-        AjaxActionFilterGames();
-    });
-
-    //РАЗРАБЫ
-    $(input_develop).on('change', function () {
+        genreIds = $(input_genre).val();
         developerIds = [];
-        developerIds = $(this).val();
-        AjaxActionFilterGames();
-    });
+        developerIds = $(input_develop).val();
 
-    //ЦЕНА ОТ И ДО
-    $(input_price_from).on('input', function () {
-        price_from = 0;
-        price_from = $(this).val();
-        if (price_from == "") {
-            price_from = 0;
-        }
-        AjaxActionFilterGames();
-    });
-    $(input_price_to).on('input', function () {
-       
-        price_to = $(this).val();
-        if (price_to == "") {
-            price_to = 0;
-        } 
-        AjaxActionFilterGames();
-    });
+        price_from = $(input_price_from).val();
+        price_to = $(input_price_to).val();
 
-    //ОСОБЕННОСТИ ИГРЫ
-    $(input_lable).on('change', function () {
         labelIds = [];
-        labelIds = $(this).val();
-        AjaxActionFilterGames();
-    });
-    //ПЛАТФОРМЫ
-    $(input_platform).on('change', function () {
+        labelIds = $(input_lable).val();
         platformIds = [];
-        platformIds = $(this).val();
-        AjaxActionFilterGames();
-    });
+        platformIds = $(input_platform).val();
 
-    //СКИДОЧНЫЕ ИГРЫ
-    $(input_isShare).on('change', function () {
-        if ($(this).is(':checked')) {
+        if ($(input_isShare).is(':checked')) {
             isShare = true;
         } else {
-         
+
             isShare = false;
         }
+        AjaxActionFilterGames();
+    });
+
+    $('#js-clearfilterBtn').off('click').on('click', function () {
+        genreIds = [];
+        developerIds = [];
+        price_from = 0;
+        price_to = 0;
+        labelIds = [];
+        platformIds = [];
+        isShare = false;
+
+        $(input_genre).val(null).trigger('change');
+        $(input_develop).val(null).trigger('change');
+        $(input_price_from).val('0');
+        $(input_price_to).val('0');
+        $(input_lable).val(null).trigger('change');
+        $(input_platform).val(null).trigger('change');
+        $(input_isShare).prop('checked', false); 
+        
         AjaxActionFilterGames();
     });
 
