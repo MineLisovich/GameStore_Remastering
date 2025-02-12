@@ -11,12 +11,12 @@
 
     <script>
         $(document).ready(function () {
-            
+
 
             InitializationMultiSelect2("js-mulsel");
-
+            ToggleLoadingView(true);
             //Загрузка данных об играх
-            AjaxActionGetGamesData("");
+             AjaxActionGetGamesData("", pageNumber, pageSize);
 
             GameBTNControll();
           
@@ -80,10 +80,21 @@
         @*  СТРОКА ПОИСКА  *@
         <div class="row search-area">
             <input id="searchGame" type="text" class="form-control" placeholder="Поиск игры по наименованию" autocomplete="off" />
+            <div id="showSearch-area" class="d-none row showSearch mx-auto">
+               <div class="js-showSearchGame">
+
+               </div>
+            </div>
         </div>
+       
 
         <div class="row games-area">
             <div id="js-gemes" class="d-flex gamesArea">
+             
+            </div>
+            @await Html.PartialAsync("_Parial.Action.Loading")
+            <div class="text-center mt-3">
+                <button id="loadMoreBtn" class="btn btn-primary">Загрузить еще</button>
             </div>
         </div>
     </div>

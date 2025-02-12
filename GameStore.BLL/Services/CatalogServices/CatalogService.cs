@@ -21,7 +21,7 @@ namespace GameStore.BLL.Services.CatalogServices
             _mapper = mapper;
         }
 
-        public async Task<List<GameDTO>> GetGamesAsync(string nameGame)
+        public async Task<List<GameDTO>> GetGamesAsync(string nameGame, int pageNumber, int pageSize)
         {
             IQueryable<Game> sqlQuery = _dbContext.Games.Include(genre => genre.GameGanres)
                                                         .Include(dev => dev.Developer)
@@ -31,11 +31,15 @@ namespace GameStore.BLL.Services.CatalogServices
 
             if (nameGame == "")
             {
-                games = await sqlQuery.Where(x => x.IsVisible == true && x.IsDeleted == false).ToListAsync();
+                games = await sqlQuery.Where(x => x.IsVisible == true && x.IsDeleted == false)
+                      .Skip((pageNumber - 1) * pageSize)
+                              .Take(pageSize).ToListAsync();
             }
             else
             {
-                games = await sqlQuery.Where(x => x.Name.ToUpper().Contains(RepName(nameGame)) && x.IsVisible == true && x.IsDeleted == false).ToListAsync();
+                games = await sqlQuery.Where(x => x.Name.ToUpper().Contains(RepName(nameGame)) && x.IsVisible == true && x.IsDeleted == false)
+                      .Skip((pageNumber - 1) * pageSize)
+                              .Take(pageSize).ToListAsync();
             }
 
 

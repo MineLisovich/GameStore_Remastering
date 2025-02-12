@@ -7,18 +7,29 @@ var labelIds = [];
 var platformIds = [];
 var isShare = false;
 
+var pageNumber = 1;
+var pageSize = 6;
+
 //Вывод игры при загрузке страницы + если был использован поиск
-function AjaxActionGetGamesData(nameGame) {
+function AjaxActionGetGamesData(nameGame, pageNumber, pageSize) {
     var url = GetUrlForLoadGameData("search");
     //отправляем запрос
     $.ajax({
         cache: false,
         type: "GET",
         url: url,
-        data: { nameGame: nameGame },
+        data: {
+            nameGame: nameGame,
+            pageNumber: pageNumber,
+            pageSize: pageSize
+        },
         dataType: "html",
         success: function (data) {
-            $("#js-gemes").empty().append(data);
+            if (nameGame != "") {
+                $("#js-gemes").empty();
+            }
+            ToggleLoadingView(false);
+            $("#js-gemes").append(data);
             SetSettings();
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -29,11 +40,23 @@ function AjaxActionGetGamesData(nameGame) {
 
 
 function GameBTNControll() {
+    $("#loadMoreBtn").on("click", function () {
+        ToggleLoadingView(true);
+        pageNumber++;
+        AjaxActionGetGamesData("", pageNumber, pageSize);
+    });
+
 
     //Поиск игры по наименованию
     $("#searchGame").on("input", function () {
         var inpdata = $("#searchGame").val();
-        AjaxActionGetGamesData(inpdata);
+        if (inpdata != "") {
+            $('#showSearch-area').removeClass('d-none');
+        }
+        else {
+            $('#showSearch-area').addClass('d-none');
+        }
+      //  AjaxActionGetGamesData(inpdata);
     });
 
     //------ AREA FILTER GAME ------

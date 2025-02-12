@@ -5,7 +5,7 @@ namespace GameStore.BLL.Infrastrcture.Singletons
     public sealed class ConvectorUtcToGmtPlus3Zone
     {
         //объект клсса 
-        private static ConvectorUtcToGmtPlus3Zone? _instance;
+        private static ConvectorUtcToGmtPlus3Zone _instance;
         private static readonly object _lock = new object();
 
         private ConvectorUtcToGmtPlus3Zone() { }

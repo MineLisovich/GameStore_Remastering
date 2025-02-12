@@ -13,7 +13,7 @@
         /// <summary>
         /// Текст ошибки
         /// </summary>
-        public string? ErrorMes { get; set; }
+        public string ErrorMes { get; set; }
 
 
         public long ObjId { get; set; }

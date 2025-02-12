@@ -29,10 +29,11 @@ namespace GameStore.WEB.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task <IActionResult> LoadGamesData(string nameGame = "")
+        public async Task <IActionResult> LoadGamesData(string nameGame = "", int pageNumber = 1, int pageSize = 50)
         {
             CatalogModel model = new();
-            model.Games = await _catalogService.GetGamesAsync(nameGame);
+            model.Games = await _catalogService.GetGamesAsync(nameGame, pageNumber, pageSize);
+            model.HasMoreGames = model.Games.Count == pageSize; // Проверяем, есть ли еще игры
             return PartialView("_Partial.Catalog.Games", model);
         }
         #endregion
