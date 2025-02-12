@@ -1,4 +1,5 @@
 using GameStore.BLL.DTO.Dictionaries;
+using GameStore.BLL.DTO.Games;
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Predefined;
 using GameStore.BLL.Services.HomeServices;
@@ -61,9 +62,51 @@ namespace GameStore.WEB.Controllers
         [AllowAnonymous]
         public async Task <IActionResult> GamePage(long gameId)
         {
+            PredefinedManager pd = new();
             SingleGamePageModel model = await CreateSingleGamePageModel(gameId,TempData);
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetGamePlatforms(long gameId)
+        {
+            PredefinedManager pd = new();
+            SingleGamePageModel model = await CreateSingleGamePageModel(gameId, pd.GamePageParts.part_platforms.OrderId);
+            return PartialView("_Partial.GamePage.Plaforms", model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetGameGenres(long gameId)
+        {
+            PredefinedManager pd = new();
+            SingleGamePageModel model = await CreateSingleGamePageModel(gameId, pd.GamePageParts.part_genres.OrderId);
+            return PartialView("_Partial.GamePage.Genres", model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetGameLables(long gameId)
+        {
+            PredefinedManager pd = new();
+            SingleGamePageModel model = await CreateSingleGamePageModel(gameId, pd.GamePageParts.part_lables.OrderId);
+            return PartialView("_Partial.GamePage.Lables", model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetGameScreens(long gameId)
+        {
+            PredefinedManager pd = new();
+            SingleGamePageModel model = await CreateSingleGamePageModel(gameId, pd.GamePageParts.part_screens.OrderId);
+            SliderModel sliderModel = new();
+            sliderModel.Screenshots = model.Screenshots;
+            sliderModel.IsSingleGamePage = model.IsSingleGamePage;
+           
+            return PartialView("_Partial.Index.Slider", sliderModel);
+        }
+
         #endregion
 
         #region PUBLIC METHODS - POST
@@ -115,31 +158,51 @@ namespace GameStore.WEB.Controllers
             SingleGamePageModel model = new();
             model.IsSingleGamePage = true;
             model.Game = await _homeService.GetGameByIdAsync(gameId);
+            model.IsCanAddToShoppCart = await _homeService.IsCanAddToShoppingCart(gameId);
 
-            if (model.Game is not null)
-            {
-                model.Screenshots = model.Game.Screenshots;
-                model.Genres = model.Game.GameGanres;
-                model.Platforms = model.Game.GameKeys.DistinctBy(x=>x.PlatformId).Select(x=>x.Platform).ToList();
-            }
-            else
+            if (model.Game is  null)
             {
                 model.ErrorVM.Title = "Ой, что-то пошло не так";
                 model.ErrorVM.Message = "Не удалось найти игру. Попробуйте позже. Если проблема не исчезла, сообщите нам о проблеме! Сообщить можно на вкладке Поддержка.";
             }
+
             model.LastAction = GetInfoAboutLastActionFromTempData(TempData);
-            
 
             return model;
         }
         
-
         private async Task<HomeDataModel> CreateHomeDataModel(long gameId)
         {
             HomeDataModel model = new();
             model.Game = await _homeService.GetGameByIdForPartial(gameId);
             List<GamePlatformDTO> platforms = model.Game.GameKeys.DistinctBy(x => x.PlatformId).Select(x => x.Platform).ToList();
             model.SelectItemsPlatforms = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(platforms, "Id", "Name");
+            return model;
+        }
+
+        private async Task<SingleGamePageModel> CreateSingleGamePageModel(long gameId, int gamePagePartId)
+        {
+            PredefinedManager pd = new();
+            SingleGamePageModel model = new();
+            GameDTO game = await _homeService.GetGamePartsAsync(gameId,gamePagePartId);
+            
+            if(gamePagePartId == pd.GamePageParts.part_platforms.OrderId)
+            {
+                model.Platforms = game.GameKeys.DistinctBy(x => x.PlatformId).Select(x => x.Platform).ToList();
+            }
+            else if(gamePagePartId == pd.GamePageParts.part_genres.OrderId)
+            {
+                model.Genres = game.GameGanres.ToList();
+            }
+            else if (gamePagePartId == pd.GamePageParts.part_lables.OrderId)
+            {
+                model.Labels = game.GameLabels.ToList();
+            }
+            else if (gamePagePartId == pd.GamePageParts.part_screens.OrderId)
+            {
+                model.Screenshots = game.Screenshots.ToList();
+                model.IsSingleGamePage = true;
+            }
             return model;
         }
         #endregion

@@ -371,3 +371,59 @@ div.loginRegHeader {
 .card-header {
     background: #5a88ca;
 }
+
+.loader {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+    .loader div {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 8px solid transparent;
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spin 1.5s linear infinite;
+    }
+
+        .loader div:nth-child(2) {
+            border-top-color: #e74c3c;
+            animation-delay: -0.75s;
+        }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.content {
+    display: none;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Имитация загрузки контента */
+.loaded .loader {
+    display: none;
+}
+
+.loaded .content {
+    display: block;
+}

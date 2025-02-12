@@ -1,0 +1,8 @@
+﻿@model SingleGamePageModel
+
+<div class="d-flex flex-wrap mtxt">
+    @foreach (var pl in Model.Platforms)
+    {
+        <div class="bg-platform m-1  p-1 text-white">@pl.Name</div>
+    }
+</div>

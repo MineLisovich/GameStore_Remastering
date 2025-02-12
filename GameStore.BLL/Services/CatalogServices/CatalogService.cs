@@ -35,7 +35,7 @@ namespace GameStore.BLL.Services.CatalogServices
             }
             else
             {
-                games = await sqlQuery.Where(x => x.Name.ToLower().Contains(RepName(nameGame)) && x.IsVisible == true && x.IsDeleted == false).ToListAsync();
+                games = await sqlQuery.Where(x => x.Name.ToUpper().Contains(RepName(nameGame)) && x.IsVisible == true && x.IsDeleted == false).ToListAsync();
             }
 
 
@@ -131,7 +131,7 @@ namespace GameStore.BLL.Services.CatalogServices
         #region PRIVATE METHODS
         private string RepName(string name)
         {
-            return name.ToLower().Trim();
+            return name.ToUpper().Trim();
         }
         #endregion
     }

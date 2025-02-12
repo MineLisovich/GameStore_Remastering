@@ -16,6 +16,7 @@ namespace GameStore.BLL.Predefined
         private PdGenres _genres;
         private PdTypesSelectedGames _typesSelectedGames;
         private PdPaymentMethods _paymentMethods;
+        private PdGamePageParts _gamePageParts;
 
 
         /// <summary>
@@ -107,6 +108,19 @@ namespace GameStore.BLL.Predefined
                 return _paymentMethods;
             }
         }
+
+        public PdGamePageParts GamePageParts
+        {
+            get
+            {
+                if (_gamePageParts is null)
+                {
+                    _gamePageParts = new PdGamePageParts();
+                }
+                return _gamePageParts;
+            }
+        }
+
 
     }
 }

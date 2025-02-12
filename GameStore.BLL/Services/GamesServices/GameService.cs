@@ -33,7 +33,7 @@ namespace GameStore.BLL.Services.GamesServices
             }
             else
             {
-                games = await sqlQuery.Where(x => x.Name.ToLower().Contains(RepName(nameGame)) && x.IsDeleted == false).ToListAsync();
+                games = await sqlQuery.Where(x => x.Name.ToUpper().Contains(RepName(nameGame)) && x.IsDeleted == false).ToListAsync();
             }
             return _mapper.Map<List<GameDTO>>(games);
         }
@@ -263,7 +263,7 @@ namespace GameStore.BLL.Services.GamesServices
         #region PRIVATE METHODS
         private string RepName(string name)
         {
-            return name.ToLower().Trim();
+            return name.ToUpper().Trim();
         }
         private byte[] UploadPoster(IFormFile uploadPoster)
         {
