@@ -29,12 +29,21 @@ namespace GameStore.WEB.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task <IActionResult> LoadGamesData(string nameGame = "", int pageNumber = 1, int pageSize = 50)
+        public async Task <IActionResult> LoadGamesData(string nameGame = "", int pageNumber = 1, int pageSize = 50, bool isSearch = false)
         {
             CatalogModel model = new();
             model.Games = await _catalogService.GetGamesAsync(nameGame, pageNumber, pageSize);
             model.HasMoreGames = model.Games.Count == pageSize; // Проверяем, есть ли еще игры
-            return PartialView("_Partial.Catalog.Games", model);
+
+            if(isSearch is false)
+            {
+                return PartialView("_Partial.Catalog.Games", model);
+            }
+            else
+            {
+                return PartialView("_Partial.Catalog.Games.Search", model);
+            }
+        
         }
         #endregion
 

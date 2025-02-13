@@ -11,8 +11,12 @@ var pageNumber = 1;
 var pageSize = 6;
 
 //Вывод игры при загрузке страницы + если был использован поиск
-function AjaxActionGetGamesData(nameGame, pageNumber, pageSize) {
+function AjaxActionGetGamesData(nameGame, pageNumber, pageSize, isSearch = false) {
     var url = GetUrlForLoadGameData("search");
+
+    var boxId = (isSearch == true) ? "js-showSearchGame" : "js-gemes";
+    console.log(boxId);
+
     //отправляем запрос
     $.ajax({
         cache: false,
@@ -21,15 +25,21 @@ function AjaxActionGetGamesData(nameGame, pageNumber, pageSize) {
         data: {
             nameGame: nameGame,
             pageNumber: pageNumber,
-            pageSize: pageSize
+            pageSize: pageSize,
+            isSearch: isSearch
         },
         dataType: "html",
         success: function (data) {
-            if (nameGame != "") {
-                $("#js-gemes").empty();
+ 
+            if (isSearch == false) {
+                ToggleLoadingView(false);
+                $("#" + boxId).append(data);
             }
-            ToggleLoadingView(false);
-            $("#js-gemes").append(data);
+            else {
+             
+                $("#"+boxId).empty().append(data);
+            }
+
             SetSettings();
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -52,11 +62,13 @@ function GameBTNControll() {
         var inpdata = $("#searchGame").val();
         if (inpdata != "") {
             $('#showSearch-area').removeClass('d-none');
+            AjaxActionGetGamesData(inpdata, 0, 0, true);
         }
         else {
             $('#showSearch-area').addClass('d-none');
+            $('#js-showSearchGame').empty();
         }
-      //  AjaxActionGetGamesData(inpdata);
+      
     });
 
     //------ AREA FILTER GAME ------

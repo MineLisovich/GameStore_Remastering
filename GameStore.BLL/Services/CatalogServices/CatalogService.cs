@@ -37,9 +37,7 @@ namespace GameStore.BLL.Services.CatalogServices
             }
             else
             {
-                games = await sqlQuery.Where(x => x.Name.ToUpper().Contains(RepName(nameGame)) && x.IsVisible == true && x.IsDeleted == false)
-                      .Skip((pageNumber - 1) * pageSize)
-                              .Take(pageSize).ToListAsync();
+                games = await sqlQuery.Where(x => x.Name.ToUpper().Contains(RepName(nameGame)) && x.IsVisible == true && x.IsDeleted == false).ToListAsync();
             }
 
 

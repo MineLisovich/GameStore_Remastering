@@ -442,6 +442,6 @@ div.loginRegHeader {
     font-size: 1.2em; /* Увеличиваем размер шрифта */
     margin-bottom: 1.25rem;
     z-index: 1000;
-    max-height: 300px; /* Максимальная высота */
+    max-height: 500px; /* Максимальная высота */
     overflow-y: auto; /* Добавляем скролл, если контент превышает высоту */
 }
