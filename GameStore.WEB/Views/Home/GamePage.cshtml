@@ -3,13 +3,6 @@
 @{
     ViewData["Title"] = (Model.Game is null) ? Model.ErrorVM.Title : Model.Game.Name;
     string nodata = "Нет данных";
-    SliderModel sliderModel = new();
-    if (Model.Screenshots.Count() > 0)
-    {
-        sliderModel.IsSingleGamePage = Model.IsSingleGamePage;
-        sliderModel.Screenshots = Model.Screenshots;
-    }
-
 }
 
 @section js {
@@ -23,6 +16,10 @@
             //НАСТРОЙКА ПОВЕДЕНИЯ МОДАЛОК: Setting modal Create & Edit
             AddHandlerShownModalForCreateEditModal("modalAddToShoppingCart", "addToShoppingCartForm");
             AddToShpCrt();
+            LoadGamePlatforms();
+            LoadGameGenres();
+            LoadGameLables();
+            LoadGameScreens();
         });
 
         // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
@@ -32,6 +29,18 @@
                 case "edit":
                     url = '@Url.Action("GetPartialWorkOnData", "Home")';
                     break;
+                case "getPlatforms":
+                    url = '@Url.Action("GetGamePlatforms", "Home")';
+                    break;
+                case "getGenres":
+                    url = '@Url.Action("GetGameGenres", "Home")';
+                    break;
+                case "getLables":
+                    url = '@Url.Action("GetGameLables", "Home")';
+                    break;
+                case "getScreens":
+                    url = '@Url.Action("GetGameScreens", "Home")';
+                    break;
             }
             return url;
         }
@@ -39,17 +48,61 @@
         // ШАГ 3. ВЫЗОВ ДОПОЛНИТЕЛЬНЫХ ФУНКЦИЙ В ГЛАВНОМ AJAX МЕТОДЕ
         function SettingBehaviorOfModalWindow(boxId, section) { }
 
-    </script>
-    <script>
         $("#showvideo").off("click").on("click", function () {
             $("#modalGameVideo").modal("show");
         });
+
+        function LoadGamePlatforms(){
+           var sectionForUrl = "getPlatforms";
+           var sectionData = "js-game-platforms";
+           AjaxActionGetOtherGameData(sectionForUrl, sectionData);
+        }
+
+        function LoadGameGenres(){
+           var sectionForUrl = "getGenres";
+           var sectionData = "js-game-genres";
+           AjaxActionGetOtherGameData(sectionForUrl, sectionData);
+        }
+
+        function LoadGameLables(){
+           var sectionForUrl = "getLables";
+           var sectionData = "js-game-lables";
+           AjaxActionGetOtherGameData(sectionForUrl, sectionData);
+        }
+
+        function LoadGameScreens(){
+           var sectionForUrl = "getScreens";
+           var sectionData = "js-game-screens";
+           AjaxActionGetOtherGameData(sectionForUrl, sectionData);
+        }
+
+        function AjaxActionGetOtherGameData(sectionForUrl, sectionData)
+        {
+            var gameId = $('#Game_Id').val();
+            var url = GetURLForAjaxByActionType(sectionForUrl);
+
+             $.ajax({
+                cache: false,
+                type: "GET",
+                url: url,
+                data: {gameId: gameId},
+                dataType: "html",
+                success: function (data) {
+                    $('.'+sectionData).empty().append(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Ошибка загрузки модального окна!!!');
+                }
+            });
+        }
+
     </script>
+
 }
 
 
 <div class="row mt-5 mb-3">
-
+    <input readonly asp-for="Game.Id" hidden />
     <div class="col-md-3">
         <div class="gamePageMainInfo singlegame-area borderS p-2 text-center ">
             <div class="">
@@ -78,16 +131,16 @@
                     }
                     else
                     {
-                        @((Model.Game.GameKeys.Count() > 0) ? Model.Game.Price : "")
+                        @((Model.IsCanAddToShoppCart is true) ? Model.Game.Price : "")
                     }
-                    @((Model.Game.GameKeys.Count() > 0) ? "BYN" : "")
+                    @((Model.IsCanAddToShoppCart is true) ? "BYN" : "")
                 </div>
 
                 @if (User.Identity.IsAuthenticated)
                 {
                     <div class="btn-group mx-auto mb-3  float-end btn-lg">
                         <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
-                        @if (Model.Game.GameKeys.Count() > 0)
+                        @if (Model.IsCanAddToShoppCart is true)
                         {
                             <button type="button" data-gameId="@Model.Game.Id" class="btn btn-success btn-lg btn-add-shopcart-js">В Корзину</button>
                         }
@@ -111,35 +164,17 @@
         </div>
 
         <div class="gamePageInfo mt-3 p-2 borderS">
-            <div class="">
-                <div class="d-flex flex-wrap mtxt">
-                    @foreach (var pl in Model.Platforms)
-                    {
-                        <div class="bg-platform m-1  p-1 text-white">@pl.Name</div>
-                    }
-                </div>
+            <div class="js-game-platforms">
             </div>
         </div>
 
         <div class="gamePageInfo mt-3 p-2 borderS">
-            <div class="">
-                <div class="d-flex flex-wrap mtxt">
-                    @foreach (var gn in Model.Genres)
-                    {
-                        <div class="bg-ganre m-1 p-1 text-white">@gn.Name</div>
-                    }
-                </div>
+            <div class="js-game-genres">
             </div>
         </div>
 
         <div class="gamePageInfo mt-3 p-2 borderS">
-            <div class="">
-                <div class="d-flex flex-wrap mtxt">
-                    @foreach (var l in Model.Game.GameLabels)
-                    {
-                        <div class="bg-glables m-1 p-1 text-white">@l.Name</div>
-                    }
-                </div>
+            <div class="js-game-lables">
             </div>
         </div>
 
@@ -163,13 +198,8 @@
             </div>
         </div>
 
-        @if (Model.Screenshots.Count() > 0)
-        {
-            <div class="row">
-                @await Html.PartialAsync("_Partial.Index.Slider", sliderModel)
-            </div>
-        }
-
+        <div class="row js-game-screens">
+        </div>
 
         <div class="row mt-2 singlegame-area mt-3 mb-3">
             <div class="mtxt">

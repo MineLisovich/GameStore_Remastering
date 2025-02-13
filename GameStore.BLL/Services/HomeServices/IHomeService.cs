@@ -11,5 +11,8 @@ namespace GameStore.BLL.Services.HomeServices
         Task<GameDTO> GetGameByIdForPartial(long gameId);
 
         Task<string> GetUserInfoForHeader(string userEmail);
+
+        Task<GameDTO> GetGamePartsAsync(long gameId, int partId);
+        Task<bool> IsCanAddToShoppingCart(long gameId);
     }
 }

@@ -9,3 +9,12 @@ function InitializationSelect2(conteiner) {
         closeOnSelect: true,
     });
 }
+
+function ToggleLoadingView(isLoading) {
+    if (isLoading == true) {
+        $("#js-loading").addClass("loader");
+    }
+    else {
+        $("#js-loading").removeClass("loader").addClass("loaded");
+    }
+}

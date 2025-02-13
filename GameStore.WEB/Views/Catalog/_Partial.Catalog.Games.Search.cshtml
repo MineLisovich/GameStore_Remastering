@@ -1,0 +1,54 @@
+﻿@model CatalogModel
+
+
+@foreach (var g in Model.Games)
+{
+    <div class="ordergameinfo d-flex shadow">
+        <div class="s_gameposter">
+            @Html.Raw("<img src=\"data:image/jpeg;base64,"
+                     + Convert.ToBase64String(g.Poster) + "\" />")
+        </div>
+        <div class="s_gameinfo">
+            <h4><a asp-area="" asp-controller="Home" asp-action="GamePage" asp-route-gameId="@g.Id">@g.Name</a></h4>
+            <div class="m-1">
+                <p>
+                    @(g.Description.Length > 50 ? g.Description.Substring(0, 50) + "..." : g.Description)
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="">
+                    <div class="m-1 p-1">
+                        @if (g.IsShare is true)
+                        {
+                            <s> @g.Price</s>  @g.SharePrice
+                        }
+                        else
+                        {
+                            @g.Price
+                        } BYN
+                    </div>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="btn-group mx-auto mb-3">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Добавить в список желаемого"><i class="fas fa-star"></i></button>
+                            @if (g.GameKeys.Count() > 0)
+                            {
+                                <button type="button" data-gameId="@g.Id" class="btn btn-success btn-add-shopcart-js">В Корзину</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success" disabled>Нет в наличии</button>
+                            }
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="row">
+              
+            </div>
+        </div>
+    </div>
+}

@@ -71,5 +71,6 @@ namespace GameStore.WEB.Models.HomeModels.CatalogModels
         /// Результат действий пользователя
         /// </summary>
         public UserActionResult LastAction { get; set; } = new();
+        public bool HasMoreGames { get; set; }
     }
 }

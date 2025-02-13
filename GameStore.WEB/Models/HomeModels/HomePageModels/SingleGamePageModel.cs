@@ -10,5 +10,8 @@ namespace GameStore.WEB.Models.HomeModels.HomePageModels
         public List<GamePlatformDTO> Platforms { get; set; } = new();
 
         public List<GenreDTO> Genres { get; set; } = new();
+        public List<GameLabelDTO> Labels { get; set; } = new();
+
+        public bool IsCanAddToShoppCart { get; set; }
     }
 }

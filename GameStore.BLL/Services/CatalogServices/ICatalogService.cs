@@ -6,7 +6,7 @@ namespace GameStore.BLL.Services.CatalogServices
 {
     public interface ICatalogService
     {
-        Task<List<GameDTO>> GetGamesAsync(string nameGame);
+        Task<List<GameDTO>> GetGamesAsync(string nameGame, int pageNumber, int pageSize);
 
         Task<List<GameDTO>> GetFromFilteredGamesAsync(FilterGamesRequest fgr);
 

@@ -27,7 +27,7 @@ using GameStore.BLL.Services.CatalogServices;
 var builder = WebApplication.CreateBuilder(args);
 
 //Database
-string? connectionString = builder.Configuration.GetConnectionString("DevConnection");
+string connectionString = builder.Configuration.GetConnectionString("DevConnection");
 builder.Services.AddDbContext<GsDbContext>(config => config.UseNpgsql(connectionString, x => x.MigrationsAssembly("GameStore.DAL")));
 
 //Config ASP engine

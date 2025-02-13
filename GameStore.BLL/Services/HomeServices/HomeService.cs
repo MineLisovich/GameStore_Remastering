@@ -5,7 +5,6 @@ using GameStore.DAL.Domain;
 using GameStore.DAL.Entities.Games;
 using GameStore.DAL.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace GameStore.BLL.Services.HomeServices
 {
@@ -13,13 +12,11 @@ namespace GameStore.BLL.Services.HomeServices
     {
         private readonly GsDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
 
-        public HomeService(GsDbContext dbContext, IMapper mapper, IMemoryCache cache)
+        public HomeService(GsDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _cache = cache;
         }
 
         public async Task<List<GameDTO>> GetGamesWithSelectedTypeAsync(int selectedId)
@@ -53,13 +50,16 @@ namespace GameStore.BLL.Services.HomeServices
         {
             Game game = await _dbContext.Games.Where(x => x.Id == gameId && x.IsDeleted == false && x.IsVisible == true)
                                               .Include(d => d.Developer)
-                                              .Include(p => p.GameKeys).ThenInclude(x => x.Platform)
-                                              .Include(g => g.GameGanres)
-                                              .Include(l => l.GameLabels)
-                                              .Include(s => s.Screenshots)
                                               .FirstOrDefaultAsync();
             return _mapper.Map<GameDTO>(game);
         }
+
+        public async Task<bool> IsCanAddToShoppingCart(long gameId)
+        {
+            PredefinedManager pd = new();
+            return await _dbContext.GameKeys.AnyAsync(x => x.GameId == gameId && x.StatusId == pd.GameKeyStatuses.active.Id);
+        }
+        
 
         public async Task<GameDTO> GetGameByIdForPartial(long gameId)
         {
@@ -76,6 +76,32 @@ namespace GameStore.BLL.Services.HomeServices
             AppUser user = await _dbContext.AppUsers.Where(x => x.Email == userEmail).FirstOrDefaultAsync();
             if(user is not null) { userData = $"{user.CustomUserName}: {user.Balance} BYN"; }
             return userData;
+        }
+
+        public async Task<GameDTO> GetGamePartsAsync(long gameId, int partId)
+        {
+            PredefinedManager pd = new();
+            IQueryable<Game> sql = _dbContext.Games.Where(x => x.Id == gameId && x.IsDeleted == false && x.IsVisible == true);
+            if (partId == pd.GamePageParts.part_platforms.OrderId)
+            {
+                sql = sql.Include(p => p.GameKeys).ThenInclude(x => x.Platform);
+            }
+            else if (partId == pd.GamePageParts.part_genres.OrderId)
+            {
+                sql = sql.Include(g => g.GameGanres);
+            }
+            else if (partId == pd.GamePageParts.part_lables.OrderId)
+            {
+                sql = sql.Include(l => l.GameLabels);
+            }
+            else if (partId == pd.GamePageParts.part_screens.OrderId)
+            {
+                sql = sql.Include(s => s.Screenshots);
+            }
+
+            Game game = await sql.FirstOrDefaultAsync();
+
+            return _mapper.Map<GameDTO>(game);
         }
     }
 }

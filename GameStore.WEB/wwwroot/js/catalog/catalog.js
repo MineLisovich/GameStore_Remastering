@@ -7,18 +7,39 @@ var labelIds = [];
 var platformIds = [];
 var isShare = false;
 
+var pageNumber = 1;
+var pageSize = 6;
+
 //Вывод игры при загрузке страницы + если был использован поиск
-function AjaxActionGetGamesData(nameGame) {
+function AjaxActionGetGamesData(nameGame, pageNumber, pageSize, isSearch = false) {
     var url = GetUrlForLoadGameData("search");
+
+    var boxId = (isSearch == true) ? "js-showSearchGame" : "js-gemes";
+    console.log(boxId);
+
     //отправляем запрос
     $.ajax({
         cache: false,
         type: "GET",
         url: url,
-        data: { nameGame: nameGame },
+        data: {
+            nameGame: nameGame,
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+            isSearch: isSearch
+        },
         dataType: "html",
         success: function (data) {
-            $("#js-gemes").empty().append(data);
+ 
+            if (isSearch == false) {
+                ToggleLoadingView(false);
+                $("#" + boxId).append(data);
+            }
+            else {
+             
+                $("#"+boxId).empty().append(data);
+            }
+
             SetSettings();
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -29,11 +50,25 @@ function AjaxActionGetGamesData(nameGame) {
 
 
 function GameBTNControll() {
+    $("#loadMoreBtn").on("click", function () {
+        ToggleLoadingView(true);
+        pageNumber++;
+        AjaxActionGetGamesData("", pageNumber, pageSize);
+    });
+
 
     //Поиск игры по наименованию
     $("#searchGame").on("input", function () {
         var inpdata = $("#searchGame").val();
-        AjaxActionGetGamesData(inpdata);
+        if (inpdata != "") {
+            $('#showSearch-area').removeClass('d-none');
+            AjaxActionGetGamesData(inpdata, 0, 0, true);
+        }
+        else {
+            $('#showSearch-area').addClass('d-none');
+            $('#js-showSearchGame').empty();
+        }
+      
     });
 
     //------ AREA FILTER GAME ------
@@ -48,60 +83,46 @@ function GameBTNControll() {
     var input_isShare = $("#IsShare");
 
     //Сбор данных и отпрвка в ajax
-
-    //ЖАНРЫ
-    $(input_genre).on('change', function () {
+    $('#js-filterBtn').off('click').on('click', function () {
         genreIds = [];
-        genreIds = $(this).val();
-        AjaxActionFilterGames();
-    });
-
-    //РАЗРАБЫ
-    $(input_develop).on('change', function () {
+        genreIds = $(input_genre).val();
         developerIds = [];
-        developerIds = $(this).val();
-        AjaxActionFilterGames();
-    });
+        developerIds = $(input_develop).val();
 
-    //ЦЕНА ОТ И ДО
-    $(input_price_from).on('input', function () {
-        price_from = 0;
-        price_from = $(this).val();
-        if (price_from == "") {
-            price_from = 0;
-        }
-        AjaxActionFilterGames();
-    });
-    $(input_price_to).on('input', function () {
-       
-        price_to = $(this).val();
-        if (price_to == "") {
-            price_to = 0;
-        } 
-        AjaxActionFilterGames();
-    });
+        price_from = $(input_price_from).val();
+        price_to = $(input_price_to).val();
 
-    //ОСОБЕННОСТИ ИГРЫ
-    $(input_lable).on('change', function () {
         labelIds = [];
-        labelIds = $(this).val();
-        AjaxActionFilterGames();
-    });
-    //ПЛАТФОРМЫ
-    $(input_platform).on('change', function () {
+        labelIds = $(input_lable).val();
         platformIds = [];
-        platformIds = $(this).val();
-        AjaxActionFilterGames();
-    });
+        platformIds = $(input_platform).val();
 
-    //СКИДОЧНЫЕ ИГРЫ
-    $(input_isShare).on('change', function () {
-        if ($(this).is(':checked')) {
+        if ($(input_isShare).is(':checked')) {
             isShare = true;
         } else {
-         
+
             isShare = false;
         }
+        AjaxActionFilterGames();
+    });
+
+    $('#js-clearfilterBtn').off('click').on('click', function () {
+        genreIds = [];
+        developerIds = [];
+        price_from = 0;
+        price_to = 0;
+        labelIds = [];
+        platformIds = [];
+        isShare = false;
+
+        $(input_genre).val(null).trigger('change');
+        $(input_develop).val(null).trigger('change');
+        $(input_price_from).val('0');
+        $(input_price_to).val('0');
+        $(input_lable).val(null).trigger('change');
+        $(input_platform).val(null).trigger('change');
+        $(input_isShare).prop('checked', false); 
+        
         AjaxActionFilterGames();
     });
 
