@@ -445,3 +445,55 @@ div.loginRegHeader {
     max-height: 500px; /* Максимальная высота */
     overflow-y: auto; /* Добавляем скролл, если контент превышает высоту */
 }
+
+.custom-progress {
+    height: 0.938rem; /* Уменьшаем высоту прогресс-бара */
+    border-radius: 0.625rem; /* Уменьшаем радиус скругления */
+    overflow: hidden;
+}
+
+    .custom-progress .progress-bar-positive {
+        background-color: #28a745; /* Зелёный цвет */
+    }
+
+    .custom-progress .progress-bar-negative {
+        background-color: #dc3545; /* Красный цвет */
+    }
+
+.legend {
+    display: block;
+    justify-content: center;
+    margin-top: 0.625rem; /* Уменьшаем отступ сверху */
+    font-size: 1.2rem; /* Уменьшаем размер шрифта */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 0.938rem; /* Уменьшаем отступ между элементами */
+}
+
+.legend-circle {
+    width: 0.938rem; /* Уменьшаем размер кружка */
+    height: 0.938rem;
+    border-radius: 50%;
+    margin-right: 0.938rem;
+}
+
+    .legend-circle.positive {
+        background-color: #28a745; /* Зелёный цвет */
+    }
+
+    .legend-circle.negative {
+        background-color: #dc3545; /* Красный цвет */
+    }
+
+.revUserAvatar img {
+    width: 100px;
+    height: 100px;
+}
+
+.reviewsTxt{
+    font-size:15px;
+    text-align:justify;
+}
