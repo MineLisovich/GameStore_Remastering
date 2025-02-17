@@ -150,6 +150,9 @@ namespace GameStore.DAL.Entities.Games
         /// </summary>
         public long CountSold { get; set; }
 
+        /// <summary>
+        /// Отзывы
+        /// </summary>
         public List<GameReview> GameReviews { get; set; } = new();  
     }
 }

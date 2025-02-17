@@ -192,5 +192,10 @@ namespace GameStore.BLL.DTO.Games
         /// Количество проданных копий
         /// </summary>
         public long CountSold { get; set; }
+
+        /// <summary>
+        /// Отзывы
+        /// </summary>
+        public List<GameReviewDTO> GameReviews { get; set; } = new();
     }
 }
