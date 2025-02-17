@@ -1,5 +1,4 @@
-﻿
-using GameStore.DAL.Entities.Dictionaries;
+﻿using GameStore.DAL.Entities.Dictionaries;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameStore.DAL.Entities.Games
@@ -151,5 +150,6 @@ namespace GameStore.DAL.Entities.Games
         /// </summary>
         public long CountSold { get; set; }
 
+        public List<GameReview> GameReviews { get; set; } = new();  
     }
 }

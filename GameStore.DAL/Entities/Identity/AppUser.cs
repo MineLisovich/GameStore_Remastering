@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using GameStore.DAL.Entities.Games;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.DAL.Entities.Identity
@@ -47,5 +48,10 @@ namespace GameStore.DAL.Entities.Identity
         /// Корзина
         /// </summary>
         public List<ShoppingCart> ShoppingCarts { get; set; } = new();
+
+        /// <summary>
+        /// Отзывы пользователя
+        /// </summary>
+        public List<GameReview> UserGameReview { get; set; } = new();
     }
 }
