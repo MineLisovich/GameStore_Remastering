@@ -1,0 +1,20 @@
+﻿using AutoMapper;
+using GameStore.BLL.DTO.Games;
+using GameStore.BLL.Infrastrcture.Singletons;
+using GameStore.DAL.Entities.Games;
+
+namespace GameStore.BLL.Infrastrcture.AutoMapperResolvers.GameResolvers.DALtoBLL
+{
+    public class GameReviewDTO_DateModifiedResolver : IValueResolver<GameReview, GameReviewDTO, DateTime?>
+    {
+        public DateTime? Resolve(GameReview source, GameReviewDTO dest, DateTime? destMember, ResolutionContext context)
+        {
+            if(source.DateModified.HasValue)
+            {
+                ConvectorUtcToGmtPlus3Zone toGmt = ConvectorUtcToGmtPlus3Zone.GetInstance();
+                return toGmt.ConvectorDate(source.DateModified.Value);
+            }
+            return null;  
+        }
+    }
+}

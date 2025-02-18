@@ -147,7 +147,7 @@ namespace GameStore.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games_Games",
+                name: "Games",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -177,9 +177,9 @@ namespace GameStore.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games_Games", x => x.Id);
+                    table.PrimaryKey("PK_Games", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_Games_Dictionaries_GameDevelopers_DeveloperId",
+                        name: "FK_Games_Dictionaries_GameDevelopers_DeveloperId",
                         column: x => x.DeveloperId,
                         principalTable: "Dictionaries_GameDevelopers",
                         principalColumn: "Id",
@@ -312,9 +312,9 @@ namespace GameStore.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GameGameLabel_Games_Games_GamesId",
+                        name: "FK_GameGameLabel_Games_GamesId",
                         column: x => x.GamesId,
-                        principalTable: "Games_Games",
+                        principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -336,9 +336,40 @@ namespace GameStore.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GameGenre_Games_Games_GamesId",
+                        name: "FK_GameGenre_Games_GamesId",
                         column: x => x.GamesId,
-                        principalTable: "Games_Games",
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Games_Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    GameId = table.Column<long>(type: "bigint", nullable: false),
+                    Review = table.Column<string>(type: "text", nullable: false),
+                    DateCreate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    isPositive = table.Column<bool>(type: "boolean", nullable: false),
+                    isDelete = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_Reviews_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_Reviews_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -357,9 +388,9 @@ namespace GameStore.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Games_Screenshots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_Screenshots_Games_Games_GameId",
+                        name: "FK_Games_Screenshots_Games_GameId",
                         column: x => x.GameId,
-                        principalTable: "Games_Games",
+                        principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -392,9 +423,9 @@ namespace GameStore.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Games_Keys_Games_Games_GameId",
+                        name: "FK_Games_Keys_Games_GameId",
                         column: x => x.GameId,
-                        principalTable: "Games_Games",
+                        principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -402,6 +433,28 @@ namespace GameStore.DAL.Migrations
                         column: x => x.ShoppingCartId,
                         principalTable: "Users_ShoppingCarts",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "History_GameReviews",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReviewId = table.Column<long>(type: "bigint", nullable: false),
+                    OldValue = table.Column<string>(type: "text", nullable: true),
+                    NewValue = table.Column<string>(type: "text", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_History_GameReviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_History_GameReviews_Games_Reviews_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Games_Reviews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -553,8 +606,8 @@ namespace GameStore.DAL.Migrations
                 column: "GamesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_Games_DeveloperId",
-                table: "Games_Games",
+                name: "IX_Games_DeveloperId",
+                table: "Games",
                 column: "DeveloperId");
 
             migrationBuilder.CreateIndex(
@@ -578,9 +631,24 @@ namespace GameStore.DAL.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Games_Reviews_GameId",
+                table: "Games_Reviews",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_Reviews_UserId",
+                table: "Games_Reviews",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Games_Screenshots_GameId",
                 table: "Games_Screenshots",
                 column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_History_GameReviews_ReviewId",
+                table: "History_GameReviews",
+                column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -630,6 +698,9 @@ namespace GameStore.DAL.Migrations
                 name: "Games_Screenshots");
 
             migrationBuilder.DropTable(
+                name: "History_GameReviews");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -648,7 +719,10 @@ namespace GameStore.DAL.Migrations
                 name: "Users_ShoppingCarts");
 
             migrationBuilder.DropTable(
-                name: "Games_Games");
+                name: "Games_Reviews");
+
+            migrationBuilder.DropTable(
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Users");

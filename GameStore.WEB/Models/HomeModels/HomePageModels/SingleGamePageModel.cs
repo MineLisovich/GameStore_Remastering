@@ -13,5 +13,11 @@ namespace GameStore.WEB.Models.HomeModels.HomePageModels
         public List<GameLabelDTO> Labels { get; set; } = new();
 
         public bool IsCanAddToShoppCart { get; set; }
+
+        public List<GameReviewDTO> GameReviews { get; set; } = new();
+
+        public bool HasMoreReview { get; set; }
+
+        public GameReviewDTO GameReview { get; set; }
     }
 }

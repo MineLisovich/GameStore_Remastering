@@ -1,0 +1,33 @@
+﻿@model SingleGamePageModel
+
+<div class="modal fade modal-js" id="modalEditReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Редактирование отзыва</h5>
+            </div>
+
+            <div class="modal-body">
+                <form id="EditReviewForm" asp-area="" asp-controller="Home" asp-action="EditReview" method="post">
+
+                    <input readonly asp-for="GameReview.Id" hidden />
+                    <input readonly asp-for="GameReview.GameId" hidden />
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Ваш отзыв</label>
+                            <textarea asp-for="GameReview.Review" class="form-control w-100" rows="4" placeholder="Оставьте свой отзыв"></textarea>
+                            <span asp-validation-for="GameReview.Review" class="validError"></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="removeEditReviewModal" class="btn btn-secondary" data-bs-dismiss="modal">Назад</button>
+                        <button type="submit" class="btn btn-outline-success">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+           
+        </div>
+    </div>
+</div>

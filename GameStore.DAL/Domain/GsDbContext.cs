@@ -1,5 +1,6 @@
 ﻿using GameStore.DAL.Entities.Dictionaries;
 using GameStore.DAL.Entities.Games;
+using GameStore.DAL.Entities.History;
 using GameStore.DAL.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,10 +26,14 @@ namespace GameStore.DAL.Domain
         public DbSet<Game> Games { get; set; }
         public DbSet<GameKey> GameKeys { get; set; }
         public DbSet<GameScreenshot> GameScreenshots { get; set; }
+        public DbSet<GameReview> GameReviews { get; set; }
 
         //-- Identity
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+        //-- History
+        public DbSet<HistoryGameReviews> HistoryGameReviews { get; set; }
 
         #endregion
 
@@ -46,13 +51,17 @@ namespace GameStore.DAL.Domain
             builder.Entity<GameKeyStatus>().ToTable("Dictionaries_GameKeyStatuses");
 
             //-- Games
-            builder.Entity<Game>().ToTable("Games_Games");
+            builder.Entity<Game>().ToTable("Games");
             builder.Entity<GameKey>().ToTable("Games_Keys");
             builder.Entity<GameScreenshot>().ToTable("Games_Screenshots");
+            builder.Entity<GameReview>().ToTable("Games_Reviews");
 
-            //--Identity
+            //-- Identity
             builder.Entity<AppUser>().ToTable("Users");
             builder.Entity<ShoppingCart>().ToTable("Users_ShoppingCarts");
+
+            //-- History
+            builder.Entity<HistoryGameReviews>().ToTable("History_GameReviews");
             #endregion
 
             #region SEED DATA

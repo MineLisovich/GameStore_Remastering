@@ -566,7 +566,7 @@ namespace GameStore.DAL.Migrations
 
                     b.HasIndex("DeveloperId");
 
-                    b.ToTable("Games_Games", (string)null);
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Games.GameKey", b =>
@@ -606,6 +606,46 @@ namespace GameStore.DAL.Migrations
                     b.ToTable("Games_Keys", (string)null);
                 });
 
+            modelBuilder.Entity("GameStore.DAL.Entities.Games.GameReview", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("isPositive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Games_Reviews", (string)null);
+                });
+
             modelBuilder.Entity("GameStore.DAL.Entities.Games.GameScreenshot", b =>
                 {
                     b.Property<long>("Id")
@@ -628,6 +668,33 @@ namespace GameStore.DAL.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Games_Screenshots", (string)null);
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.History.HistoryGameReviews", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NewValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnType("text");
+
+                    b.Property<long>("ReviewId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("History_GameReviews", (string)null);
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Identity.AppUser", b =>
@@ -971,6 +1038,25 @@ namespace GameStore.DAL.Migrations
                     b.Navigation("ShoppingCart");
                 });
 
+            modelBuilder.Entity("GameStore.DAL.Entities.Games.GameReview", b =>
+                {
+                    b.HasOne("GameStore.DAL.Entities.Games.Game", "Game")
+                        .WithMany("GameReviews")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameStore.DAL.Entities.Identity.AppUser", "User")
+                        .WithMany("UserGameReview")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GameStore.DAL.Entities.Games.GameScreenshot", b =>
                 {
                     b.HasOne("GameStore.DAL.Entities.Games.Game", "Game")
@@ -980,6 +1066,17 @@ namespace GameStore.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.History.HistoryGameReviews", b =>
+                {
+                    b.HasOne("GameStore.DAL.Entities.Games.GameReview", "GameReview")
+                        .WithMany("HistoryGameReviews")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GameReview");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Identity.ShoppingCart", b =>
@@ -1048,12 +1145,21 @@ namespace GameStore.DAL.Migrations
                 {
                     b.Navigation("GameKeys");
 
+                    b.Navigation("GameReviews");
+
                     b.Navigation("Screenshots");
+                });
+
+            modelBuilder.Entity("GameStore.DAL.Entities.Games.GameReview", b =>
+                {
+                    b.Navigation("HistoryGameReviews");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("ShoppingCarts");
+
+                    b.Navigation("UserGameReview");
                 });
 
             modelBuilder.Entity("GameStore.DAL.Entities.Identity.ShoppingCart", b =>
