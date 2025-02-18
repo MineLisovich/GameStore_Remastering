@@ -12,10 +12,10 @@
             <div class="row">
                 <form>
                     <div class="form-group">
-                        <textarea id="rev" class="form-control w-100" rows="4" placeholder="Оставьте свой отзыв"></textarea>
+                        <textarea id="js-review" class="form-control w-100" rows="4" placeholder="Оставьте свой отзыв"></textarea>
                     </div>
                     <div class="form-group d-flex justify-content-end">
-                        <button type="button" class="btn btn-lg btn-outline-primary">Отправить</button>
+                        <button id="js-sendReviewBtn" type="button" class="btn btn-lg btn-outline-primary">Отправить</button>
                     </div>
                 </form>
             </div>
@@ -24,12 +24,12 @@
         
         @*ОБЛАСТЬ. Сами отзывы *@
         <div class="row mt-5">
-            <div class="js-reviews">
-                @*Врмеменно - потом удалить*@
-                @await Html.PartialAsync("_Partial.GamePage.Reviews") 
+            <div id="js-reviewsArea">
+             
             </div>
+            @await Html.PartialAsync("_Parial.Action.Loading")
             <div class="mt-3 d-flex justify-content-center">
-                <button type="button" class="btn btn-primary">Загрузить ещё</button>
+                <button id="loadMoreReviewBtn" type="button" class="btn btn-primary">Загрузить ещё</button>
             </div>
          
         </div>

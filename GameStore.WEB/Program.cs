@@ -24,6 +24,7 @@ using GameStore.BLL.Services.HomeServices;
 using GameStore.BLL.Services.ShoppingCartServices;
 using GameStore.BLL.Services.CatalogServices;
 using GameStore.BLL.Infrastrcture.AutomapperProfiles.HistoryProfiles;
+using GameStore.BLL.Services.GameReviewServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,6 +134,7 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IGameReviewService, GameReviewService>();
 
 
 //DevModeServices

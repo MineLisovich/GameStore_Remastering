@@ -1,8 +1,11 @@
 using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.DTO.Games;
 using GameStore.BLL.Infrastrcture;
+using GameStore.BLL.Infrastrcture.Models;
 using GameStore.BLL.Predefined;
+using GameStore.BLL.Services.GameReviewServices;
 using GameStore.BLL.Services.HomeServices;
+using GameStore.DAL.Entities.Games;
 using GameStore.WEB.Infrastrcture;
 using GameStore.WEB.Models.HomeModels.HomePageModels;
 using Microsoft.AspNetCore.Authorization;
@@ -18,10 +21,12 @@ namespace GameStore.WEB.Controllers
     public class HomeController : Controller
     {
         private readonly IHomeService _homeService;
+        private readonly IGameReviewService _gameReviewService;
 
-        public HomeController(IHomeService homeService) 
+        public HomeController(IHomeService homeService, IGameReviewService gameReviewService) 
         {
             _homeService = homeService;
+            _gameReviewService = gameReviewService;
         }
 
         #region PUBLIC METHODS - GET
@@ -107,9 +112,53 @@ namespace GameStore.WEB.Controllers
             return PartialView("_Partial.Index.Slider", sliderModel);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetGameReviews(long gameId, int pageNumber = 1, int pageSize = 50)
+        {
+            SingleGamePageModel model = new();
+            model.GameReviews = await _gameReviewService.GetGameReviewsAsync(gameId, pageNumber, pageSize);
+            model.HasMoreReview = model.GameReviews.Count == pageSize;
+            return PartialView("_Partial.GamePage.Reviews", model);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ElasticRemoveReview(long reviewId)
+        {
+            ResultServiceModel result = await _gameReviewService.ElasticRemoveReviewAsync(reviewId);
+            return Json(result);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetModalForEditReview(long reviewId)
+        {
+            SingleGamePageModel model = new();
+            model.GameReview = await _gameReviewService.GetGameReviewByIdAsync(reviewId);
+            return PartialView("_Partial.GamePage.Reviews.EditModal", model);
+        }
         #endregion
 
         #region PUBLIC METHODS - POST
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateReviewGame([FromBody] GameReviewModel request)
+        {
+            ResultServiceModel result = await _gameReviewService.CreateReviewGameAsync(request);
+            return Json(result);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditReview(SingleGamePageModel model)
+        {
+            ResultServiceModel result = await _gameReviewService.UpdateGameReviewAsync(model.GameReview);
+            StandartUserActionTypes actionTypes = new();
+            TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Edit.Id);
+
+            return RedirectToAction(nameof(GamePage), new { gameId = model.GameReview.GameId});
+        }
         #endregion
 
         #region PRIVATE METHODS - TEMPDATA
@@ -124,9 +173,9 @@ namespace GameStore.WEB.Controllers
             PredefinedManager pd = new();
             StandartUserActionTypes actionTypes = new();
             string mainMessage = "";
-            if (actionTypeId == actionTypes.Create.Id)
+            if (actionTypeId == actionTypes.Edit.Id)
             {
-                mainMessage = (result.IsSucceeded) ? "Игра успешно добавлена в корзину" : "Не удалось добавить игру в корзину";
+                mainMessage = (result.IsSucceeded) ? "Отзыв успешно изменён" : "Не удалось изменить отзыв";
             }
           
 

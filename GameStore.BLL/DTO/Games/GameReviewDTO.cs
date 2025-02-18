@@ -1,4 +1,5 @@
 ﻿using GameStore.BLL.DTO.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.BLL.DTO.Games
 {
@@ -27,6 +28,7 @@ namespace GameStore.BLL.DTO.Games
         /// <summary>
         /// Отзыв
         /// </summary>
+        [Required(ErrorMessage = "Это поле обязательно к заполнению!")]
         public string Review { get; set; }
 
         /// <summary>

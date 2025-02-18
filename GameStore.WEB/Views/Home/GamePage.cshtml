@@ -7,6 +7,8 @@
 
 @section js {
     <script src="~/js/shoppingcart/shopcart.js"></script>
+    <script src="~/js/gamepage/review.js"></script>
+    <script src="~/js/companets.js"></script>
     <script>
         // ШАГ 1. НАСТРОЙКА ОБЩЕГО ПОВЕДЕНИЯ МОДАЛОК
         $(document).ready(function () {
@@ -20,6 +22,8 @@
             LoadGameGenres();
             LoadGameLables();
             LoadGameScreens();
+            ToggleLoadingView(true);
+            AjaxActionGetGameReviews(pageNumber, pageSize);
         });
 
         // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
@@ -40,6 +44,18 @@
                     break;
                 case "getScreens":
                     url = '@Url.Action("GetGameScreens", "Home")';
+                    break;
+                case "review":
+                    url = '@Url.Action("CreateReviewGame", "Home")';
+                    break;
+                case "showReview":
+                    url = '@Url.Action("GetGameReviews", "Home")';
+                    break;
+                case "editReview":
+                    url = '@Url.Action("GetModalForEditReview", "Home")';
+                    break;  
+                case "elasticRemove":
+                    url = '@Url.Action("ElasticRemoveReview", "Home")';
                     break;
             }
             return url;
@@ -103,6 +119,7 @@
 
 <div class="row mt-5 mb-3">
     <input readonly asp-for="Game.Id" hidden />
+    <input readonly id="js-userEmail" value="@User.Identity.Name" hidden />
     <div class="col-md-3">
         <div class="gamePageMainInfo singlegame-area borderS p-2 text-center ">
             <div class="">
