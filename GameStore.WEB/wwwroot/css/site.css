@@ -480,11 +480,11 @@ div.loginRegHeader {
     margin-right: 0.938rem;
 }
 
-    .legend-circle.positive {
+  .positive {
         background-color: #28a745; /* Зелёный цвет */
     }
 
-    .legend-circle.negative {
+   .negative {
         background-color: #dc3545; /* Красный цвет */
     }
 
@@ -496,4 +496,11 @@ div.loginRegHeader {
 .reviewsTxt{
     font-size:15px;
     text-align:justify;
+}
+
+.revstatconteiner{
+    width:auto;
+    height:auto;
+    color:white;
+    border-radius:15px;
 }

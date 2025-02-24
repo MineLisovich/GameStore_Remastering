@@ -20,6 +20,9 @@
             <div class="w-100 ms-2">
                 <div class="row w-100 h5">
                     <div class="col">@rev.User.CustomUserName</div>
+                        <div class="col text-center revstatconteiner @((rev.isPositive is true) ? "positive" : "negative" )">
+                              @((rev.isPositive is true) ? "Положительный" : "Отрицательный")
+                         </div>
                     <div class="col text-end">@((rev.DateModified is null) ? rev.DateCreate : "изм. " + rev.DateModified.Value)</div>
                 </div>
                 <div class="row w-100">
