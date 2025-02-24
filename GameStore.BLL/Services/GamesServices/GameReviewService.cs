@@ -33,7 +33,8 @@ namespace GameStore.BLL.Services.GamesServices
                 UserId = user.Id,
                 GameId = model.GameId,
                 Review = model.Review,
-                DateCreate = DateTime.UtcNow
+                DateCreate = DateTime.UtcNow,
+                isPositive = model.isPositive
             };
 
             try
@@ -100,6 +101,7 @@ namespace GameStore.BLL.Services.GamesServices
             try
             {
                 review.Review = gameReview.Review;
+                review.isPositive = gameReview.isPositive;
                 review.DateModified = DateTime.UtcNow;
 
                 _dbContext.GameReviews.Update(review);

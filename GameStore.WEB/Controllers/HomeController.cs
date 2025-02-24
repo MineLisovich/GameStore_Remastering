@@ -7,12 +7,11 @@ using GameStore.BLL.Services.GamesServices;
 using GameStore.BLL.Services.HomeServices;
 using GameStore.WEB.Infrastrcture;
 using GameStore.WEB.Models.HomeModels.HomePageModels;
+using GameStore_WEB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-
-
 
 namespace GameStore.WEB.Controllers
 {
@@ -144,6 +143,7 @@ namespace GameStore.WEB.Controllers
         [Authorize]
         public async Task<IActionResult> CreateReviewGame([FromBody] GameReviewModel request)
         {
+            request.isPositive = ClassificationReview(request.Review);
             ResultServiceModel result = await _gameReviewService.CreateReviewGameAsync(request);
             return Json(result);
         }
@@ -152,6 +152,7 @@ namespace GameStore.WEB.Controllers
         [Authorize]
         public async Task<IActionResult> EditReview(SingleGamePageModel model)
         {
+            model.GameReview.isPositive = ClassificationReview(model.GameReview.Review);
             ResultServiceModel result = await _gameReviewService.UpdateGameReviewAsync(model.GameReview);
             StandartUserActionTypes actionTypes = new();
             TempData = SetTempDataForInfoAboutLastAction(result, actionTypes.Edit.Id);
@@ -252,6 +253,16 @@ namespace GameStore.WEB.Controllers
                 model.IsSingleGamePage = true;
             }
             return model;
+        }
+
+        public bool ClassificationReview(string review)
+        {
+            //Load sample data
+            var sampleData = new MLModelGameReview.ModelInput() {Col0 = review};
+            //Load model and predict output
+            var result = MLModelGameReview.Predict(sampleData);
+
+            return (result.PredictedLabel == 1) ? true : false;
         }
         #endregion
     }
