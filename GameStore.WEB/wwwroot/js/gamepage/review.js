@@ -41,6 +41,9 @@ function AjaxActionReviewGame(gameId, userEmail, reviewMess) {
 
             //Обновить список отзывов
             UpdateContainerReviews();
+
+            //Обновить статистику
+            LoadStats();
           
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -118,6 +121,9 @@ function AjaxActionReviewBTN(action, reviewId) {
 
                     //Обновить список отзывов
                     UpdateContainerReviews();
+
+                    //Обновить статистику
+                    LoadStats();
                     break;
                 case "editReview":
                     $("#modalWrapper").append(data);

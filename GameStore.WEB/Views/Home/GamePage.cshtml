@@ -24,6 +24,7 @@
             LoadGameScreens();
             ToggleLoadingView(true);
             AjaxActionGetGameReviews(pageNumber, pageSize);
+            LoadStats();
         });
 
         // ШАГ 2. НАСТРОЙКА МАРШРУТОВ
@@ -56,6 +57,9 @@
                     break;  
                 case "elasticRemove":
                     url = '@Url.Action("ElasticRemoveReview", "Home")';
+                    break;
+                case "getStats":
+                    url = '@Url.Action("GetGameReviewStats", "Home")';
                     break;
             }
             return url;
@@ -90,6 +94,12 @@
            var sectionForUrl = "getScreens";
            var sectionData = "js-game-screens";
            AjaxActionGetOtherGameData(sectionForUrl, sectionData);
+        }
+
+        function LoadStats() {
+            var sectionForUrl = "getStats";
+            var sectionData = "js-reviewStats";
+            AjaxActionGetOtherGameData(sectionForUrl, sectionData);
         }
 
         function AjaxActionGetOtherGameData(sectionForUrl, sectionData)

@@ -11,5 +11,6 @@ namespace GameStore.BLL.Services.GamesServices
         Task<ResultServiceModel> ElasticRemoveReviewAsync(long reviewId);
         Task<GameReviewDTO> GetGameReviewByIdAsync(long reviewId);
         Task<ResultServiceModel> UpdateGameReviewAsync(GameReviewDTO gameReview);
+        Task<GameReviewStatsModel> GetGameReviewStatsAsync(long gameId);
     }
 }

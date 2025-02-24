@@ -135,7 +135,18 @@ namespace GameStore.WEB.Controllers
             SingleGamePageModel model = new();
             model.GameReview = await _gameReviewService.GetGameReviewByIdAsync(reviewId);
             return PartialView("_Partial.GamePage.Reviews.EditModal", model);
+        }   
+        
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetGameReviewStats(long gameId)
+        {
+            SingleGamePageModel model = new();
+            model.GameReviewStats = await _gameReviewService.GetGameReviewStatsAsync(gameId);
+            return PartialView("_Partial.GamePage.Reviews.Stats", model);
         }
+
+
         #endregion
 
         #region PUBLIC METHODS - POST

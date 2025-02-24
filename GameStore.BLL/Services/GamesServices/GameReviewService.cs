@@ -116,5 +116,31 @@ namespace GameStore.BLL.Services.GamesServices
             result.IsSucceeded = true;
             return result;
         }
+
+       public async Task<GameReviewStatsModel> GetGameReviewStatsAsync(long gameId)
+       {
+            GameReviewStatsModel model = new();
+
+            List<GameReview> gameReviews = await _dbContext.GameReviews.Where(x=>x.GameId == gameId && x.isDelete == false).ToListAsync();
+
+            int totalReview = gameReviews.Count;
+            if (totalReview == 0)
+            {
+                model.Positive = 0;
+                model.Negative = 0;
+                return model;
+            }
+
+            int positive = gameReviews.Count(x => x.isPositive);
+            int negative = gameReviews.Count(x => !x.isPositive);
+
+            model.Positive = (positive / (double)totalReview) * 100;
+            model.Positive = Math.Round(model.Positive, 1);
+            model.Negative = (negative / (double)totalReview) * 100;
+            model.Negative = Math.Round(model.Negative, 1);
+
+
+            return model;
+       }
     }
 }
