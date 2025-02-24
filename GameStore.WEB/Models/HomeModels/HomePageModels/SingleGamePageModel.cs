@@ -1,5 +1,6 @@
 ﻿using GameStore.BLL.DTO.Dictionaries;
 using GameStore.BLL.DTO.Games;
+using GameStore.BLL.Infrastrcture.Models;
 
 namespace GameStore.WEB.Models.HomeModels.HomePageModels
 {
@@ -19,5 +20,7 @@ namespace GameStore.WEB.Models.HomeModels.HomePageModels
         public bool HasMoreReview { get; set; }
 
         public GameReviewDTO GameReview { get; set; }
+
+        public GameReviewStatsModel  GameReviewStats { get; set; } = new();
     }
 }

@@ -2,7 +2,7 @@
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Infrastrcture.Models;
 
-namespace GameStore.BLL.Services.GameReviewServices
+namespace GameStore.BLL.Services.GamesServices
 {
     public interface IGameReviewService
     {
@@ -11,5 +11,6 @@ namespace GameStore.BLL.Services.GameReviewServices
         Task<ResultServiceModel> ElasticRemoveReviewAsync(long reviewId);
         Task<GameReviewDTO> GetGameReviewByIdAsync(long reviewId);
         Task<ResultServiceModel> UpdateGameReviewAsync(GameReviewDTO gameReview);
+        Task<GameReviewStatsModel> GetGameReviewStatsAsync(long gameId);
     }
 }

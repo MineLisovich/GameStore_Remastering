@@ -1,29 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="3.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\GameStore.BLL\GameStore.BLL.csproj" />
     <ProjectReference Include="..\GameStore.DAL\GameStore.DAL.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Areas\Order\Views\Shared\" />
     <Folder Include="wwwroot\css\datatables\" />
     <Folder Include="wwwroot\js\datatables\" />
   </ItemGroup>
-
+  <ItemGroup Label="MLModelGameReview">
+    <None Include="MLModelGameReview.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

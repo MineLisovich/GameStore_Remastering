@@ -7,5 +7,7 @@
         public string UserEmail { get; set; }
 
         public string Review { get; set; }
+
+        public bool isPositive { get; set; }
     }
 }
