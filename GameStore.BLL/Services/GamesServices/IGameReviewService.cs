@@ -2,7 +2,7 @@
 using GameStore.BLL.Infrastrcture;
 using GameStore.BLL.Infrastrcture.Models;
 
-namespace GameStore.BLL.Services.GameReviewServices
+namespace GameStore.BLL.Services.GamesServices
 {
     public interface IGameReviewService
     {
